@@ -83,6 +83,7 @@ class Table extends React.Component{
                             salary={userSalary} 
                             car={userCar} 
                             status={userStatus} 
+                            user={user}
                         />)})
                     }
                 </tbody>
@@ -95,23 +96,160 @@ class Table extends React.Component{
 class Item extends React.Component{
     constructor(props){
         super(props);
-        console.log("oiii",this.props.status)
+        
+        this.state = {
+         isOpemItem : false,
+        }
+        this.toggleBodyItem = this.toggleBodyItem.bind(this);
+    }
+
+    toggleBodyItem(){
+        this.setState({isOpemItem : !this.state.isOpemItem});
     }
 
     render(){
         return(
-            <tr>
-                <td>{this.props.name}</td>
-                <td>{this.props.date}</td>
-                <td>{this.props.salary}</td>
-                <td>{this.props.car}</td>
-                <td>{this.props.status == true?
-                      <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUser} /> : 
-                     this.props.status == false?
-                      <FontAwesomeIcon style={{color : '#FF6347'}} icon={faUser} /> :
-                      <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
-                }</td>
-            </tr>
+            <>
+                <tr
+                onClick={() => this.toggleBodyItem()}
+                >
+                    <td>{this.props.name}</td>
+                    <td>{this.props.date}</td>
+                    <td>{this.props.salary}</td>
+                    <td>{this.props.car}</td>
+                    <td>{this.props.status === true?
+                        <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
+                        this.props.status === false?
+                        <FontAwesomeIcon style={{color : '#FF6347'}} icon={faUser} /> :
+                        <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
+                    }</td>
+                </tr>
+                {this.state.isOpemItem === false? null :<ItemBody user={this.props.user}/>}
+            </>
+        )
+    }
+}
+
+
+class ItemBody extends React.Component{
+    constructor(props){
+        super(props);
+    
+        this.state = {
+            tabOpemModal : 0,
+        }
+        this.toggleModal = this.toggleModal.bind(this);
+    }
+
+    toggleModal(tab){
+       this.setState({tabOpemModal : tab});
+   }
+
+    render(){
+        return(
+            <>
+                <tr onClick={() => this.toggleModal(1)}> 
+                    <th>Carro</th>
+                    <td  colSpan="5" rowSpan="5"><Modal openModal={this.state.tabOpemModal} user={this.props.user}/></td>
+                </tr>
+                <tr onClick={() => this.toggleModal(2)}>
+                    <th>Emprego</th>
+                </tr> 
+                <tr onClick={() => this.toggleModal(3)}>
+                    <th>Produto</th>
+                </tr>
+                <tr onClick={() => this.toggleModal(4)}>
+                    <th>Acessos</th>
+                </tr>
+                <tr onClick={() => this.toggleModal(5)}>
+                    <th>Endereço</th> 
+                </tr>
+            </>
+        )
+    }
+}
+
+class Modal extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        return(
+            <>
+                {
+                    this.props.openModal === 1? //Tab Carro
+                        <>  
+                            <div>
+                                <b>Carro</b><br/><hr/>
+                            </div>
+                            <p>    
+                                Carro: {this.props.user.user_car_id} <br/>
+                                Modelo: <br/>
+                                Fabricante: <br/>
+                                Tipo: <br/>
+                                Gasolina: <br/>
+                            </p> 
+                        </>
+                        :
+                        this.props.openModal === 2? //Tab Emprego
+                        <>  
+                            <div>
+                                <b>Emprego</b><br/><hr/>
+                            </div>
+                            <p>            
+                                Carro: <br/>
+                                Modelo: <br/>
+                                Fabricante: <br/>
+                                Tipo: <br/>
+                                Gasolina: <br/>
+                            </p>
+                        </>
+                        :
+                        this.props.openModal === 3? //Tab Produto
+                        <>  
+                            <div>
+                                <b>Produto</b><br/><hr/>
+                            </div>
+                            <p>            
+                                Carro: <br/>
+                                Modelo: <br/>
+                                Fabricante: <br/>
+                                Tipo: <br/>
+                                Gasolina: <br/>
+                            </p>
+                        </>
+                        :
+                        this.props.openModal === 4? //Tab Acessos
+                        <>  
+                            <div>
+                                <b>Acessos</b><br/><hr/>
+                            </div>
+                            <p>            
+                                Carro: <br/>
+                                Modelo: <br/>
+                                Fabricante: <br/>
+                                Tipo: <br/>
+                                Gasolina: <br/>
+                            </p>
+                        </>
+                        :
+                        this.props.openModal === 5? //Tab Endereço
+                        <>  
+                            <div>
+                                <b>Endereço</b><br/><hr/>
+                            </div>
+                            <p>            
+                                Carro: <br/>
+                                Modelo: <br/>
+                                Fabricante: <br/>
+                                Tipo: <br/>
+                                Gasolina: <br/>
+                            </p>
+                        </>
+                        : <></>
+                }
+            </>
         )
     }
 }

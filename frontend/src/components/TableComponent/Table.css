@@ -9,7 +9,7 @@ th {
     padding: 10px;
     background-color: #beeded;
 }
-td {
-    padding: 10px;
+tr:nth-child(even) {
     background-color: #e3f8f8;
 }
+tr:hover {background-color: #b6d6d6;}
