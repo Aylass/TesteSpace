@@ -6,34 +6,9 @@ import { faUser, faUserSecret } from '@fortawesome/free-solid-svg-icons'
 class Table extends React.Component{
     constructor(props){
         super(props);
-        this.state = {};
-        //this.buildRow = this.buildRow.bind(this);//se funcao nova usa THIS adiciona aq
+        this.state = {
+        };
     }
-
-   /* buildRow(collum){
-        console.log(typeof this.props.dataRow);
-        return(
-            this.props.dataRow.map?.(user => {
-                return(
-                    <>
-                        <td key={`dataRow_${user.user_id}`}>
-                            {collum == "user_first_name" ? 
-                                user.user_first_name :
-                                collum == "user_birth_date"?
-                                user.user_birth_date : 
-                                collum == "user_product_buyed_id"?
-                                user.user_product_buyed_id : 
-                                collum == "user_car_id"?
-                                user.user_car_id :
-                                collum == "status"?
-                                user.user_car_id : null
-                            }
-                        </td>
-                    </>
-                );
-            })
-        );
-    }*/
 
     buildHeader(){
         return(
@@ -55,6 +30,7 @@ class Table extends React.Component{
                 {this.buildHeader()}
                 <tbody>
                     {this.props.dataRow.map?.(user => {
+                        //user -------------------------------------------------------
                         let userName = "";
                         let userDate = "";
                         let userSalary = "";
@@ -74,8 +50,11 @@ class Table extends React.Component{
                             userCar = user.user_car_id;
                         }
                         userStatus = user.status;
-                        
 
+                        //user cars-------------------------------------------------------
+                        const userCurrentCar = this.props.dataCars[userCar];
+                        //let userCarName = userCurrentCar?.car_name || "";
+        
                      return(<Item 
                             key={`item_${user.user_id}`} 
                             name={userName} 
@@ -84,6 +63,7 @@ class Table extends React.Component{
                             car={userCar} 
                             status={userStatus} 
                             user={user}
+                            currentCar={userCurrentCar}
                         />)})
                     }
                 </tbody>
@@ -124,7 +104,7 @@ class Item extends React.Component{
                         <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
                     }</td>
                 </tr>
-                {this.state.isOpemItem === false? null :<ItemBody user={this.props.user}/>}
+                {this.state.isOpemItem === false? null :<ItemBody user={this.props.user} currentCar={this.props.currentCar}/>}
             </>
         )
     }
@@ -150,7 +130,7 @@ class ItemBody extends React.Component{
             <>
                 <tr onClick={() => this.toggleModal(1)}> 
                     <th>Carro</th>
-                    <td  colSpan="5" rowSpan="5"><Modal openModal={this.state.tabOpemModal} user={this.props.user}/></td>
+                    <td  colSpan="5" rowSpan="5"><Modal openModal={this.state.tabOpemModal} user={this.props.user} currentCar={this.props.currentCar}/></td>
                 </tr>
                 <tr onClick={() => this.toggleModal(2)}>
                     <th>Emprego</th>
@@ -172,6 +152,9 @@ class ItemBody extends React.Component{
 class Modal extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            tabOpemModal : 0,
+        }
     }
 
     render(){
@@ -184,11 +167,11 @@ class Modal extends React.Component{
                                 <b>Carro</b><br/><hr/>
                             </div>
                             <p>    
-                                Carro: {this.props.user.user_car_id} <br/>
-                                Modelo: <br/>
-                                Fabricante: <br/>
-                                Tipo: <br/>
-                                Gasolina: <br/>
+                                Carro: {this.props.currentCar.car_name} <br/>
+                                Modelo: {this.props.currentCar.car_model} <br/>
+                                Fabricante: {this.props.currentCar.car_manufacturer} <br/>
+                                Tipo: {this.props.currentCar.car_type} <br/>
+                                Gasolina: {this.props.currentCar.car_fuel} <br/>
                             </p> 
                         </>
                         :
@@ -247,7 +230,8 @@ class Modal extends React.Component{
                                 Gasolina: <br/>
                             </p>
                         </>
-                        : <></>
+                        : 
+                    <></>
                 }
             </>
         )

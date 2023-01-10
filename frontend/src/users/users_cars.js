@@ -1,4 +1,4 @@
-module.export = {
+module.exports = {
     1: {
         car_id: 1,
         car_fuel: "Diesel",
