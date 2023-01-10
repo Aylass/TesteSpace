@@ -167,11 +167,11 @@ class Modal extends React.Component{
                                 <b>Carro</b><br/><hr/>
                             </div>
                             <p>    
-                                Carro: {this.props.currentCar.car_name} <br/>
-                                Modelo: {this.props.currentCar.car_model} <br/>
-                                Fabricante: {this.props.currentCar.car_manufacturer} <br/>
-                                Tipo: {this.props.currentCar.car_type} <br/>
-                                Gasolina: {this.props.currentCar.car_fuel} <br/>
+                                Carro: {this.props.currentCar?.car_name || ""} <br/>
+                                Modelo: {this.props.currentCar?.car_model || ""} <br/>
+                                Fabricante: {this.props.currentCar?.car_manufacturer || ""} <br/>
+                                Tipo: {this.props.currentCar?.car_type || ""} <br/>
+                                Gasolina: {this.props.currentCar?.car_fuel || ""} <br/>
                             </p> 
                         </>
                         :
