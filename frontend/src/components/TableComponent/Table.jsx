@@ -64,8 +64,11 @@ class Table extends React.Component{
                         //user produtos-------------------------------------------------------
                         const userCurrentProduct = this.props.dataProducts[userSalary];
                         
-                        //user produtos-------------------------------------------------------
+                        //user Acessos-------------------------------------------------------
                         const userCurrentAccess = this.props.dataAccess[userId];
+                        
+                        //user Endereços-------------------------------------------------------
+                        const userCurrentAddresses = this.props.dataAddresses[userId];
         
                      return(<Item 
                             key={`item_${user.user_id}`} 
@@ -79,6 +82,7 @@ class Table extends React.Component{
                             currentJob={userCurrentJob}
                             currentProduct={userCurrentProduct}
                             currentAccess={userCurrentAccess}
+                            currentAdresses={userCurrentAddresses}
                         />)})
                     }
                 </tbody>
@@ -126,6 +130,7 @@ class Item extends React.Component{
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
                         currentAccess={this.props.currentAccess}
+                        currentAdresses={this.props.currentAdresses}
                     />}
             </>
         )
@@ -160,6 +165,7 @@ class ItemBody extends React.Component{
                             currentJob={this.props.currentJob}
                             currentProduct={this.props.currentProduct}
                             currentAccess={this.props.currentAccess}
+                            currentAdresses={this.props.currentAdresses}
                         />
                     </td>
                 </tr>
@@ -249,12 +255,11 @@ class Modal extends React.Component{
                             <div>
                                 <b>Endereço</b><br/><hr/>
                             </div>
-                            <p>            
-                                Carro: <br/>
-                                Modelo: <br/>
-                                Fabricante: <br/>
-                                Tipo: <br/>
-                                Gasolina: <br/>
+                            <p>   
+                                País: {this.props.currentAdresses?.user_address_country || ""} <br/>         
+                                Estado: {this.props.currentAdresses?.user_address_state || ""} <br/>
+                                Cidade: {this.props.currentAdresses?.user_address_city || ""} <br/>
+                                Rua: {this.props.currentAdresses?.user_address_street_address || ""} <br/>
                             </p>
                         </>
                         : 
