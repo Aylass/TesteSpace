@@ -73,9 +73,8 @@ class Table extends React.Component{
                         if(user.user_car_id){
                             userCar = user.user_car_id;
                         }
-                        if(user.status){
-                            userStatus = user.status;
-                        }
+                        userStatus = user.status;
+                        
 
                      return(<Item 
                             key={`item_${user.user_id}`} 
@@ -96,7 +95,9 @@ class Table extends React.Component{
 class Item extends React.Component{
     constructor(props){
         super(props);
+        console.log("oiii",this.props.status)
     }
+
     render(){
         return(
             <tr>
@@ -104,9 +105,12 @@ class Item extends React.Component{
                 <td>{this.props.date}</td>
                 <td>{this.props.salary}</td>
                 <td>{this.props.car}</td>
-                <td>{this.props.status}</td>
-                <FontAwesomeIcon icon={faUser} />
-                <FontAwesomeIcon icon={faUserSecret} />
+                <td>{this.props.status == true?
+                      <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUser} /> : 
+                     this.props.status == false?
+                      <FontAwesomeIcon style={{color : '#FF6347'}} icon={faUser} /> :
+                      <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
+                }</td>
             </tr>
         )
     }
