@@ -53,17 +53,21 @@ class Table extends React.Component{
 
                         //user cars-------------------------------------------------------
                         const userCurrentCar = this.props.dataCars[userCar];
-                        //let userCarName = userCurrentCar?.car_name || "";
+                        
+                        //user emprego-------------------------------------------------------
+                        const userCurrentJob = this.props.dataJobs[userSalary];
+                        console.log("oi", userCurrentJob)
         
                      return(<Item 
                             key={`item_${user.user_id}`} 
                             name={userName} 
                             date={userDate} 
-                            salary={userSalary} 
+                            salary={userCurrentJob?.user_job_salary || ""} 
                             car={userCar} 
                             status={userStatus} 
                             user={user}
                             currentCar={userCurrentCar}
+                            currentJob={userCurrentJob}
                         />)})
                     }
                 </tbody>
@@ -104,7 +108,12 @@ class Item extends React.Component{
                         <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
                     }</td>
                 </tr>
-                {this.state.isOpemItem === false? null :<ItemBody user={this.props.user} currentCar={this.props.currentCar}/>}
+                {this.state.isOpemItem === false? null :
+                    <ItemBody 
+                        user={this.props.user} 
+                        currentCar={this.props.currentCar}
+                        currentJob={this.props.currentJob}
+                    />}
             </>
         )
     }
@@ -130,7 +139,15 @@ class ItemBody extends React.Component{
             <>
                 <tr onClick={() => this.toggleModal(1)}> 
                     <th>Carro</th>
-                    <td  colSpan="5" rowSpan="5"><Modal openModal={this.state.tabOpemModal} user={this.props.user} currentCar={this.props.currentCar}/></td>
+                    <td  colSpan="5" rowSpan="5">
+                        <Modal 
+                            openModal={this.state.tabOpemModal} 
+                            user={this.props.user} 
+                            currentCar={this.props.currentCar}
+                            currentJob={this.props.currentJob}
+                            
+                        />
+                    </td>
                 </tr>
                 <tr onClick={() => this.toggleModal(2)}>
                     <th>Emprego</th>
@@ -181,11 +198,9 @@ class Modal extends React.Component{
                                 <b>Emprego</b><br/><hr/>
                             </div>
                             <p>            
-                                Carro: <br/>
-                                Modelo: <br/>
-                                Fabricante: <br/>
-                                Tipo: <br/>
-                                Gasolina: <br/>
+                                Titulo: {this.props.currentJob?.user_job_title || ""} <br/>
+                                Salário: {this.props.currentJob?.user_job_salary_currency_symbol || ""} {this.props.currentJob?.user_job_salary || ""} <br/>
+                                Endereço: {this.props.currentJob?.user_job_address || ""} <br/>
                             </p>
                         </>
                         :
