@@ -32,6 +32,7 @@ class Table extends React.Component{
                     {this.props.dataRow.map?.(user => {
                         //user -------------------------------------------------------
                         let userName = "";
+                        let userId = "";
                         let userDate = "";
                         let userSalary = "";
                         let userCar = "";
@@ -49,6 +50,9 @@ class Table extends React.Component{
                         if(user.user_car_id){
                             userCar = user.user_car_id;
                         }
+                        if(user.user_access_id){
+                            userId = user.user_access_id;
+                        }
                         userStatus = user.status;
 
                         //user cars-------------------------------------------------------
@@ -56,7 +60,12 @@ class Table extends React.Component{
                         
                         //user emprego-------------------------------------------------------
                         const userCurrentJob = this.props.dataJobs[userSalary];
-                        console.log("oi", userCurrentJob)
+                        
+                        //user produtos-------------------------------------------------------
+                        const userCurrentProduct = this.props.dataProducts[userSalary];
+                        
+                        //user produtos-------------------------------------------------------
+                        const userCurrentAccess = this.props.dataAccess[userId];
         
                      return(<Item 
                             key={`item_${user.user_id}`} 
@@ -68,6 +77,8 @@ class Table extends React.Component{
                             user={user}
                             currentCar={userCurrentCar}
                             currentJob={userCurrentJob}
+                            currentProduct={userCurrentProduct}
+                            currentAccess={userCurrentAccess}
                         />)})
                     }
                 </tbody>
@@ -113,6 +124,8 @@ class Item extends React.Component{
                         user={this.props.user} 
                         currentCar={this.props.currentCar}
                         currentJob={this.props.currentJob}
+                        currentProduct={this.props.currentProduct}
+                        currentAccess={this.props.currentAccess}
                     />}
             </>
         )
@@ -145,7 +158,8 @@ class ItemBody extends React.Component{
                             user={this.props.user} 
                             currentCar={this.props.currentCar}
                             currentJob={this.props.currentJob}
-                            
+                            currentProduct={this.props.currentProduct}
+                            currentAccess={this.props.currentAccess}
                         />
                     </td>
                 </tr>
@@ -210,11 +224,9 @@ class Modal extends React.Component{
                                 <b>Produto</b><br/><hr/>
                             </div>
                             <p>            
-                                Carro: <br/>
-                                Modelo: <br/>
-                                Fabricante: <br/>
-                                Tipo: <br/>
-                                Gasolina: <br/>
+                                Nome: {this.props.currentProduct?.user_product_buyed_product_name || ""} <br/>
+                                Fabricante: {this.props.currentProduct?.user_product_buyed_company_name || ""} <br/>
+                                Preço: {this.props.currentProduct?.user_product_buyed_product_price || ""} <br/>
                             </p>
                         </>
                         :
@@ -224,11 +236,11 @@ class Modal extends React.Component{
                                 <b>Acessos</b><br/><hr/>
                             </div>
                             <p>            
-                                Carro: <br/>
-                                Modelo: <br/>
-                                Fabricante: <br/>
-                                Tipo: <br/>
-                                Gasolina: <br/>
+                                Tecnologia: {this.props.currentAccess?.user_access_business_technoloy || ""} <br/>
+                                Login: {this.props.currentAccess?.user_access_login || ""} <br/>
+                                Endereço IP: {this.props.currentAccess?.user_access_ip_address || ""} <br/>
+                                Endereço MAC: {this.props.currentAccess?.user_access_mac_address || ""} <br/>
+                                Máquina: {this.props.currentAccess?.user_access_user_agent || ""} <br/>
                             </p>
                         </>
                         :
