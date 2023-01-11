@@ -7,7 +7,10 @@ class Table extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-        };
+            isOpenModal: false,
+        }
+
+        this.openEditModal = this.openEditModal.bind(this);
     }
 
     buildHeader(){
@@ -24,10 +27,18 @@ class Table extends React.Component{
         );
     }
 
+    openEditModal(){
+        this.setState({isOpenModal : true});
+    }
+
     render(){
         return(
             <>
-                <EditModal/>
+                {this.state.isOpenModal?
+                    <div className="divModal"> 
+                        <EditModal isOpenModal={this.state.isOpenModal} /> 
+                    </div>
+                    : <></>}
                 <table>
                     {this.buildHeader()}
                     <tbody>
@@ -85,6 +96,7 @@ class Table extends React.Component{
                                 currentProduct={userCurrentProduct}
                                 currentAccess={userCurrentAccess}
                                 currentAdresses={userCurrentAddresses}
+                                openEditModal={this.openEditModal}
                             />)})
                         }
                     </tbody>
@@ -99,39 +111,48 @@ class EditModal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            
+            isOpenModal: false,
         }
+        this.wrapperRef = null;
         this.closeModal = this.closeModal.bind(this);
+        this.setWrapperRef = this.setWrapperRef.bind(this);
     }
 
     closeModal(){
-        var modal = document.getElementById("editModal");
-        modal.style.display = "none";
+        //var modal = document.getElementById("editModal");
+        //modal.style.display = "none";
+        
+    }
+
+    setWrapperRef(node){
+        this.wrapperRef = node;
+        console.log("setwrapper", this.wrapperRef)
+    }
+
+    componentDidMount(){
+        document.addEventListener('click', this.listenerClick);
+    }
+    
+
+    listenerClick(event){
+        if(this.wrapperRef && !this.wrapperRef.current.contains(event.target))
+        console.log("clico", event)
     }
     
     render(){
-        window.onclick = function(event) {
-            var modal = document.getElementById("editModal");
-            if (event.target === modal) {
-                modal.style.display = "none";
-            }
-          }
-        
+        console.log("oi", this.wrapperRef)
         return(
-            <>
-                <div id="editModal" className="modal">
-                    
-                    <div className="modal-content">
-                        <button className="closeModalButton" onClick={this.closeModal}>X</button>
-                        <p className="titulo">Titulo</p>
-                        <hr/>
-                        <p>dskoadnaodnklfndjfnjdakfnjkfndjkafk</p>
-                        <button className="editModalButton" onClick={this.closeModal}>Editar</button>
-                        <button className="saveModalButton" onClick={this.closeModal}>Salvar</button>
-                        <button className="cancelModalButton" onClick={this.closeModal}>Cancelar</button>
-                    </div>
+            <div ref={this.setWrapperRef} className="modal">
+                <div className="modal-content">
+                    <button className="closeModalButton" onClick={this.closeModal}>X</button>
+                    <p className="titulo">Titulo</p>
+                    <hr/>
+                    <p>dskoadnaodnklfndjfnjdakfnjkfndjkafk</p>
+                    <button className="editModalButton" onClick={this.closeModal}>Editar</button>
+                    <button className="saveModalButton" onClick={this.closeModal}>Salvar</button>
+                    <button className="cancelModalButton" onClick={this.closeModal}>Cancelar</button>
                 </div>
-            </>
+            </div>
         )
     }
 }
@@ -141,33 +162,24 @@ class Item extends React.Component{
         super(props);
         
         this.state = {
-         isOpemItem : false,
+         isOpenItem : false,
         }
         this.toggleBodyItem = this.toggleBodyItem.bind(this);
-        this.openEditModal = this.openEditModal.bind(this);
     }
 
     toggleBodyItem(){
-        this.setState({isOpemItem : !this.state.isOpemItem});
-    }
-
-    openEditModal(){
-        console.log("oi")
-        // Get the modal
-        var modal = document.getElementById("editModal");
-        modal.style.display = "block";
+        this.setState({isOpenItem : !this.state.isOpenItem});
     }
 
     render(){
         return(
             <>
-                <tr
-                onClick={() => this.toggleBodyItem()}
+                <tr onClick={() => this.toggleBodyItem()}
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
                     <td>{this.props.salary}</td>
-                    <td><button onClick={this.openEditModal}>Visualizar</button></td>
+                    <td><button onClick={this.props.openEditModal}>Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
                         this.props.status === false?
@@ -175,7 +187,7 @@ class Item extends React.Component{
                         <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
                     }</td>
                 </tr>
-                {this.state.isOpemItem === false? null :
+                {this.state.isOpenItem === false? null :
                     <ItemBody 
                         user={this.props.user} 
                         currentCar={this.props.currentCar}
@@ -195,13 +207,13 @@ class ItemBody extends React.Component{
         super(props);
     
         this.state = {
-            tabOpemModal : 1,
+            tabOpenModal : 1,
         }
         this.toggleModal = this.toggleModal.bind(this);
     }
 
     toggleModal(tab){
-       this.setState({tabOpemModal : tab});
+       this.setState({tabOpenModal : tab});
    }
 
     render(){
@@ -211,7 +223,7 @@ class ItemBody extends React.Component{
                     <th>Carro</th>
                     <td  colSpan="5" rowSpan="5">
                         <Modal 
-                            openModal={this.state.tabOpemModal} 
+                            openModal={this.state.tabOpenModal} 
                             user={this.props.user} 
                             currentCar={this.props.currentCar}
                             currentJob={this.props.currentJob}
@@ -242,7 +254,7 @@ class Modal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            tabOpemModal : 0,
+            tabOpenModal : 0,
         }
     }
 
