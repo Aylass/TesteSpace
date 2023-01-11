@@ -143,7 +143,7 @@ class ItemBody extends React.Component{
         super(props);
     
         this.state = {
-            tabOpemModal : 0,
+            tabOpemModal : 1,
         }
         this.toggleModal = this.toggleModal.bind(this);
     }
