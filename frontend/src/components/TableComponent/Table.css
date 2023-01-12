@@ -29,6 +29,7 @@ tr:hover {background-color: #b6d6d6;}
     background-color: #fefefe;
     z-index: 1; /* Sit on top */
     padding: 20px;
+    width: 160%;
     border: 1px solid rgb(183, 183, 183);
     border-radius: 10px;
     animation-name: animateModal;

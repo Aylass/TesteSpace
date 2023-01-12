@@ -8,10 +8,12 @@ class Table extends React.Component{
         super(props);
         this.state = {
             isOpenModal: false,
+            modalData: null
         }
 
         this.openEditModal = this.openEditModal.bind(this);
         this.onChildChanged = this.onChildChanged.bind(this);
+        this.onChildChangedModalData = this.onChildChangedModalData.bind(this);
     }
 
     buildHeader(){
@@ -39,12 +41,17 @@ class Table extends React.Component{
         console.log("Trocou valor pai!", this.state.isOpenModal)
     }
 
+    onChildChangedModalData(data) {
+        this.setState({modalData: data});
+        console.log("Trocou valor pai Modal Data!", this.state.modalData)
+    }
+
     render(){
         return(
             <>
                 {this.state.isOpenModal?
                     <div className="divModal"> 
-                        <EditModal isOpenModal={this.state.isOpenModal} callbackParent={this.onChildChanged} /> 
+                        <EditModal isOpenModal={this.state.isOpenModal} modalData={this.state.modalData} callbackParent={this.onChildChanged} /> 
                     </div>
                     : <></>}
                 <table>
@@ -92,6 +99,7 @@ class Table extends React.Component{
                             const userCurrentAddresses = this.props.dataAddresses[userId];
             
                         return(<Item 
+                                modalData={this.onChildChangedModalData}
                                 key={`item_${user.user_id}`} 
                                 name={userName} 
                                 date={userDate} 
@@ -118,6 +126,7 @@ class EditModal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            carData: null
         }
         this.closeModal = this.closeModal.bind(this);
         this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -156,13 +165,21 @@ class EditModal extends React.Component{
     }
     
     render(){
+        console.log(this.props.modalData)
         return(
             <div ref={this.setWrapperRef} className="modal">
                 <div className="modal-content">
                     <button className="closeModalButton" onClick={() => this.props.callbackParent(false)}>X</button>
-                    <p className="titulo">Titulo</p>
-                    <hr/>
-                    <p>dskoadnaodnklfndjfnjdakfnjkfndjkafk</p>
+                    <div>
+                            <b>Carro</b><br/><hr/>
+                            </div>
+                            {this.props.modalData ? <p>    
+                                Carro: {this.props.modalData?.car_name || ""} <br/>
+                                Modelo: {this.props.modalData?.car_model || ""} <br/>
+                                Fabricante: {this.props.modalData?.car_manufacturer || ""} <br/>
+                                Tipo: {this.props.modalData?.car_type || ""} <br/>
+                                Gasolina: {this.props.modalData?.car_fuel || ""} <br/>
+                            </p>: <></>}
                     <button className="editModalButton" onClick={() => this.props.callbackParent(false)}>Editar</button>
                     <button className="saveModalButton" onClick={this.closeModal}>Salvar</button>
                     <button className="cancelModalButton" onClick={this.closeModal}>Cancelar</button>
@@ -180,21 +197,27 @@ class Item extends React.Component{
          isOpenItem : false,
         }
         this.toggleBodyItem = this.toggleBodyItem.bind(this);
+        this.viewButtonFunc = this.viewButtonFunc.bind(this);
     }
 
     toggleBodyItem(){
         this.setState({isOpenItem : !this.state.isOpenItem});
     }
 
+    viewButtonFunc(event){
+            this.props.modalData(this.props.currentCar);
+            this.props.openEditModal(event);
+    }
+
     render(){
         return(
             <>
-                <tr onClick={() => this.toggleBodyItem()}
+                <tr onClick={() => this.toggleBodyItem}
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
                     <td>{this.props.salary}</td>
-                    <td><button onClick={this.props.openEditModal}>Visualizar</button></td>
+                    <td><button onClick={this.viewButtonFunc} >Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
                         this.props.status === false?
