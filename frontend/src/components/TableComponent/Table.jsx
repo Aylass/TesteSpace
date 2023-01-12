@@ -11,6 +11,7 @@ class Table extends React.Component{
         }
 
         this.openEditModal = this.openEditModal.bind(this);
+        this.onChildChanged = this.onChildChanged.bind(this);
     }
 
     buildHeader(){
@@ -27,8 +28,15 @@ class Table extends React.Component{
         );
     }
 
-    openEditModal(){
+    openEditModal(event){  
+        event.preventDefault();
+        event.stopPropagation();
         this.setState({isOpenModal : true});
+    }
+
+    onChildChanged(bool) {
+        this.setState({isOpenModal: bool});
+        console.log("Trocou valor pai!", this.state.isOpenModal)
     }
 
     render(){
@@ -36,7 +44,7 @@ class Table extends React.Component{
             <>
                 {this.state.isOpenModal?
                     <div className="divModal"> 
-                        <EditModal isOpenModal={this.state.isOpenModal} /> 
+                        <EditModal isOpenModal={this.state.isOpenModal} callbackParent={this.onChildChanged} /> 
                     </div>
                     : <></>}
                 <table>
@@ -104,51 +112,58 @@ class Table extends React.Component{
             </>
         )
     }
-
 }
 
 class EditModal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            isOpenModal: false,
         }
-        this.wrapperRef = null;
         this.closeModal = this.closeModal.bind(this);
         this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.listenerClick = this.listenerClick.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.wrapperRef = React.createRef();
     }
 
     closeModal(){
-        //var modal = document.getElementById("editModal");
-        //modal.style.display = "none";
-        
+       //this.props.isOpenModal = false;
+       console.log("fechou")
     }
 
     setWrapperRef(node){
+        if(node !== undefined)
         this.wrapperRef = node;
         console.log("setwrapper", this.wrapperRef)
     }
 
+    listenerClick(event){
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target) && this.props.isOpenModal) {
+            this.props.callbackParent(false)
+            console.log("entro")
+            console.log(event.target)
+        }
+    }
+
     componentDidMount(){
         document.addEventListener('click', this.listenerClick);
+        //document.addEventListener('keyDown', this.listenerClick);
     }
-    
 
-    listenerClick(event){
-        if(this.wrapperRef && !this.wrapperRef.current.contains(event.target))
-        console.log("clico", event)
+    componentWillUnmount(){
+        //document.removeEventListener('keyDown', this.listenerClick);
+        document.removeEventListener('click', this.listenerClick);
     }
     
     render(){
-        console.log("oi", this.wrapperRef)
         return(
             <div ref={this.setWrapperRef} className="modal">
                 <div className="modal-content">
-                    <button className="closeModalButton" onClick={this.closeModal}>X</button>
+                    <button className="closeModalButton" onClick={() => this.props.callbackParent(false)}>X</button>
                     <p className="titulo">Titulo</p>
                     <hr/>
                     <p>dskoadnaodnklfndjfnjdakfnjkfndjkafk</p>
-                    <button className="editModalButton" onClick={this.closeModal}>Editar</button>
+                    <button className="editModalButton" onClick={() => this.props.callbackParent(false)}>Editar</button>
                     <button className="saveModalButton" onClick={this.closeModal}>Salvar</button>
                     <button className="cancelModalButton" onClick={this.closeModal}>Cancelar</button>
                 </div>
