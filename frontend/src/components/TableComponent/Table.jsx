@@ -31,7 +31,6 @@ class Table extends React.Component{
     }
 
     openEditModal(event){  
-        event.preventDefault();
         event.stopPropagation();
         this.setState({isOpenModal : true});
     }
@@ -205,14 +204,14 @@ class Item extends React.Component{
     }
 
     viewButtonFunc(event){
-            this.props.modalData(this.props.currentCar);
-            this.props.openEditModal(event);
+        this.props.modalData(this.props.currentCar);
+        this.props.openEditModal(event);
     }
 
     render(){
         return(
             <>
-                <tr onClick={() => this.toggleBodyItem}
+                <tr onClick={this.toggleBodyItem}
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
