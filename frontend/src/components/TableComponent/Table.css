@@ -88,3 +88,18 @@ tr:hover {background-color: #b6d6d6;}
     font-size: 30px;  
     font-weight: bold;
 }
+
+.inputGrid{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+.input{
+    border-radius: 10px;
+    border: 2px solid #beeded;
+    margin: 3px;
+    padding: 5px
+}
+input:focus{
+    outline: none;
+    border: 2px solid #22c2c2 !important;
+}

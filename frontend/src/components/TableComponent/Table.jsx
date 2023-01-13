@@ -121,6 +121,40 @@ class Table extends React.Component{
     }
 }
 
+class Input extends React.Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        return(
+            <div className="inputGrid">
+                <p>    
+                    Carro:  
+                </p>
+                <input className="input" type="text" placeholder="nome" name="Nome do Carro"/>
+                <p>    
+                    Modelo:  
+                </p>
+                <input className="input" type="text" placeholder="modelo" name="Modelo"/>
+                <p>    
+                    Fabricante:  
+                </p>
+                <input className="input" type="text" placeholder="fabricante" name="Fabricante"/>
+                <p>    
+                    Tipo:  
+                </p>
+                <input className="input" type="text" placeholder="tipo" name="Tipo"/>
+                <p>    
+                    Gasolina:  
+                </p> 
+                <input className="input" type="text" placeholder="gasolina" name="Gasolina"/>
+            </div>
+        )
+    }
+}
+
 class EditModal extends React.Component{
     constructor(props){
         super(props);
@@ -196,13 +230,7 @@ class EditModal extends React.Component{
                                     Gasolina: {this.props.modalData?.car_fuel || ""} <br/>
                                 </p>
                             : <>
-                                <p>    
-                                    Carro: {this.props.modalData?.car_name || ""} <br/>
-                                    Modelo: {this.props.modalData?.car_model || ""} <br/>
-                                    Fabricante: {this.props.modalData?.car_manufacturer || ""} <br/>
-                                    Tipo: {this.props.modalData?.car_type || ""} <br/>
-                                    Gasolina: {this.props.modalData?.car_fuel || ""} <br/>
-                                </p>
+                                <Input/>
                             </>}
                     <button className={"editModalButton " + this.state.displayEditButton} onClick={this.setIsEditing}>Editar</button>
                     <button className={"saveModalButton " + this.state.displaySaveCancelButton} onClick={this.setIsEditing}>Salvar</button>
