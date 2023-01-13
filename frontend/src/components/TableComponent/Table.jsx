@@ -157,7 +157,7 @@ class EditModal extends React.Component{
             await this.setState({displayEditButton: "hide"});
             await this.setState({displaySaveCancelButton: "show"});
         }
-        
+        this.forceUpdate();
     }
 
     listenerClick(event){
@@ -185,19 +185,28 @@ class EditModal extends React.Component{
                 <div className="modal-content">
                     <button className="closeModalButton" onClick={() => this.props.callbackParent(false)}>X</button>
                     <div>
-                            <b>Carro</b><br/><hr/>
+                            <b>{!this.state.isEditing? "": "Edição de "}Carro</b><br/><hr/>
                             </div>
                             {this.props.modalData && !this.state.isEditing ? 
-                            <p>    
-                                Carro: {this.props.modalData?.car_name || ""} <br/>
-                                Modelo: {this.props.modalData?.car_model || ""} <br/>
-                                Fabricante: {this.props.modalData?.car_manufacturer || ""} <br/>
-                                Tipo: {this.props.modalData?.car_type || ""} <br/>
-                                Gasolina: {this.props.modalData?.car_fuel || ""} <br/>
-                            </p>: <><p>fdhjsidhfiduofhduislfhjdkfhdsjk</p></>}
+                                <p>    
+                                    Carro: {this.props.modalData?.car_name || ""} <br/>
+                                    Modelo: {this.props.modalData?.car_model || ""} <br/>
+                                    Fabricante: {this.props.modalData?.car_manufacturer || ""} <br/>
+                                    Tipo: {this.props.modalData?.car_type || ""} <br/>
+                                    Gasolina: {this.props.modalData?.car_fuel || ""} <br/>
+                                </p>
+                            : <>
+                                <p>    
+                                    Carro: {this.props.modalData?.car_name || ""} <br/>
+                                    Modelo: {this.props.modalData?.car_model || ""} <br/>
+                                    Fabricante: {this.props.modalData?.car_manufacturer || ""} <br/>
+                                    Tipo: {this.props.modalData?.car_type || ""} <br/>
+                                    Gasolina: {this.props.modalData?.car_fuel || ""} <br/>
+                                </p>
+                            </>}
                     <button className={"editModalButton " + this.state.displayEditButton} onClick={this.setIsEditing}>Editar</button>
                     <button className={"saveModalButton " + this.state.displaySaveCancelButton} onClick={this.setIsEditing}>Salvar</button>
-                    <button className="cancelModalButton" onClick={this.closeModal}>Cancelar</button>
+                    <button className={"cancelModalButton " + this.state.displaySaveCancelButton} onClick={() => this.props.callbackParent(false)}>Cancelar</button>
                 </div>
             </div>
         )
