@@ -125,6 +125,36 @@ class Input extends React.Component{
 
     constructor(props){
         super(props);
+        this.state = {
+            nome: "",
+            modelo: "",
+            fabricante: "",
+            tipo: "",
+            gasolina: ""
+        }
+        this.setNome = this.setNome.bind(this);
+        this.setModelo = this.setModelo.bind(this);
+        this.setFabricante = this.setFabricante.bind(this);
+        this.setTipo = this.setTipo.bind(this);
+        this.setGasolina = this.setGasolina.bind(this);
+
+    }
+
+
+    setNome(event){
+        this.setState({nome: event.target.value});
+    }
+    setModelo(event){
+        this.setState({modelo: event.target.value});
+    }
+    setFabricante(event){
+        this.setState({fabricante: event.target.value});
+    }
+    setTipo(event){
+        this.setState({tipo: event.target.value});
+    }
+    setGasolina(event){
+        this.setState({gasolina: event.target.value});
     }
 
     render(){
@@ -133,23 +163,23 @@ class Input extends React.Component{
                 <p>    
                     Carro:  
                 </p>
-                <input className="input" type="text" placeholder="nome" name="Nome do Carro"/>
+                <input className="input" type="text" placeholder="nome" name="Nome do Carro" onChange={this.setNome}/>
                 <p>    
                     Modelo:  
                 </p>
-                <input className="input" type="text" placeholder="modelo" name="Modelo"/>
+                <input className="input" type="text" placeholder="modelo" name="Modelo" onChange={this.setModelo}/>
                 <p>    
                     Fabricante:  
                 </p>
-                <input className="input" type="text" placeholder="fabricante" name="Fabricante"/>
+                <input className="input" type="text" placeholder="fabricante" name="Fabricante" onChange={this.setFabricante}/>
                 <p>    
                     Tipo:  
                 </p>
-                <input className="input" type="text" placeholder="tipo" name="Tipo"/>
+                <input className="input" type="text" placeholder="tipo" name="Tipo" onChange={this.setTipo}/>
                 <p>    
                     Gasolina:  
                 </p> 
-                <input className="input" type="text" placeholder="gasolina" name="Gasolina"/>
+                <input className="input" type="text" placeholder="gasolina" name="Gasolina" onChange={this.setGasolina}/>
             </div>
         )
     }
