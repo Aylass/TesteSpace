@@ -61,27 +61,28 @@ tr:hover {background-color: #b6d6d6;}
     border: 5px solid rgb(227, 209, 75);
     background-color: rgb(227, 209, 75);;
 }
+.show{display:block !important;}
+.hide{display:none !important;}
+
 .saveModalButton{
-    display: none; /* Hidden by default */
     margin-top: 30px;
     width: 100%;
     font-size: 28px;
     font-weight: bold;
     color: #ffffff;
-    border-radius: 1px 1px 10px 1px;
-    border: 5px solid rgb(227, 209, 75);
-    background-color: rgb(227, 209, 75);;
+    border-radius: 1px 1px 10px 10px;
+    border: 5px solid rgb(138, 227, 75);
+    background-color: rgb(138, 227, 75);
 }
 .cancelModalButton{
-    display: none; /* Hidden by default */
     margin-top: 30px;
     width: 100%;
     font-size: 28px;
     font-weight: bold;
     color: #ffffff;
-    border-radius: 1px 1px 1px 10px;
-    border: 5px solid rgb(227, 209, 75);
-    background-color: rgb(227, 209, 75);;
+    border-radius: 1px 1px 10px 10px;
+    border: 5px solid rgb(255, 80, 80);
+    background-color: rgb(255, 80, 80);
 }
 .titulo{
     font-size: 30px;  
