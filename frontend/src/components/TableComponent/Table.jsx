@@ -120,92 +120,29 @@ class Table extends React.Component{
     }
 }
 
-/*class Input extends React.Component{
-
-    constructor(props){
-        super(props);
-        this.state = {
-            nome: "",
-            modelo: "",
-            fabricante: "",
-            tipo: "",
-            gasolina: ""
-        }
-        this.setNome = this.setNome.bind(this);
-        this.setModelo = this.setModelo.bind(this);
-        this.setFabricante = this.setFabricante.bind(this);
-        this.setTipo = this.setTipo.bind(this);
-        this.setGasolina = this.setGasolina.bind(this);
-    }
-
-    setNome(event){
-        this.setState({nome: event.target.value});
-        //this.props.onChildChanged(event.target.value, undefined, undefined, undefined, undefined);
-    }
-    setModelo(event){
-        this.setState({modelo: event.target.value});
-        this.props.onChildChanged(undefined, this.state.modelo, undefined, undefined, undefined);
-    }
-    setFabricante(event){
-        this.setState({fabricante: event.target.value});
-        this.props.onChildChanged(undefined, undefined, this.state.fabricante, undefined, undefined);
-    }
-    setTipo(event){
-        this.setState({tipo: event.target.value});
-        this.props.onChildChanged(undefined, undefined, undefined, this.state.tipo, undefined);
-    }
-    setGasolina(event){
-        this.setState({gasolina: event.target.value});
-        this.props.onChildChanged(undefined, undefined, undefined, undefined, this.state.gasolina);
-    }
-
-
-    render(){
-        return(
-            <div className="inputGrid">
-                <p>    
-                    Carro:  
-                </p>
-                <input className="input" type="text" placeholder={this.props.nomeData} name="Nome do Carro" onChange={this.setNome} value={this.state.nome}/>
-                <p>    
-                    Modelo:  
-                </p>
-                <input className="input" type="text" placeholder={this.props.modeloData} name="Modelo" onChange={this.setModelo} value={this.state.modelo}/>
-                <p>    
-                    Fabricante:  
-                </p>
-                <input className="input" type="text" placeholder={this.props.fabricanteData} name="Fabricante" onChange={this.setFabricante} value={this.state.fabricante}/>
-                <p>    
-                    Tipo:  
-                </p>
-                <input className="input" type="text" placeholder={this.props.tipoData}name="Tipo" onChange={this.setTipo} value={this.state.tipo}/>
-                <p>    
-                    Gasolina:  
-                </p> 
-                <input className="input" type="text" placeholder={this.props.gasolinaData} name="Gasolina" onChange={this.setGasolina} value={this.state.gasolina}/>
-            </div>
-        )
-    }
-}*/
-
 class EditModal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             carData: null,
             isEditing: false,
-            nomeData: "Nome",
-            modeloData: "Modelo",
-            fabricanteData: "Fabricante",
-            tipoData: "Tipo",
-            gasolinaData: "Gasolina",
-            disableReadOnly: false
+            nomeData: this.props.modalData?.car_name || "Nome",
+            modeloData: this.props.modalData?.car_model || "Modelo",
+            fabricanteData: this.props.modalData?.car_manufacturer || "Fabricante",
+            tipoData: this.props.modalData?.car_type || "Tipo",
+            gasolinaData: this.props.modalData?.car_fuel || "Gasolina",
         }
-        this.setWrapperRef = this.setWrapperRef.bind(this);
+    
         this.listenerClick = this.listenerClick.bind(this);
         this.setIsEditing = this.setIsEditing.bind(this);
-        this.onChildChanged = this.onChildChanged.bind(this);
-        this.onInputChanged = this.onInputChanged.bind(this);
+
+        this.onNameChanged = this.onNameChanged.bind(this);
+        this.onModeloChanged = this.onModeloChanged.bind(this);
+        this.onFabricanteChanged = this.onFabricanteChanged.bind(this);
+        this.onTipoChanged = this.onTipoChanged.bind(this);
+        this.onGasolinaChanged = this.onGasolinaChanged.bind(this);
+
+        this.setWrapperRef = this.setWrapperRef.bind(this);
         this.wrapperRef = React.createRef();
     }
 
@@ -226,41 +163,27 @@ class EditModal extends React.Component{
         event.stopPropagation();
         if(this.state.isEditing === false){ //not editing
              this.setState({
-                isEditing: true, 
-                disableReadOnly: true});
+                isEditing: true});
         }else{ //editing
             this.setState({
-                isEditing: false,    
-                disableReadOnly: false});
-                console.log("coisa")
-            //this.onChildChanged(this.props.modalData.car_name, this.props.modalData.car_model, this.props.modalData.car_manufacturer, this.props.modalData.car_type, this.props.modalData.car_fuel);
+                isEditing: false});
         }
     }
 
-     onInputChanged(data){
-        //await this.setState({data: data});
-        console.log("mudo")
+    onNameChanged(data){
+        this.setState({nomeData: data.target.value});
     }
-
-    async onChildChanged(nome, modelo, fabricante, tipo, gasolina){
-        if(nome !== undefined){
-            await this.setState({nomeData: nome});
-        }
-        if(modelo !== undefined){
-            await this.setState({modeloData: modelo});
-        }
-        if(fabricante !== undefined){
-            await this.setState({fabricanteData: fabricante});
-        }
-        if(tipo !== undefined){
-            await this.setState({tipoData: tipo});
-        }
-        if(gasolina !== undefined){
-            await this.setState({gasolinaData: gasolina});
-        }
-        console.log("Funcao chamada", this.state.nomeData)
-        console.log("----", this.state.modeloData)
-        this.forceUpdate();
+    onModeloChanged(data){
+        this.setState({modeloData: data.target.value});
+    }
+    onFabricanteChanged(data){
+        this.setState({fabricanteData: data.target.value});
+    }
+    onTipoChanged(data){
+        this.setState({tipoData: data.target.value});
+    }
+    onGasolinaChanged(data){
+        this.setState({gasolinaData: data.target.value});
     }
 
     listenerClick(event){
@@ -271,20 +194,9 @@ class EditModal extends React.Component{
 
     componentDidMount(){
         document.addEventListener('click', this.listenerClick);
-        this.setState({nomeData: this.props.modalData?.car_name || "Nome"});
-        this.setState({modeloData: this.props.modalData?.car_model || "Modelo"});
-        this.setState({fabricanteData: this.props.modalData?.car_manufacturer || "Fabricante"});
-        this.setState({tipoData: this.props.modalData?.car_type || "Tipo"});
-        this.setState({gasolinaData: this.props.modalData?.car_fuel || "Gasolina"});
-        //document.addEventListener('keyDown', this.listenerClick);
+        document.addEventListener('escKey', this.listenerClick);
     }
 
-    /*componentWillUnmount(){
-        //document.removeEventListener('keyDown', this.listenerClick);
-        document.removeEventListener('click', this.listenerClick);
-        console.log("desmonto", this.props.modalData)
-    }*/
-    
     render(){
         return(
             <div ref={this.setWrapperRef} className="modal">
@@ -294,11 +206,11 @@ class EditModal extends React.Component{
                         <b>{!this.state.isEditing? "": "Edição de "}Carro</b><br/><hr/>
 
                         <div className="inputGrid">
-                            <p>Carro: </p>  <InputComponent disable={this.state.disableReadOnly} data={this.state.nomeData} onChange={() => this.onInputChanged} />    
-                            <p>Modelo: </p> <InputComponent disable={this.state.disableReadOnly} data={this.state.modeloData} onChange={() => this.onInputChanged}/> 
-                            <p>Fabricante: </p> <InputComponent disable={this.state.disableReadOnly} data={this.state.fabricanteData} onChange={() => this.onInputChanged}/> 
-                            <p>Tipo: </p> <InputComponent disable={this.state.disableReadOnly} data={this.state.tipoData} onChange={() => this.onInputChanged}/>
-                            <p>Gasolina: </p> <InputComponent disable={this.state.disableReadOnly} data={this.state.gasolinaData} onChange={() => this.onInputChanged}/>
+                            <p>Carro: </p>  <InputComponent disabled={!this.state.isEditing} data={this.state.nomeData} onChange={this.onNameChanged} />    
+                            <p>Modelo: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.modeloData} onChange={this.onModeloChanged}/> 
+                            <p>Fabricante: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.fabricanteData} onChange={this.onFabricanteChanged}/> 
+                            <p>Tipo: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.tipoData} onChange={this.onTipoChanged}/>
+                            <p>Gasolina: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.gasolinaData} onChange={this.onGasolinaChanged}/>
                         </div>
                         { this.state.isEditing === false?
                                 <button className={"editModalButton"} onClick={this.setIsEditing}>Editar</button>
