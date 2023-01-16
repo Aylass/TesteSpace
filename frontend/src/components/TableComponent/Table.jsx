@@ -10,7 +10,7 @@ class Table extends React.Component{
         this.state = {
             isOpenModal: false,
             modalData: null,
-            modalCar: ""
+            modalCar: {}
         }
 
         this.openEditModal = this.openEditModal.bind(this);
@@ -88,9 +88,7 @@ class Table extends React.Component{
                             userStatus = user.status;
 
                             //user cars-------------------------------------------------------
-                            const userCurrentCar = this.state.modalCar === "" ? this.props.dataCars[userCar] : this.state.modalCar
-                            
-                            //this.setState({modalCar: userCurrentCar});
+                            const userCurrentCar = this.props.dataCars[userCar];
                             
                             //user emprego-------------------------------------------------------
                             const userCurrentJob = this.props.dataJobs[userSalary];
@@ -114,6 +112,7 @@ class Table extends React.Component{
                                 status={userStatus} 
                                 user={user}
                                 currentCar={userCurrentCar}
+                                editedCar={this.state.modalCar}
                                 currentJob={userCurrentJob}
                                 currentProduct={userCurrentProduct}
                                 currentAccess={userCurrentAccess}
@@ -154,15 +153,7 @@ class EditModal extends React.Component{
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.wrapperRef = React.createRef();
     }
-
-    /*saveJson(){
-        const obj={albumId:'1', id:'2', photoId:'2', title:'abcd', thumbnailUrl:'https://abcd.com', url:'https://abcd.com'}
-        this.props.saveChanges({
-            key: this.props.modalData,
-            obj
-        }) 
-    }*/
-
+    
     setWrapperRef(node){
         if(node !== undefined)
         this.wrapperRef = node;
@@ -178,7 +169,7 @@ class EditModal extends React.Component{
                 isEditing: false});
                 //cria um objeto para comportar o carro novo
                 let newCar = {
-                    car_id: this.props.modalData.id,
+                    car_id: this.props.modalData.car_id,
                     car_fuel: this.state.gasolinaData,
                     car_manufacturer: this.state.fabricanteData,
                     car_model: this.state.modeloData,
@@ -187,7 +178,6 @@ class EditModal extends React.Component{
                 }
                 //manda o objeto do carro novo pro pai
                 this.props.onChildChangedModalCar(newCar);
-                //salva no json
         }
     }
 
@@ -277,6 +267,7 @@ class Item extends React.Component{
         this.props.openEditModal(event);
     }
     render(){
+
         return(
             <>
                 <tr onClick={this.toggleBodyItem}
@@ -295,7 +286,8 @@ class Item extends React.Component{
                 {this.state.isOpenItem === false? null :
                     <ItemBody 
                         user={this.props.user} 
-                        currentCar={this.props.currentCar}
+                        currentCar={this.props.editedCar.car_id === this.props.currentCar.car_id ?
+                                            this.props.editedCar: this.props.currentCar}
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
                         currentAccess={this.props.currentAccess}
