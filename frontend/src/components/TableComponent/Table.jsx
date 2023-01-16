@@ -10,13 +10,23 @@ class Table extends React.Component{
         this.state = {
             isOpenModal: false,
             modalData: null,
-            modalCar: {}
+            modalUser: null,
+            modalCar: {},
+            listCars: this.props.dataCars,
+            listUsers: this.props.dataRow
         }
+        this.listJob = this.props.dataJobs;
+        this.listProducts = this.props.dataProducts;
+        this.listAccess = this.props.dataAccess;
+        this.listAdresses = this.props.dataAddresses;
+
 
         this.openEditModal = this.openEditModal.bind(this);
         this.onChildChanged = this.onChildChanged.bind(this);
         this.onChildChangedModalData = this.onChildChangedModalData.bind(this);
         this.onChildChangedModalCar = this.onChildChangedModalCar.bind(this);
+        this.onChangedModalCar = this.onChangedModalCar.bind(this);
+        this.onChildChangedModalUserData = this.onChildChangedModalUserData.bind(this);
     }
 
     buildHeader(){
@@ -48,20 +58,43 @@ class Table extends React.Component{
     onChildChangedModalCar(data) {
         this.setState({modalCar: data});
     }
+    onChildChangedModalUserData(data) {
+        this.setState({modalUser: data});
+    }
+    
+    onChangedModalCar(modalCar) {
+        let listCarsObjectCopy = {...this.state.listCars};
+        let listUserObjectCopy = {...this.state.listUsers};
+        const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
+        modalCar.car_id = newCarId
+        listCarsObjectCopy[newCarId] = modalCar;
+
+        for(let i=0; i<this.state.listUsers.length; i++){
+            const user = this.state.listUsers[i];
+            if(user.user_id === this.state.modalUser.user_id){
+                listUserObjectCopy[user.user_id].user_car_id = newCarId;
+                console.log("atualizo car id no user",listUserObjectCopy[user.user_id])
+            }
+        }
+        this.setState({
+            listCars: listCarsObjectCopy,
+            listUsers: listUserObjectCopy});//ta atualizando
+            //console.log("atualizo car id no user",this.state.listUsers)
+    }
 
     render(){
         return(
             <>
                 {this.state.isOpenModal?
                     <div className="divModal"> 
-                        <EditModal isOpenModal={this.state.isOpenModal} modalData={this.state.modalData} 
-                                onChildChangedModalCar={this.onChildChangedModalCar} callbackParent={this.onChildChanged} /> 
+                        <EditModal isOpenModal={this.state.isOpenModal} modalData={this.state.modalData} modalUser={this.state.modalUser}
+                                onChildChangedModalCar={this.onChangedModalCar} callbackParent={this.onChildChanged} /> 
                     </div>
                     : <></>}
                 <table>
                     {this.buildHeader()}
                     <tbody>
-                        {this.props.dataRow.map?.(user => {
+                        {this.state.listUsers.map?.(user => {
                             //user -------------------------------------------------------
                             let userName = "";
                             let userId = "";
@@ -112,7 +145,8 @@ class Table extends React.Component{
                                 status={userStatus} 
                                 user={user}
                                 currentCar={userCurrentCar}
-                                editedCar={this.state.modalCar}
+                                onChangedModalCar={this.onChangedModalCar}
+                                onChildChangedModalUserData={this.onChildChangedModalUserData}
                                 currentJob={userCurrentJob}
                                 currentProduct={userCurrentProduct}
                                 currentAccess={userCurrentAccess}
@@ -177,7 +211,8 @@ class EditModal extends React.Component{
                     car_type: this.state.tipoData
                 }
                 //manda o objeto do carro novo pro pai
-                this.props.onChildChangedModalCar(newCar);
+                this.props.onChildChangedModalCar(newCar,this.props.modalUser.user_id);
+                //valida e manda pro back
         }
     }
 
@@ -253,6 +288,7 @@ class Item extends React.Component{
         
         this.state = {
          isOpenItem : false,
+         currentCarItem: this.props.currentCar
         }
         this.toggleBodyItem = this.toggleBodyItem.bind(this);
         this.viewButtonFunc = this.viewButtonFunc.bind(this);
@@ -264,10 +300,12 @@ class Item extends React.Component{
 
     viewButtonFunc(event){
         this.props.modalData(this.props.currentCar);
+        this.props.onChildChangedModalUserData(this.props.user);
         this.props.openEditModal(event);
     }
-    render(){
 
+    render(){
+        
         return(
             <>
                 <tr onClick={this.toggleBodyItem}
@@ -286,8 +324,7 @@ class Item extends React.Component{
                 {this.state.isOpenItem === false? null :
                     <ItemBody 
                         user={this.props.user} 
-                        currentCar={this.props.editedCar.car_id === this.props.currentCar.car_id ?
-                                            this.props.editedCar: this.props.currentCar}
+                        currentCar={this.state.currentCarItem}
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
                         currentAccess={this.props.currentAccess}
@@ -298,6 +335,8 @@ class Item extends React.Component{
     }
 }
 
+// this.props.editedCar.car_id === this.props.currentCar.car_id ?
+//                                             this.props.editedCar: this.props.currentCar
 
 class ItemBody extends React.Component{
     constructor(props){
