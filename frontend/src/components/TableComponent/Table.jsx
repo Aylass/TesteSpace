@@ -9,12 +9,14 @@ class Table extends React.Component{
         super(props);
         this.state = {
             isOpenModal: false,
-            modalData: null
+            modalData: null,
+            modalCar: ""
         }
 
         this.openEditModal = this.openEditModal.bind(this);
         this.onChildChanged = this.onChildChanged.bind(this);
         this.onChildChangedModalData = this.onChildChangedModalData.bind(this);
+        this.onChildChangedModalCar = this.onChildChangedModalCar.bind(this);
     }
 
     buildHeader(){
@@ -43,13 +45,17 @@ class Table extends React.Component{
     onChildChangedModalData(data) {
         this.setState({modalData: data});
     }
+    onChildChangedModalCar(data) {
+        this.setState({modalCar: data});
+    }
 
     render(){
         return(
             <>
                 {this.state.isOpenModal?
                     <div className="divModal"> 
-                        <EditModal isOpenModal={this.state.isOpenModal} modalData={this.state.modalData} callbackParent={this.onChildChanged} /> 
+                        <EditModal isOpenModal={this.state.isOpenModal} modalData={this.state.modalData} 
+                                onChildChangedModalCar={this.onChildChangedModalCar} callbackParent={this.onChildChanged} /> 
                     </div>
                     : <></>}
                 <table>
@@ -82,7 +88,9 @@ class Table extends React.Component{
                             userStatus = user.status;
 
                             //user cars-------------------------------------------------------
-                            const userCurrentCar = this.props.dataCars[userCar];
+                            const userCurrentCar = this.state.modalCar === "" ? this.props.dataCars[userCar] : this.state.modalCar
+                            
+                            //this.setState({modalCar: userCurrentCar});
                             
                             //user emprego-------------------------------------------------------
                             const userCurrentJob = this.props.dataJobs[userSalary];
@@ -124,7 +132,7 @@ class EditModal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            carData: null,
+            carData: this.props.carData,
             isEditing: false,
             nomeData: this.props.modalData?.car_name || "Nome",
             modeloData: this.props.modalData?.car_model || "Modelo",
@@ -168,6 +176,17 @@ class EditModal extends React.Component{
         }else{ //editing
             this.setState({
                 isEditing: false});
+                //cria um objeto para comportar o carro novo
+                let newCar = {
+                    car_id: this.props.modalData.id,
+                    car_fuel: this.state.gasolinaData,
+                    car_manufacturer: this.state.fabricanteData,
+                    car_model: this.state.modeloData,
+                    car_name: this.state.nomeData,
+                    car_type: this.state.tipoData
+                }
+                //manda o objeto do carro novo pro pai
+                this.props.onChildChangedModalCar(newCar);
                 //salva no json
         }
     }
@@ -257,7 +276,6 @@ class Item extends React.Component{
         this.props.modalData(this.props.currentCar);
         this.props.openEditModal(event);
     }
-
     render(){
         return(
             <>
