@@ -15,6 +15,8 @@ tr:nth-child(even) {
 tr:hover {background-color: #b6d6d6;}
 
 .divModal{
+    scroll-behavior: auto;
+    scroll-behavior: smooth;
     display: flex !important; /* Hidden by default */
     position: absolute; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -61,9 +63,6 @@ tr:hover {background-color: #b6d6d6;}
     border: 5px solid rgb(227, 209, 75);
     background-color: rgb(227, 209, 75);;
 }
-.show{display:block !important;}
-.hide{display:none !important;}
-
 .saveModalButton{
     margin-top: 30px;
     width: 100%;

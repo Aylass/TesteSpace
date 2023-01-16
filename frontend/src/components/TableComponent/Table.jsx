@@ -134,6 +134,7 @@ class EditModal extends React.Component{
         }
     
         this.listenerClick = this.listenerClick.bind(this);
+        this.listenerESC = this.listenerESC.bind(this);
         this.setIsEditing = this.setIsEditing.bind(this);
 
         this.onNameChanged = this.onNameChanged.bind(this);
@@ -167,6 +168,7 @@ class EditModal extends React.Component{
         }else{ //editing
             this.setState({
                 isEditing: false});
+                //salva no json
         }
     }
 
@@ -191,10 +193,19 @@ class EditModal extends React.Component{
             this.props.callbackParent(false);
         }
     }
+    listenerESC(event){
+            if(event.keyCode === 27)
+                this.props.callbackParent(false);
+    }
 
     componentDidMount(){
         document.addEventListener('click', this.listenerClick);
-        document.addEventListener('escKey', this.listenerClick);
+        document.addEventListener('keydown', this.listenerESC);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener('click', this.listenerClick);
+        document.removeEventListener('keydown', this.listenerESC);
     }
 
     render(){
