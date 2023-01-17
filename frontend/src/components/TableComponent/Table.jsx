@@ -4,6 +4,62 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import InputComponent from "../InputComponent/Input";
 
+class Paginator extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            currentPage: 1,
+            nextPage: 0,
+            previousPage: 0,
+            startsOn: this.props.startsOn,
+            endsOn: this.props.endsOn,
+            totalItems: this.props.totalItems,
+        }
+        
+        this.btnChangeOption = this.btnChangeOption.bind(this);
+    }
+
+    selectOptions(){
+        const optionsArray = [];
+        for (let page = 1; page < this.state.totalItems; page++) {
+            optionsArray.push(<option key={'option'+page} selected={page === this.state.currentPage} value={page}>{page} Pagina</option>);
+        }
+        return optionsArray;
+    }
+
+    btnChangeOption(side){
+        let cont = this.state.currentPage;
+        if(side){//direita
+            console.log("direita")
+            cont = cont+1;
+        }else{//esquerda
+            console.log("esquerda")
+            cont = cont-1;
+        }
+        if(cont < this.state.totalItems && cont > 0){
+            this.setState({currentPage: cont});
+            console.log(document.getElementById('option1'))
+            this.props.onChangeCurrentPage(this.state.currentPage, side);
+        }
+    }
+
+    render(){
+        return(
+            <>
+                <div className="paginatorWrapper">
+                    <p className="paginatorPara">Exibindo: {this.state.startsOn}-{this.state.endsOn}</p>
+                    <p className="paginatorPara">Total: {this.state.totalItems}</p>
+                    <button onClick={()=>this.btnChangeOption(false)}>setinha</button>
+                    <select name="page" id="page">
+                        {this.selectOptions()}
+                    </select>
+                    <button onClick={()=>this.btnChangeOption(true)}>setinha</button>
+                </div>
+            </>        
+        )
+    }
+}
+
 class Table extends React.Component{
     constructor(props){
         super(props);
@@ -13,7 +69,10 @@ class Table extends React.Component{
             modalUser: null,
             modalCar: {},
             listCars: this.props.dataCars,
-            listUsers: this.props.dataRow
+            listUsers: this.props.dataRow,
+            currentPage: 1,
+            startsOn: 0,
+            endsOn: 5
         }
         this.listJob = this.props.dataJobs;
         this.listProducts = this.props.dataProducts;
@@ -27,6 +86,7 @@ class Table extends React.Component{
         this.onChildChangedModalCar = this.onChildChangedModalCar.bind(this);
         this.onChangedModalCar = this.onChangedModalCar.bind(this);
         this.onChildChangedModalUserData = this.onChildChangedModalUserData.bind(this);
+        this.onChildPageChange = this.onChildPageChange.bind(this);
     }
 
     buildHeader(){
@@ -61,6 +121,25 @@ class Table extends React.Component{
     onChildChangedModalUserData(data) {
         this.setState({modalUser: data});
     }
+
+    onChildPageChange(newPage, side){
+        console.log("current",newPage)
+        if(side){//direita
+            this.setState({
+                startsOn: this.state.startsOn + 5,
+                endsOn: this.state.startsOn + 5,
+                currentPage: newPage
+            });
+        }else{//esquerda
+            this.setState({
+                startsOn: this.state.startsOn - 5,
+                endsOn: this.state.startsOn - 5,
+                currentPage: newPage
+            });
+        }
+        console.log("starts on",this.state.startsOn)
+        console.log("ends on",this.state.endsOn)
+    }
     
     onChangedModalCar(modalCar) {
         let listCarsObjectCopy = {...this.state.listCars};
@@ -80,9 +159,75 @@ class Table extends React.Component{
             this.forceUpdate()
     }
 
+    mapItems(){
+        const list = [];
+        for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
+            const user = this.state.listUsers[index];
+            //user -------------------------------------------------------
+                let userName = "";
+                let userId = "";
+                let userDate = "";
+                let userSalary = "";
+                let userCarId = "";
+                let userStatus = "";
+
+                if(user.user_first_name){
+                    userName = user.user_first_name;
+                }
+                if(user.user_birth_date){
+                    userDate = user.user_birth_date;
+                }
+                if(user.user_job_id){
+                    userSalary = user.user_job_id;
+                }
+                if(user.user_car_id){
+                    userCarId = user.user_car_id;
+                }
+                if(user.user_access_id){
+                    userId = user.user_access_id;
+                }
+                userStatus = user.status;
+
+                //user cars-------------------------------------------------------
+                const userCurrentCar = this.state.listCars[userCarId];
+                
+                //user emprego-------------------------------------------------------
+                const userCurrentJob = this.props.dataJobs[userSalary];
+                
+                //user produtos-------------------------------------------------------
+                const userCurrentProduct = this.props.dataProducts[userSalary];
+                
+                //user Acessos-------------------------------------------------------
+                const userCurrentAccess = this.props.dataAccess[userId];
+                
+                //user Endereços-------------------------------------------------------
+                const userCurrentAddresses = this.props.dataAddresses[userId];
+
+            list.push(<Item 
+                    modalData={this.onChildChangedModalData}
+                    key={`item_${user.user_id}`} 
+                    name={userName} 
+                    date={userDate} 
+                    currency={userCurrentJob?.user_job_salary_currency_symbol || ""}
+                    salary={userCurrentJob?.user_job_salary || ""} 
+                    status={userStatus} 
+                    user={user}
+                    currentCar={userCurrentCar}
+                    onChangedModalCar={this.onChangedModalCar}
+                    onChildChangedModalUserData={this.onChildChangedModalUserData}
+                    currentJob={userCurrentJob}
+                    currentProduct={userCurrentProduct}
+                    currentAccess={userCurrentAccess}
+                    currentAdresses={userCurrentAddresses}
+                    openEditModal={this.openEditModal}/>);
+        }
+        return list;
+    }
+
     render(){
         return(
             <>
+                <Paginator totalItems={this.state.listUsers.length} currentPage={this.state.currentPage} startsOn={this.state.startsOn} endsOn={this.state.endsOn} onChangeCurrentPage={this.onChildPageChange}/>
                 {this.state.isOpenModal?
                     <div className="divModal"> 
                         <EditModal isOpenModal={this.state.isOpenModal} modalData={this.state.modalData} modalUser={this.state.modalUser}
@@ -92,66 +237,7 @@ class Table extends React.Component{
                 <table>
                     {this.buildHeader()}
                     <tbody>
-                        {this.state.listUsers.map?.(user => {
-                            //user -------------------------------------------------------
-                            let userName = "";
-                            let userId = "";
-                            let userDate = "";
-                            let userSalary = "";
-                            let userCarId = "";
-                            let userStatus = "";
-
-                            if(user.user_first_name){
-                                userName = user.user_first_name;
-                            }
-                            if(user.user_birth_date){
-                                userDate = user.user_birth_date;
-                            }
-                            if(user.user_job_id){
-                                userSalary = user.user_job_id;
-                            }
-                            if(user.user_car_id){
-                                userCarId = user.user_car_id;
-                            }
-                            if(user.user_access_id){
-                                userId = user.user_access_id;
-                            }
-                            userStatus = user.status;
-
-                            //user cars-------------------------------------------------------
-                            const userCurrentCar = this.state.listCars[userCarId];
-                            
-                            //user emprego-------------------------------------------------------
-                            const userCurrentJob = this.props.dataJobs[userSalary];
-                            
-                            //user produtos-------------------------------------------------------
-                            const userCurrentProduct = this.props.dataProducts[userSalary];
-                            
-                            //user Acessos-------------------------------------------------------
-                            const userCurrentAccess = this.props.dataAccess[userId];
-                            
-                            //user Endereços-------------------------------------------------------
-                            const userCurrentAddresses = this.props.dataAddresses[userId];
-            
-                        return(<Item 
-                                modalData={this.onChildChangedModalData}
-                                key={`item_${user.user_id}`} 
-                                name={userName} 
-                                date={userDate} 
-                                currency={userCurrentJob?.user_job_salary_currency_symbol || ""}
-                                salary={userCurrentJob?.user_job_salary || ""} 
-                                status={userStatus} 
-                                user={user}
-                                currentCar={userCurrentCar}
-                                onChangedModalCar={this.onChangedModalCar}
-                                onChildChangedModalUserData={this.onChildChangedModalUserData}
-                                currentJob={userCurrentJob}
-                                currentProduct={userCurrentProduct}
-                                currentAccess={userCurrentAccess}
-                                currentAdresses={userCurrentAddresses}
-                                openEditModal={this.openEditModal}
-                            />)})
-                        }
+                        {this.mapItems()}
                     </tbody>
                 </table>
             </>
@@ -427,7 +513,7 @@ class Modal extends React.Component{
                             </div>
                             <p>            
                                 Titulo: {this.props.currentJob?.user_job_title || ""} <br/>
-                                Salário: {this.props.currentJob?.user_job_salary_currency_symbol || ""}: {this.props.currentJob?.user_job_salary.replace(".", ",") || ""} <br/>
+                                Salário: {this.props.currentJob?.user_job_salary_currency_symbol || ""} {this.props.currentJob?.user_job_salary.replace(".", ",") || ""} <br/>
                                 Endereço: {this.props.currentJob?.user_job_address || ""} <br/>
                             </p>
                         </>

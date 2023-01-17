@@ -14,6 +14,12 @@ tr.item:nth-of-type(even) {
     background-color: #beeded;
 }
 tr.item:hover {background-color: #b6d6d6;}
+.paginatorWrapper{
+    display: flex;
+}
+.paginatorPara{
+    margin: 5px;
+}
 
 .divModal{
     scroll-behavior: auto;
