@@ -13,7 +13,7 @@ th {
 tr.item:nth-of-type(even) {
     background-color: #beeded;
 }
-tr:hover {background-color: #b6d6d6;}
+tr.item:hover {background-color: #b6d6d6;}
 
 .divModal{
     scroll-behavior: auto;
