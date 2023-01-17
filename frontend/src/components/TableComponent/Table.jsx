@@ -138,6 +138,7 @@ class Table extends React.Component{
                                 key={`item_${user.user_id}`} 
                                 name={userName} 
                                 date={userDate} 
+                                currency={userCurrentJob?.user_job_salary_currency_symbol || ""}
                                 salary={userCurrentJob?.user_job_salary || ""} 
                                 status={userStatus} 
                                 user={user}
@@ -315,11 +316,11 @@ class Item extends React.Component{
     render(){
         return(
             <>
-                <tr onClick={this.toggleBodyItem} class="item"
+                <tr onClick={this.toggleBodyItem} className="item"
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
-                    <td>{this.props.salary}</td>
+                    <td>{this.props.currency}: {this.props.salary}</td>
                     <td><button onClick={this.viewButtonFunc} >Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
