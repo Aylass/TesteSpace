@@ -162,6 +162,7 @@ class EditModal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            disabledSaveBtn: true,
             carData: this.props.carData,
             isEditing: false,
             nomeData: this.props.modalData?.car_name || "Nome",
@@ -214,19 +215,29 @@ class EditModal extends React.Component{
     }
 
     onNameChanged(data){
-        this.setState({nomeData: data.target.value});
+        this.setState({
+            disabledSaveBtn: false,
+            nomeData: data.target.value});
     }
     onModeloChanged(data){
-        this.setState({modeloData: data.target.value});
+        this.setState({
+            disabledSaveBtn: false,
+            modeloData: data.target.value});
     }
     onFabricanteChanged(data){
-        this.setState({fabricanteData: data.target.value});
+        this.setState({
+            disabledSaveBtn: false,
+            fabricanteData: data.target.value});
     }
     onTipoChanged(data){
-        this.setState({tipoData: data.target.value});
+        this.setState({
+            disabledSaveBtn: false,
+            tipoData: data.target.value});
     }
     onGasolinaChanged(data){
-        this.setState({gasolinaData: data.target.value});
+        this.setState({
+            disabledSaveBtn: false,
+            gasolinaData: data.target.value});
     }
 
     listenerClick(event){
@@ -269,7 +280,7 @@ class EditModal extends React.Component{
                                 <button className={"editModalButton"} onClick={this.setIsEditing}>Editar</button>
                             : 
                             <>
-                                <button className={"saveModalButton"} onClick={this.setIsEditing}>Salvar</button>
+                                <button className={this.state.disabledSaveBtn? "saveModalButtonDisable" : "saveModalButton"} disabled={this.state.disabledSaveBtn} onClick={this.setIsEditing}>Salvar</button>
                                 <button className={"cancelModalButton"} onClick={() => this.props.callbackParent(false)}>Cancelar</button>
                             </>
 

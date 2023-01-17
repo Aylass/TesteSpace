@@ -74,6 +74,16 @@ tr.item:hover {background-color: #b6d6d6;}
     border: 5px solid rgb(138, 227, 75);
     background-color: rgb(138, 227, 75);
 }
+.saveModalButtonDisable{
+    margin-top: 30px;
+    width: 100%;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    border-radius: 1px 1px 10px 10px;
+    border: 5px solid rgb(155, 155, 155);
+    background-color: rgb(155, 155, 155);
+}
 .cancelModalButton{
     margin-top: 30px;
     width: 100%;
