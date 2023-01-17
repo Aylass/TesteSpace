@@ -63,18 +63,13 @@ class Table extends React.Component{
     }
     
     onChangedModalCar(modalCar) {
-        console.log("originaç",this.state.listUsers)
         let listCarsObjectCopy = {...this.state.listCars};
         let listUserObjectCopy = [...this.state.listUsers];
         const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
         modalCar.car_id = newCarId
         listCarsObjectCopy[newCarId] = modalCar;
-        console.log("modal",this.state.modalUser.user_car_id)
-        console.log("lista",listUserObjectCopy)
         for(let i=0; i<this.state.listUsers.length; i++){
             const user = this.state.listUsers[i];
-            console.log("user",user)
-            console.log("list na pos tal",listUserObjectCopy)
             if(user.user_car_id === this.state.modalUser.user_car_id){
                 listUserObjectCopy[i].user_car_id = newCarId;
             }
@@ -103,7 +98,7 @@ class Table extends React.Component{
                             let userId = "";
                             let userDate = "";
                             let userSalary = "";
-                            let userCar = "";
+                            let userCarId = "";
                             let userStatus = "";
 
                             if(user.user_first_name){
@@ -116,7 +111,7 @@ class Table extends React.Component{
                                 userSalary = user.user_job_id;
                             }
                             if(user.user_car_id){
-                                userCar = user.user_car_id;
+                                userCarId = user.user_car_id;
                             }
                             if(user.user_access_id){
                                 userId = user.user_access_id;
@@ -124,7 +119,7 @@ class Table extends React.Component{
                             userStatus = user.status;
 
                             //user cars-------------------------------------------------------
-                            const userCurrentCar = this.props.dataCars[userCar];
+                            const userCurrentCar = this.state.listCars[userCarId];
                             
                             //user emprego-------------------------------------------------------
                             const userCurrentJob = this.props.dataJobs[userSalary];
@@ -144,7 +139,6 @@ class Table extends React.Component{
                                 name={userName} 
                                 date={userDate} 
                                 salary={userCurrentJob?.user_job_salary || ""} 
-                                car={userCar} 
                                 status={userStatus} 
                                 user={user}
                                 currentCar={userCurrentCar}
@@ -292,7 +286,6 @@ class Item extends React.Component{
         
         this.state = {
          isOpenItem : false,
-         currentCarItem: this.props.currentCar
         }
         this.toggleBodyItem = this.toggleBodyItem.bind(this);
         this.viewButtonFunc = this.viewButtonFunc.bind(this);
@@ -327,7 +320,7 @@ class Item extends React.Component{
                 {this.state.isOpenItem === false? null :
                     <ItemBody 
                         user={this.state.itemUser} 
-                        currentCar={this.state.currentCarItem}
+                        currentCar={this.props.currentCar}
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
                         currentAccess={this.props.currentAccess}
