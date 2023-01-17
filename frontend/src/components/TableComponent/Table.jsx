@@ -320,7 +320,7 @@ class Item extends React.Component{
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
-                    <td>{this.props.currency}: {this.props.salary}</td>
+                    <td>{this.props.currency}: {this.props.salary.replace(".", ",")}</td>
                     <td><button onClick={this.viewButtonFunc} >Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
@@ -427,7 +427,7 @@ class Modal extends React.Component{
                             </div>
                             <p>            
                                 Titulo: {this.props.currentJob?.user_job_title || ""} <br/>
-                                Salário: {this.props.currentJob?.user_job_salary_currency_symbol || ""} {this.props.currentJob?.user_job_salary || ""} <br/>
+                                Salário: {this.props.currentJob?.user_job_salary_currency_symbol || ""}: {this.props.currentJob?.user_job_salary.replace(".", ",") || ""} <br/>
                                 Endereço: {this.props.currentJob?.user_job_address || ""} <br/>
                             </p>
                         </>
@@ -440,7 +440,7 @@ class Modal extends React.Component{
                             <p>            
                                 Nome: {this.props.currentProduct?.user_product_buyed_product_name || ""} <br/>
                                 Fabricante: {this.props.currentProduct?.user_product_buyed_company_name || ""} <br/>
-                                Preço: {this.props.currentProduct?.user_product_buyed_product_price || ""} <br/>
+                                Preço: {this.props.currentProduct?.user_product_buyed_product_price.replace(".", ",") || ""} <br/>
                             </p>
                         </>
                         :
