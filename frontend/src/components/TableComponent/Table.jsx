@@ -63,23 +63,26 @@ class Table extends React.Component{
     }
     
     onChangedModalCar(modalCar) {
+        console.log("originaç",this.state.listUsers)
         let listCarsObjectCopy = {...this.state.listCars};
-        let listUserObjectCopy = {...this.state.listUsers};
+        let listUserObjectCopy = [...this.state.listUsers];
         const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
         modalCar.car_id = newCarId
         listCarsObjectCopy[newCarId] = modalCar;
-
+        console.log("modal",this.state.modalUser.user_car_id)
+        console.log("lista",listUserObjectCopy)
         for(let i=0; i<this.state.listUsers.length; i++){
             const user = this.state.listUsers[i];
-            if(user.user_id === this.state.modalUser.user_id){
-                listUserObjectCopy[user.user_id].user_car_id = newCarId;
-                console.log("atualizo car id no user",listUserObjectCopy[user.user_id])
+            console.log("user",user)
+            console.log("list na pos tal",listUserObjectCopy)
+            if(user.user_car_id === this.state.modalUser.user_car_id){
+                listUserObjectCopy[i].user_car_id = newCarId;
             }
         }
         this.setState({
             listCars: listCarsObjectCopy,
             listUsers: listUserObjectCopy});//ta atualizando
-            //console.log("atualizo car id no user",this.state.listUsers)
+            this.forceUpdate()
     }
 
     render(){
@@ -253,6 +256,7 @@ class EditModal extends React.Component{
     }
 
     render(){
+        
         return(
             <div ref={this.setWrapperRef} className="modal">
                 <div className="modal-content">
@@ -305,7 +309,6 @@ class Item extends React.Component{
     }
 
     render(){
-        
         return(
             <>
                 <tr onClick={this.toggleBodyItem}
@@ -323,7 +326,7 @@ class Item extends React.Component{
                 </tr>
                 {this.state.isOpenItem === false? null :
                     <ItemBody 
-                        user={this.props.user} 
+                        user={this.state.itemUser} 
                         currentCar={this.state.currentCarItem}
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
