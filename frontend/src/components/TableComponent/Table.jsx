@@ -304,7 +304,7 @@ class Item extends React.Component{
     render(){
         return(
             <>
-                <tr onClick={this.toggleBodyItem}
+                <tr onClick={this.toggleBodyItem} class="item"
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
