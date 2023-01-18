@@ -8,18 +8,15 @@ class Paginator extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            currentPage: 1,
-            nextPage: 0,
-            previousPage: 0,
             startsOn: this.props.startsOn,
             endsOn: this.props.endsOn,
             totalItems: this.props.totalItems,
-            numPages: this.props.totalItems / 20
+            numPages: this.props.totalItems / 20,
         }
         
         this.btnChangeOption = this.btnChangeOption.bind(this);
+        this.handlePageOptionChange = this.handlePageOptionChange.bind(this);
 
-        console.log(this.props.totalItems % 20)
         if(this.props.totalItems % 20 !== 0){
             this.setState({numPages: this.state.numPages + 1});
         }
@@ -29,24 +26,30 @@ class Paginator extends React.Component{
     selectOptions(){
         const optionsArray = [];
         for (let page = 1; page <= this.state.numPages; page++) {
-            optionsArray.push(<option key={'option'+page} selected={page === this.state.currentPage} value={page}>{page} Pagina</option>);
+            optionsArray.push(<option key={'option'+page} selected={page === this.props.currentPage} value={page}>{page} Pagina</option>);
         }
         return optionsArray;
     }
 
     btnChangeOption(side){
-        let cont = this.state.currentPage;
+        let count = this.props.currentPage;
         if(side){//direita
-            console.log("direita")
-            cont = cont+1;
+            count = count+1;
         }else{//esquerda
-            console.log("esquerda")
-            cont = cont-1;
+            count = count-1;
         }
-        if(cont <= this.state.numPages && cont > 0){
-            this.setState({currentPage: cont});
-            this.props.onChangeCurrentPage(this.state.currentPage, side);
+        if(count <= this.state.numPages && count > 0){
+            this.props.onChangeCurrentPage(count, side);
         }
+    }
+
+    handlePageOptionChange() {
+        let selectElement = document.querySelector('select');
+        let output = parseInt(selectElement.options[selectElement.selectedIndex].value);
+        selectElement.options[selectElement.selectedIndex].selected = true;
+
+        //atualizar end start
+        this.props.onChildOptionChange(20 * (output - 1), 20 * output, output);
     }
 
     render(){
@@ -56,7 +59,7 @@ class Paginator extends React.Component{
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
                     <p className="paginatorPara">Total: {this.state.totalItems}</p>
                     <button onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
-                    <select name="page" id="page">
+                    <select id="select" onChange={this.handlePageOptionChange}>
                         {this.selectOptions()}
                     </select>
                     <button onClick={()=>this.btnChangeOption(true)}>{<FontAwesomeIcon icon={faArrowRight} />}</button>
@@ -85,7 +88,6 @@ class Table extends React.Component{
         this.listAccess = this.props.dataAccess;
         this.listAdresses = this.props.dataAddresses;
 
-
         this.openEditModal = this.openEditModal.bind(this);
         this.onChildChanged = this.onChildChanged.bind(this);
         this.onChildChangedModalData = this.onChildChangedModalData.bind(this);
@@ -93,6 +95,7 @@ class Table extends React.Component{
         this.onChangedModalCar = this.onChangedModalCar.bind(this);
         this.onChildChangedModalUserData = this.onChildChangedModalUserData.bind(this);
         this.onChildPageChange = this.onChildPageChange.bind(this);
+        this.onChildOptionChange = this.onChildOptionChange.bind(this);
     }
 
     buildHeader(){
@@ -129,7 +132,6 @@ class Table extends React.Component{
     }
 
     onChildPageChange(newPage, side){
-        console.log("current",newPage)
         if(side){//direita
             this.setState({
                 startsOn: this.state.startsOn + 20,
@@ -143,8 +145,16 @@ class Table extends React.Component{
                 currentPage: newPage
             });
         }
+        console.log("CurrentPage",this.state.currentPage)
         console.log("starts on",this.state.startsOn)
         console.log("ends on",this.state.endsOn)
+    }
+    onChildOptionChange(start, end, current){
+        this.setState({
+            startsOn: start,
+            endsOn: end,
+            currentPage: current
+        });
     }
     
     onChangedModalCar(modalCar) {
@@ -238,7 +248,9 @@ class Table extends React.Component{
                     currentPage={this.state.currentPage} 
                     startsOn={this.state.startsOn} 
                     endsOn={this.state.endsOn} 
-                    onChangeCurrentPage={this.onChildPageChange}/>
+                    onChangeCurrentPage={this.onChildPageChange}
+                    onChildOptionChange={this.onChildOptionChange}
+                    />
                 {this.state.isOpenModal?
                     <div className="divModal"> 
                         <EditModal 
