@@ -58,11 +58,11 @@ class Paginator extends React.Component{
                 <div className="paginatorWrapper">
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
                     <p className="paginatorPara">Total: {this.state.totalItems}</p>
-                    <button onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
-                    <select id="select" onChange={this.handlePageOptionChange}>
+                    <button className='btnPaginator' onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
+                    <select className="selector" id="select" onChange={this.handlePageOptionChange}>
                         {this.selectOptions()}
                     </select>
-                    <button onClick={()=>this.btnChangeOption(true)}>{<FontAwesomeIcon icon={faArrowRight} />}</button>
+                    <button className='btnPaginator' onClick={()=>this.btnChangeOption(true)}>{<FontAwesomeIcon icon={faArrowRight} />}</button>
                 </div>
             </>        
         )
@@ -434,7 +434,7 @@ class Item extends React.Component{
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
                     <td>{this.props.currency}: {this.props.salary.replace(".", ",")}</td>
-                    <td><button onClick={this.viewButtonFunc} >Visualizar</button></td>
+                    <td><button className="btnVisualizar" onClick={this.viewButtonFunc} >Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
                     
