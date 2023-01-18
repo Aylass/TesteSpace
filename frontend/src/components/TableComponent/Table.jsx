@@ -14,14 +14,20 @@ class Paginator extends React.Component{
             startsOn: this.props.startsOn,
             endsOn: this.props.endsOn,
             totalItems: this.props.totalItems,
+            numPages: this.props.totalItems / 20
         }
         
         this.btnChangeOption = this.btnChangeOption.bind(this);
+
+        console.log(this.props.totalItems % 20)
+        if(this.props.totalItems % 20 !== 0){
+            this.setState({numPages: this.state.numPages + 1});
+        }
     }
 
     selectOptions(){
         const optionsArray = [];
-        for (let page = 1; page < this.state.totalItems; page++) {
+        for (let page = 1; page <= this.state.numPages; page++) {
             optionsArray.push(<option key={'option'+page} selected={page === this.state.currentPage} value={page}>{page} Pagina</option>);
         }
         return optionsArray;
@@ -36,9 +42,8 @@ class Paginator extends React.Component{
             console.log("esquerda")
             cont = cont-1;
         }
-        if(cont < this.state.totalItems && cont > 0){
+        if(cont <= this.state.numPages && cont > 0){
             this.setState({currentPage: cont});
-            console.log(document.getElementById('option1'))
             this.props.onChangeCurrentPage(this.state.currentPage, side);
         }
     }
@@ -47,7 +52,7 @@ class Paginator extends React.Component{
         return(
             <>
                 <div className="paginatorWrapper">
-                    <p className="paginatorPara">Exibindo: {this.state.startsOn}-{this.state.endsOn}</p>
+                    <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
                     <p className="paginatorPara">Total: {this.state.totalItems}</p>
                     <button onClick={()=>this.btnChangeOption(false)}>setinha</button>
                     <select name="page" id="page">
@@ -72,7 +77,7 @@ class Table extends React.Component{
             listUsers: this.props.dataRow,
             currentPage: 1,
             startsOn: 0,
-            endsOn: 5
+            endsOn: 20,
         }
         this.listJob = this.props.dataJobs;
         this.listProducts = this.props.dataProducts;
@@ -126,14 +131,14 @@ class Table extends React.Component{
         console.log("current",newPage)
         if(side){//direita
             this.setState({
-                startsOn: this.state.startsOn + 5,
-                endsOn: this.state.startsOn + 5,
+                startsOn: this.state.startsOn + 20,
+                endsOn: this.state.endsOn + 20,
                 currentPage: newPage
             });
         }else{//esquerda
             this.setState({
-                startsOn: this.state.startsOn - 5,
-                endsOn: this.state.startsOn - 5,
+                startsOn: this.state.startsOn - 20,
+                endsOn: this.state.endsOn - 20,
                 currentPage: newPage
             });
         }
@@ -227,11 +232,20 @@ class Table extends React.Component{
     render(){
         return(
             <>
-                <Paginator totalItems={this.state.listUsers.length} currentPage={this.state.currentPage} startsOn={this.state.startsOn} endsOn={this.state.endsOn} onChangeCurrentPage={this.onChildPageChange}/>
+                <Paginator 
+                    totalItems={this.state.listUsers.length} 
+                    currentPage={this.state.currentPage} 
+                    startsOn={this.state.startsOn} 
+                    endsOn={this.state.endsOn} 
+                    onChangeCurrentPage={this.onChildPageChange}/>
                 {this.state.isOpenModal?
                     <div className="divModal"> 
-                        <EditModal isOpenModal={this.state.isOpenModal} modalData={this.state.modalData} modalUser={this.state.modalUser}
-                                onChildChangedModalCar={this.onChangedModalCar} callbackParent={this.onChildChanged} /> 
+                        <EditModal 
+                            isOpenModal={this.state.isOpenModal} 
+                            modalData={this.state.modalData} 
+                            modalUser={this.state.modalUser}
+                            onChildChangedModalCar={this.onChangedModalCar} 
+                            callbackParent={this.onChildChanged} /> 
                     </div>
                     : <></>}
                 <table>
