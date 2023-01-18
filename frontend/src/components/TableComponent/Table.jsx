@@ -145,9 +145,6 @@ class Table extends React.Component{
                 currentPage: newPage
             });
         }
-        console.log("CurrentPage",this.state.currentPage)
-        console.log("starts on",this.state.startsOn)
-        console.log("ends on",this.state.endsOn)
     }
     onChildOptionChange(start, end, current){
         this.setState({
@@ -191,7 +188,8 @@ class Table extends React.Component{
                     userName = user.user_first_name;
                 }
                 if(user.user_birth_date){
-                    userDate = user.user_birth_date;
+                    userDate = user.user_birth_date.split("/");
+                    userDate = userDate[1] + "/" + userDate[0] + "/" + userDate[2]
                 }
                 if(user.user_job_id){
                     userSalary = user.user_job_id;
@@ -324,7 +322,6 @@ class EditModal extends React.Component{
                 }
                 //manda o objeto do carro novo pro pai
                 this.props.onChildChangedModalCar(newCar,this.props.modalUser.user_id);
-                //valida e manda pro back
         }
     }
 
@@ -425,6 +422,7 @@ class Item extends React.Component{
         this.props.onChildChangedModalUserData(this.props.user);
         this.props.openEditModal(event);
     }
+    
 
     render(){
         return(
@@ -456,9 +454,6 @@ class Item extends React.Component{
         )
     }
 }
-
-// this.props.editedCar.car_id === this.props.currentCar.car_id ?
-//                                             this.props.editedCar: this.props.currentCar
 
 class ItemBody extends React.Component{
     constructor(props){
