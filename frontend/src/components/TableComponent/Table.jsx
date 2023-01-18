@@ -7,49 +7,50 @@ import InputComponent from "../InputComponent/Input";
 class Paginator extends React.Component{
     constructor(props){
         super(props);
-        this.state = {
-            startsOn: this.props.startsOn,
-            endsOn: this.props.endsOn,
-            totalItems: this.props.totalItems,
-            numPages: this.props.totalItems / 20,
-        }
+        const totalItems = this.props.totalItems;
+        const numMaxPages = Math.ceil(totalItems / 20);
+        
+
+        this.numPages = numMaxPages;
         
         this.btnChangeOption = this.btnChangeOption.bind(this);
         this.handlePageOptionChange = this.handlePageOptionChange.bind(this);
-
-        if(this.props.totalItems % 20 !== 0){
-            this.setState({numPages: this.state.numPages + 1});
-        }
-    }
-    
+    }  
 
     selectOptions(){
         const optionsArray = [];
-        for (let page = 1; page <= this.state.numPages; page++) {
-            optionsArray.push(<option key={'option'+page} selected={page === this.props.currentPage} value={page}>{page} Pagina</option>);
+        for (let page = 1; page <= this.numPages; page++) {
+            optionsArray.push(<option key={'option' + page} value={page}>{page} Pagina</option>);
         }
         return optionsArray;
     }
 
-    btnChangeOption(side){
+    btnChangeOption(isRight){
         let count = this.props.currentPage;
-        if(side){//direita
+        let newStart;
+        let newEnd;
+        if(isRight){//direita
             count = count+1;
+            newStart = parseInt(this.props.startsOn + 20);
+            newEnd = parseInt(this.props.endsOn + 20);
         }else{//esquerda
             count = count-1;
+            newStart = parseInt(this.props.startsOn - 20);
+            newEnd = parseInt(this.props.endsOn - 20); 
         }
-        if(count <= this.state.numPages && count > 0){
-            this.props.onChangeCurrentPage(count, side);
+        
+        if(count <= this.numPages && count > 0){
+            this.props.onPageChange(newStart, newEnd, count);
         }
     }
 
-    handlePageOptionChange() {
-        let selectElement = document.querySelector('select');
-        let output = parseInt(selectElement.options[selectElement.selectedIndex].value);
-        selectElement.options[selectElement.selectedIndex].selected = true;
+    handlePageOptionChange(event) {
+        let newOptionValue = parseInt(event.target.value);
+        let newStart = 20 * (newOptionValue - 1);
+        let newEnd =  20 * newOptionValue;
 
         //atualizar end start
-        this.props.onChildOptionChange(20 * (output - 1), 20 * output, output);
+        this.props.onPageChange(newStart, newEnd, newOptionValue);
     }
 
     render(){
@@ -57,9 +58,9 @@ class Paginator extends React.Component{
             <>
                 <div className="paginatorWrapper">
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
-                    <p className="paginatorPara">Total: {this.state.totalItems}</p>
+                    <p className="paginatorPara">Total: {this.totalItems}</p>
                     <button className='btnPaginator' onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
-                    <select className="selector" id="select" onChange={this.handlePageOptionChange}>
+                    <select className="selector" id="select" onChange={this.handlePageOptionChange} value={this.props.currentPage}>
                         {this.selectOptions()}
                     </select>
                     <button className='btnPaginator' onClick={()=>this.btnChangeOption(true)}>{<FontAwesomeIcon icon={faArrowRight} />}</button>
@@ -88,14 +89,16 @@ class Table extends React.Component{
         this.listAccess = this.props.dataAccess;
         this.listAdresses = this.props.dataAddresses;
 
+        //Modal
         this.openEditModal = this.openEditModal.bind(this);
         this.onChildChanged = this.onChildChanged.bind(this);
         this.onChildChangedModalData = this.onChildChangedModalData.bind(this);
         this.onChildChangedModalCar = this.onChildChangedModalCar.bind(this);
         this.onChangedModalCar = this.onChangedModalCar.bind(this);
         this.onChildChangedModalUserData = this.onChildChangedModalUserData.bind(this);
-        this.onChildPageChange = this.onChildPageChange.bind(this);
-        this.onChildOptionChange = this.onChildOptionChange.bind(this);
+
+        //Paginator
+        this.onPageChange = this.onPageChange.bind(this);
     }
 
     buildHeader(){
@@ -131,22 +134,8 @@ class Table extends React.Component{
         this.setState({modalUser: data});
     }
 
-    onChildPageChange(newPage, side){
-        if(side){//direita
-            this.setState({
-                startsOn: this.state.startsOn + 20,
-                endsOn: this.state.endsOn + 20,
-                currentPage: newPage
-            });
-        }else{//esquerda
-            this.setState({
-                startsOn: this.state.startsOn - 20,
-                endsOn: this.state.endsOn - 20,
-                currentPage: newPage
-            });
-        }
-    }
-    onChildOptionChange(start, end, current){
+
+    onPageChange(start, end, current){
         this.setState({
             startsOn: start,
             endsOn: end,
@@ -246,8 +235,7 @@ class Table extends React.Component{
                     currentPage={this.state.currentPage} 
                     startsOn={this.state.startsOn} 
                     endsOn={this.state.endsOn} 
-                    onChangeCurrentPage={this.onChildPageChange}
-                    onChildOptionChange={this.onChildOptionChange}
+                    onPageChange={this.onPageChange}
                     />
                 {this.state.isOpenModal?
                     <div className="divModal"> 
@@ -509,6 +497,7 @@ class Modal extends React.Component{
         this.state = {
             tabOpenModal : 0,
         }
+        this.stringCutter = this.props.currentAccess.user_access_user_agent.split(" ");
     }
 
     render(){
@@ -563,7 +552,7 @@ class Modal extends React.Component{
                                 Login: {this.props.currentAccess?.user_access_login || ""} <br/>
                                 Endereço IP: {this.props.currentAccess?.user_access_ip_address || ""} <br/>
                                 Endereço MAC: {this.props.currentAccess?.user_access_mac_address || ""} <br/>
-                                Máquina: {this.props.currentAccess?.user_access_user_agent || ""} <br/>
+                                Máquina: {this.stringCutter[0]} <br/>
                             </p>
                         </>
                         :
