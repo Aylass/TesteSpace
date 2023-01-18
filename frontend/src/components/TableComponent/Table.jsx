@@ -1,7 +1,7 @@
 import React from "react";
 import "./Table.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faUserSecret, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import InputComponent from "../InputComponent/Input";
 
 class Paginator extends React.Component{
@@ -24,6 +24,7 @@ class Paginator extends React.Component{
             this.setState({numPages: this.state.numPages + 1});
         }
     }
+    
 
     selectOptions(){
         const optionsArray = [];
@@ -54,11 +55,11 @@ class Paginator extends React.Component{
                 <div className="paginatorWrapper">
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
                     <p className="paginatorPara">Total: {this.state.totalItems}</p>
-                    <button onClick={()=>this.btnChangeOption(false)}>setinha</button>
+                    <button onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
                     <select name="page" id="page">
                         {this.selectOptions()}
                     </select>
-                    <button onClick={()=>this.btnChangeOption(true)}>setinha</button>
+                    <button onClick={()=>this.btnChangeOption(true)}>{<FontAwesomeIcon icon={faArrowRight} />}</button>
                 </div>
             </>        
         )
@@ -424,6 +425,7 @@ class Item extends React.Component{
                     <td><button onClick={this.viewButtonFunc} >Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
+                    
                         this.props.status === false?
                         <FontAwesomeIcon style={{color : '#FF6347'}} icon={faUser} /> :
                         <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
