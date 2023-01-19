@@ -7,11 +7,12 @@ table, th, td {
 }
 thead th {
     width: 25%;
-  }
+}
 th {
     padding: 10px;
     background-color: #beeded;
 }
+
 
 tr.item:nth-of-type(even) {
     background-color: #beeded;
@@ -178,4 +179,7 @@ input:focus{
     border: 2px solid #ffffff;
     padding: 2px;
     cursor: pointer;
+}
+p.tab{
+    height: 150px;
 }

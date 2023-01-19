@@ -537,7 +537,7 @@ class Modal extends React.Component{
                             <div>
                                 <b>Carro</b><br/><hr/>
                             </div>
-                            <p>    
+                            <p className="tab">    
                                 Carro: {this.props.currentCar?.car_name || ""} <br/>
                                 Modelo: {this.props.currentCar?.car_model || ""} <br/>
                                 Fabricante: {this.props.currentCar?.car_manufacturer || ""} <br/>
@@ -551,7 +551,7 @@ class Modal extends React.Component{
                             <div>
                                 <b>Emprego</b><br/><hr/>
                             </div>
-                            <p>            
+                            <p className="tab">          
                                 Titulo: {this.props.currentJob?.user_job_title || ""} <br/>
                                 Salário: {this.props.currentJob?.user_job_salary_currency_symbol || ""} {this.props.currentJob?.user_job_salary.replace(".", ",") || ""} <br/>
                                 Endereço: {this.props.currentJob?.user_job_address || ""} <br/>
@@ -563,7 +563,7 @@ class Modal extends React.Component{
                             <div>
                                 <b>Produto</b><br/><hr/>
                             </div>
-                            <p>            
+                            <p className="tab">            
                                 Nome: {this.props.currentProduct?.user_product_buyed_product_name || ""} <br/>
                                 Fabricante: {this.props.currentProduct?.user_product_buyed_company_name || ""} <br/>
                                 Preço: {this.props.currentProduct?.user_product_buyed_product_price.replace(".", ",") || ""} <br/>
@@ -575,7 +575,7 @@ class Modal extends React.Component{
                             <div>
                                 <b>Acessos</b><br/><hr/>
                             </div>
-                            <p>            
+                            <p className="tab">          
                                 Tecnologia: {this.props.currentAccess?.user_access_business_technoloy || ""} <br/>
                                 Login: {this.props.currentAccess?.user_access_login || ""} <br/>
                                 Endereço IP: {this.props.currentAccess?.user_access_ip_address || ""} <br/>
@@ -589,7 +589,7 @@ class Modal extends React.Component{
                             <div>
                                 <b>Endereço</b><br/><hr/>
                             </div>
-                            <p>   
+                            <p className="tab">  
                                 País: {this.props.currentAdresses?.user_address_country || ""} <br/>         
                                 Estado: {this.props.currentAdresses?.user_address_state || ""} <br/>
                                 Cidade: {this.props.currentAdresses?.user_address_city || ""} <br/>
