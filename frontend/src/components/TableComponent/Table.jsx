@@ -151,8 +151,9 @@ class Table extends React.Component{
         listCarsObjectCopy[newCarId] = modalCar;
         for(let i=0; i<this.state.listUsers.length; i++){
             const user = this.state.listUsers[i];
-            if(user.user_car_id === this.state.modalUser.user_car_id){
+            if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_first_name === this.state.modalUser.user_first_name)){
                 listUserObjectCopy[i].user_car_id = newCarId;
+                break;
             }
         }
         this.setState({
@@ -309,7 +310,7 @@ class EditModal extends React.Component{
                     car_type: this.state.tipoData
                 }
                 //manda o objeto do carro novo pro pai
-                this.props.onChildChangedModalCar(newCar,this.props.modalUser.user_id);
+                this.props.onChildChangedModalCar(newCar,this.props.modalUser);
         }
     }
 
