@@ -480,21 +480,21 @@ class ItemBody extends React.Component{
 
     render(){
         return(
-            <tr >
+            <tr className="modal">
                 <td>
-                    <div className="ItemBody" onClick={() => this.toggleModal(1)}> 
+                    <div className="tabItemBody" onClick={() => this.toggleModal(1)}> 
                         <span>Carro</span>
                     </div>
-                    <div className="ItemBody" onClick={() => this.toggleModal(2)}>
+                    <div className="tabItemBody" onClick={() => this.toggleModal(2)}>
                         <span>Emprego</span>
                     </div> 
-                    <div className="ItemBody" onClick={() => this.toggleModal(3)}>
+                    <div className="tabItemBody" onClick={() => this.toggleModal(3)}>
                         <span>Produto</span>
                     </div>
-                    <div className="ItemBody" onClick={() => this.toggleModal(4)}>
+                    <div className="tabItemBody" onClick={() => this.toggleModal(4)}>
                         <span>Acessos</span>
                     </div>
-                    <div className="ItemBody"  onClick={() => this.toggleModal(5)}>
+                    <div className="tabItemBody"  onClick={() => this.toggleModal(5)}>
                         <span>Endereço</span> 
                     </div>
                 </td>

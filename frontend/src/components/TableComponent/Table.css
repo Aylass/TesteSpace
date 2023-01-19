@@ -17,7 +17,14 @@ tr.item:nth-of-type(even) {
     background-color: #beeded;
     width: 60px;
 }
-tr.item:hover {background-color: #b6d6d6;}
+tr.item:hover {
+    cursor: pointer;
+    background-color: #b6d6d6;
+}
+tr.modal {
+    background-color: #e7f6f6;
+    max-height: 5px;
+}
 
 /*Paginator Style*/
 .paginatorWrapper{
@@ -40,6 +47,7 @@ tr.item:hover {background-color: #b6d6d6;}
     background-color: #ffffff;
 }
 .btnPaginator:hover{
+    cursor: pointer;
     background-color: #beeded;
     animation-name: animateArrowButton;
     animation-duration: 0.5s;
@@ -165,11 +173,9 @@ input:focus{
     border: 5px solid #87cdcd;
 }
 /*InputModal*/
-.ItemBody{
+.tabItemBody{
     background-color: #beeded;
     border: 2px solid #ffffff;
     padding: 2px;
-}
-.itemModal{
-    height: 60px;
+    cursor: pointer;
 }
