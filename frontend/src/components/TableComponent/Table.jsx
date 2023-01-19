@@ -374,7 +374,6 @@ class EditModal extends React.Component{
     }
 
     render(){
-        
         return(
             <div ref={this.setWrapperRef} className="modal">
                 <div className="modal-content">
@@ -528,7 +527,6 @@ class Modal extends React.Component{
     }
 
     render(){
-        console.log("modal", this.props.openModal)
         return(
             <>
                 {

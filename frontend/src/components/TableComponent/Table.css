@@ -166,12 +166,12 @@ input:focus{
 .btnVisualizar{
     background-color: #56afaf;
     border-radius: 5px;
-    border: 5px solid #56afaf;
+    border: none;
+    padding: 5px;
     color: white;
 }
 .btnVisualizar:hover{
     background-color: #3f8282;
-    border: 5px solid #87cdcd;
 }
 /*InputModal*/
 .tabItemBody{
