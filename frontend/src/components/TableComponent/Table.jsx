@@ -420,7 +420,7 @@ class Item extends React.Component{
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
-                    <td>{this.props.currency}: {this.props.salary.replace(".", ",")}</td>
+                    <td>{this.props.currency} {this.props.salary? ":" : ""} {this.props.salary?.replace(".", ",") || ""} </td>
                     <td><button className="btnVisualizar" onClick={this.viewButtonFunc} >Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
@@ -498,7 +498,11 @@ class Modal extends React.Component{
         this.state = {
             tabOpenModal : 0,
         }
-        this.stringCutter = this.props.currentAccess.user_access_user_agent.split(" ");
+        this.stringCutter = []
+        if(this.props.currentAccess !== undefined){
+            this.stringCutter = this.props.currentAccess.user_access_user_agent.split(" ");
+        }
+       
     }
 
     render(){
