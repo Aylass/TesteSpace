@@ -314,30 +314,44 @@ class EditModal extends React.Component{
         }
     }
 
+
+    hasSomeInputChanged(nome, modelo, fabricante, tipo, gasolina){
+
+        console.log(nome)
+        if((nome ===  this.props.modalData.car_name)
+        && (modelo ===  this.props.modalData.car_model)
+        && (fabricante ===  this.props.modalData.car_manufacturer)
+        && (tipo ===  this.props.modalData.car_type)
+        && (gasolina ===  this.props.modalData.car_fuel)
+        ){//disable button
+            return true;
+        }
+        return false;
+    }
     onNameChanged(data){
         this.setState({
-            disabledSaveBtn: false,
-            nomeData: data.target.value});
+            nomeData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(data.target.value, this.state.modeloData, this.state.fabricanteData, this.state.tipoData, this.state.gasolinaData)});
     }
     onModeloChanged(data){
         this.setState({
-            disabledSaveBtn: false,
-            modeloData: data.target.value});
+            modeloData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, data.target.value, this.state.fabricanteData, this.state.tipoData, this.state.gasolinaData)});
     }
     onFabricanteChanged(data){
         this.setState({
-            disabledSaveBtn: false,
-            fabricanteData: data.target.value});
+            fabricanteData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, data.target.value, this.state.tipoData, this.state.gasolinaData)});
     }
     onTipoChanged(data){
         this.setState({
-            disabledSaveBtn: false,
-            tipoData: data.target.value});
+            tipoData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, this.state.fabricanteData, data.target.value, this.state.gasolinaData)});
     }
     onGasolinaChanged(data){
         this.setState({
-            disabledSaveBtn: false,
-            gasolinaData: data.target.value});
+            gasolinaData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, this.state.fabricanteData, this.state.tipoData, data.target.value)});
     }
 
     listenerClick(event){
@@ -410,17 +424,27 @@ class Item extends React.Component{
         this.props.modalData(this.props.currentCar);
         this.props.onChildChangedModalUserData(this.props.user);
         this.props.openEditModal(event);
+        console.log(this.props.currency)
+        console.log(this.props.currency,this.props.salary)
+        console.log(this.props.salary.replace(".", ","))
     }
-    
 
     render(){
+        
+        const salaryFormated = this.props.salary?.replace(".", ",") || "";
         return(
             <>
                 <tr onClick={this.toggleBodyItem} className="item"
                 >
                     <td>{this.props.name}</td>
                     <td>{this.props.date}</td>
-                    <td>{this.props.currency} {this.props.salary? ":" : ""} {this.props.salary?.replace(".", ",") || ""} </td>
+                    {/*Salary Column*/}
+                    <td>
+                        {this.props.currency} 
+                        {this.props.salary? ":" : null} 
+                        {salaryFormated} 
+                    </td>
+
                     <td><button className="btnVisualizar" onClick={this.viewButtonFunc} >Visualizar</button></td>
                     <td>{this.props.status === true?
                         <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> : 
