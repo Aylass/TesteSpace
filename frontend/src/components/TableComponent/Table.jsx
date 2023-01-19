@@ -58,7 +58,8 @@ class Paginator extends React.Component{
             <>
                 <div className="paginatorWrapper">
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
-                    <p className="paginatorPara">Total: {this.totalItems}</p>
+                    <p className="paginatorPara">Total: {this.props.totalItems}</p>
+    
                     <button className='btnPaginator' onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
                     <select className="selector" id="select" onChange={this.handlePageOptionChange} value={this.props.currentPage}>
                         {this.selectOptions()}
@@ -316,8 +317,6 @@ class EditModal extends React.Component{
 
 
     hasSomeInputChanged(nome, modelo, fabricante, tipo, gasolina){
-
-        console.log(nome)
         if((nome ===  this.props.modalData.car_name)
         && (modelo ===  this.props.modalData.car_model)
         && (fabricante ===  this.props.modalData.car_manufacturer)
@@ -424,9 +423,6 @@ class Item extends React.Component{
         this.props.modalData(this.props.currentCar);
         this.props.onChildChangedModalUserData(this.props.user);
         this.props.openEditModal(event);
-        console.log(this.props.currency)
-        console.log(this.props.currency,this.props.salary)
-        console.log(this.props.salary.replace(".", ","))
     }
 
     render(){
@@ -484,34 +480,36 @@ class ItemBody extends React.Component{
 
     render(){
         return(
-            <>
-                <tr onClick={() => this.toggleModal(1)}> 
-                    <th>Carro</th>
-                    <td  colSpan="5" rowSpan="5">
-                        <Modal 
-                            openModal={this.state.tabOpenModal} 
-                            user={this.props.user} 
-                            currentCar={this.props.currentCar}
-                            currentJob={this.props.currentJob}
-                            currentProduct={this.props.currentProduct}
-                            currentAccess={this.props.currentAccess}
-                            currentAdresses={this.props.currentAdresses}
-                        />
-                    </td>
-                </tr>
-                <tr onClick={() => this.toggleModal(2)}>
-                    <th>Emprego</th>
-                </tr> 
-                <tr onClick={() => this.toggleModal(3)}>
-                    <th>Produto</th>
-                </tr>
-                <tr onClick={() => this.toggleModal(4)}>
-                    <th>Acessos</th>
-                </tr>
-                <tr onClick={() => this.toggleModal(5)}>
-                    <th>Endereço</th> 
-                </tr>
-            </>
+            <tr >
+                <td>
+                    <div className="ItemBody" onClick={() => this.toggleModal(1)}> 
+                        <span>Carro</span>
+                    </div>
+                    <div className="ItemBody" onClick={() => this.toggleModal(2)}>
+                        <span>Emprego</span>
+                    </div> 
+                    <div className="ItemBody" onClick={() => this.toggleModal(3)}>
+                        <span>Produto</span>
+                    </div>
+                    <div className="ItemBody" onClick={() => this.toggleModal(4)}>
+                        <span>Acessos</span>
+                    </div>
+                    <div className="ItemBody"  onClick={() => this.toggleModal(5)}>
+                        <span>Endereço</span> 
+                    </div>
+                </td>
+                <td colSpan="5" rowSpan="1">
+                    <Modal  
+                        openModal={this.state.tabOpenModal} 
+                        user={this.props.user} 
+                        currentCar={this.props.currentCar}
+                        currentJob={this.props.currentJob}
+                        currentProduct={this.props.currentProduct}
+                        currentAccess={this.props.currentAccess}
+                        currentAdresses={this.props.currentAdresses}
+                    />
+                </td>
+            </tr>
         )
     }
 }
@@ -530,6 +528,7 @@ class Modal extends React.Component{
     }
 
     render(){
+        console.log("modal", this.props.openModal)
         return(
             <>
                 {
