@@ -10,7 +10,7 @@ class Table extends React.Component{
         super(props);
         this.state = {
             isOpenModal: false,
-            isNotification: true,
+            isNotification: false,
             modalData: null,
             modalUser: null,
             modalCar: {},
@@ -32,14 +32,14 @@ class Table extends React.Component{
         this.onChildChangedModalCar = this.onChildChangedModalCar.bind(this);
         this.onChangedModalCar = this.onChangedModalCar.bind(this);
         this.onChildChangedModalUserData = this.onChildChangedModalUserData.bind(this);
-        this.closeNotification = this.closeNotification.bind(this);
+        this.isNotificationOpen = this.isNotificationOpen.bind(this);
 
         //Paginator
         this.onPageChange = this.onPageChange.bind(this);
     }
 
-    closeNotification(){
-        this.setState({isNotification: false});
+    isNotificationOpen(){
+        this.setState({isNotification: !this.state.isNotification});
     }
 
     buildHeader(){
@@ -176,8 +176,8 @@ class Table extends React.Component{
                     <NotificationComponent 
                         tipo="Success"
                         titulo="Titulo Notificacao"
-                        nomeCarro="Corola"
-                        closeNotification={this.closeNotification}
+                        nomeCarro={this.state.modalUser.user_first_name}
+                        closeNotification={this.isNotificationOpen}
                     /> 
                 : null}
                 <Paginator 
@@ -194,7 +194,9 @@ class Table extends React.Component{
                             modalData={this.state.modalData} 
                             modalUser={this.state.modalUser}
                             onChildChangedModalCar={this.onChangedModalCar} 
-                            callbackParent={this.onChildChanged} /> 
+                            callbackParent={this.onChildChanged} 
+                            openNotification={this.isNotificationOpen}
+                        /> 
                     </div>
                     : <></>}
                 <table>
@@ -327,6 +329,7 @@ class EditModal extends React.Component{
                 }
                 //manda o objeto do carro novo pro pai
                 this.props.onChildChangedModalCar(newCar,this.props.modalUser);
+                this.props.openNotification();
         }
     }
 

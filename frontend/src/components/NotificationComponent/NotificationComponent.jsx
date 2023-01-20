@@ -5,6 +5,7 @@ class NotificationComponent extends React.Component{
 
     constructor(props){
         super(props);
+        setTimeout(this.props.closeNotification, 5000);
     }
     
     render(){
@@ -16,7 +17,7 @@ class NotificationComponent extends React.Component{
                     <hr className="line"/>
                     <div className="notificationContent">
                         <span>
-                            Carro {this.props.nomeCarro} foi editado com 
+                            Carro de {this.props.nomeCarro} foi editado com 
                             {this.props.tipo === "Success"? 
                                 " sucesso"
                                 : this.props.tipo === "Error"? 
