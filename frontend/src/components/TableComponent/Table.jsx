@@ -32,9 +32,14 @@ class Table extends React.Component{
         this.onChildChangedModalCar = this.onChildChangedModalCar.bind(this);
         this.onChangedModalCar = this.onChangedModalCar.bind(this);
         this.onChildChangedModalUserData = this.onChildChangedModalUserData.bind(this);
+        this.closeNotification = this.closeNotification.bind(this);
 
         //Paginator
         this.onPageChange = this.onPageChange.bind(this);
+    }
+
+    closeNotification(){
+        this.setState({isNotification: false});
     }
 
     buildHeader(){
@@ -172,6 +177,7 @@ class Table extends React.Component{
                         tipo="Success"
                         titulo="Titulo Notificacao"
                         nomeCarro="Corola"
+                        closeNotification={this.closeNotification}
                     /> 
                 : null}
                 <Paginator 
