@@ -4,73 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faUserSecret, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import InputComponent from "../InputComponent/Input";
 
-class Paginator extends React.Component{
-    constructor(props){
-        super(props);
-        const totalItems = this.props.totalItems;
-        const numMaxPages = Math.ceil(totalItems / 20);
-        
-
-        this.numPages = numMaxPages;
-        
-        this.btnChangeOption = this.btnChangeOption.bind(this);
-        this.handlePageOptionChange = this.handlePageOptionChange.bind(this);
-    }  
-
-    selectOptions(){
-        const optionsArray = [];
-        for (let page = 1; page <= this.numPages; page++) {
-            optionsArray.push(<option key={'option' + page} value={page}>{page} Pagina</option>);
-        }
-        return optionsArray;
-    }
-
-    btnChangeOption(isRight){
-        let count = this.props.currentPage;
-        let newStart;
-        let newEnd;
-        if(isRight){//direita
-            count = count+1;
-            newStart = parseInt(this.props.startsOn + 20);
-            newEnd = parseInt(this.props.endsOn + 20);
-        }else{//esquerda
-            count = count-1;
-            newStart = parseInt(this.props.startsOn - 20);
-            newEnd = parseInt(this.props.endsOn - 20); 
-        }
-        
-        if(count <= this.numPages && count > 0){
-            this.props.onPageChange(newStart, newEnd, count);
-        }
-    }
-
-    handlePageOptionChange(event) {
-        let newOptionValue = parseInt(event.target.value);
-        let newStart = 20 * (newOptionValue - 1);
-        let newEnd =  20 * newOptionValue;
-
-        //atualizar end start
-        this.props.onPageChange(newStart, newEnd, newOptionValue);
-    }
-
-    render(){
-        return(
-            <>
-                <div className="paginatorWrapper">
-                    <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
-                    <p className="paginatorPara">Total: {this.props.totalItems}</p>
-    
-                    <button className='btnPaginator' onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
-                    <select className="selector" id="select" onChange={this.handlePageOptionChange} value={this.props.currentPage}>
-                        {this.selectOptions()}
-                    </select>
-                    <button className='btnPaginator' onClick={()=>this.btnChangeOption(true)}>{<FontAwesomeIcon icon={faArrowRight} />}</button>
-                </div>
-            </>        
-        )
-    }
-}
-
 class Table extends React.Component{
     constructor(props){
         super(props);
@@ -118,7 +51,7 @@ class Table extends React.Component{
 
     openEditModal(event){  
         event.stopPropagation();
-        this.setState({isOpenModal : true});
+        this.setState({isOpenModal: true});
     }
 
     onChildChanged(bool) {
@@ -256,6 +189,73 @@ class Table extends React.Component{
                     </tbody>
                 </table>
             </>
+        )
+    }
+}
+
+class Paginator extends React.Component{
+    constructor(props){
+        super(props);
+        const totalItems = this.props.totalItems;
+        const numMaxPages = Math.ceil(totalItems / 20);
+        
+
+        this.numPages = numMaxPages;
+        
+        this.btnChangeOption = this.btnChangeOption.bind(this);
+        this.handlePageOptionChange = this.handlePageOptionChange.bind(this);
+    }  
+
+    selectOptions(){
+        const optionsArray = [];
+        for (let page = 1; page <= this.numPages; page++) {
+            optionsArray.push(<option key={'option' + page} value={page}>{page} Pagina</option>);
+        }
+        return optionsArray;
+    }
+
+    btnChangeOption(isRight){
+        let count = this.props.currentPage;
+        let newStart;
+        let newEnd;
+        if(isRight){//direita
+            count = count+1;
+            newStart = parseInt(this.props.startsOn + 20);
+            newEnd = parseInt(this.props.endsOn + 20);
+        }else{//esquerda
+            count = count-1;
+            newStart = parseInt(this.props.startsOn - 20);
+            newEnd = parseInt(this.props.endsOn - 20); 
+        }
+        
+        if(count <= this.numPages && count > 0){
+            this.props.onPageChange(newStart, newEnd, count);
+        }
+    }
+
+    handlePageOptionChange(event) {
+        let newOptionValue = parseInt(event.target.value);
+        let newStart = 20 * (newOptionValue - 1);
+        let newEnd =  20 * newOptionValue;
+
+        //atualizar end start
+        this.props.onPageChange(newStart, newEnd, newOptionValue);
+    }
+
+    render(){
+        return(
+            <>
+                <div className="paginatorWrapper">
+                    <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
+                    <p className="paginatorPara">Total: {this.props.totalItems}</p>
+    
+                    <button className='btnPaginator' onClick={()=>this.btnChangeOption(false)}>{<FontAwesomeIcon icon={faArrowLeft} />}</button>
+                    <select className="selector" id="select" onChange={this.handlePageOptionChange} value={this.props.currentPage}>
+                        {this.selectOptions()}
+                    </select>
+                    <button className='btnPaginator' onClick={()=>this.btnChangeOption(true)}>{<FontAwesomeIcon icon={faArrowRight} />}</button>
+                </div>
+            </>        
         )
     }
 }
@@ -412,6 +412,16 @@ class Item extends React.Component{
         }
         this.toggleBodyItem = this.toggleBodyItem.bind(this);
         this.viewButtonFunc = this.viewButtonFunc.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        if(nextState.isOpenItem !== this.state.isOpenItem){
+            return true;
+        }
+        if(nextProps.currentCar !== this.props.currentCar){
+            return true;
+        }
+        return false;
     }
 
     toggleBodyItem(){
