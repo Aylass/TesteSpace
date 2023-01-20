@@ -11,11 +11,19 @@ class NotificationComponent extends React.Component{
         return(
             <>
                 <div className={"notificationBox" + this.props.tipo}>
-                    <spam className="notificationTitle">{this.props.titulo}</spam>
-                    <button className="notificationHeaderBtn">x</button>
+                    <span className="notificationTitle">{this.props.titulo}</span>
+                    <button className="notificationHeaderBtn" onClick={this.props.closeNotification}>x</button>
                     <hr className="line"/>
                     <div className="notificationContent">
-                        <spam>Carro {this.props.nomeCarro} foi editado com {this.props.tipo}.</spam>
+                        <span>
+                            Carro {this.props.nomeCarro} foi editado com 
+                            {this.props.tipo === "Success"? 
+                                " sucesso"
+                                : this.props.tipo === "Error"? 
+                                " erro" 
+                                : " um aviso"
+                            }.
+                        </span>
                     </div>
                 </div>
             </>

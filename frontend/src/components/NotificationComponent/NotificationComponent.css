@@ -1,32 +1,44 @@
 .notificationBoxSuccess{
+    position: fixed;
+    z-index: 100;
     display: inline-flex;
-    background-color: #8ae9c8;
+    background-color: #8ae9c8ed;
     justify-content: center;
     width: 30%;
     flex-wrap: wrap;
     border-radius: 10px;
     animation-name: animateModal;
     animation-duration: 0.5s;
+    border: 5px solid #93f9d6;
+    margin-top: 10px;
 }
 .notificationBoxError{
+    position: fixed;
+    z-index: 100;
     display: inline-flex;
-    background-color: #fb847d;
+    background-color: #ef7b75eb;
     justify-content: center;
     width: 30%;
     flex-wrap: wrap;
     border-radius: 10px;
     animation-name: animateModal;
     animation-duration: 0.5s;
+    border: 10px solid #ff918b;
+    margin-top: 10px;
 }
 .notificationBoxWarning{
+    position: fixed;
+    z-index: 100;
     display: inline-flex;
-    background-color: #fbec7d;
+    background-color: #ebde76e7;
     justify-content: center;
     width: 30%;
     flex-wrap: wrap;
     border-radius: 10px;
     animation-name: animateModal;
     animation-duration: 0.5s;
+    border: 5px solid #fff07c;
+    margin-top: 10px;
 }
   
 /* Add Animation */
