@@ -3,12 +3,14 @@ import "./Table.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faUserSecret, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import InputComponent from "../InputComponent/Input";
+import NotificationComponent from "../NotificationComponent/NotificationComponent";
 
 class Table extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             isOpenModal: false,
+            isNotification: true,
             modalData: null,
             modalUser: null,
             modalCar: {},
@@ -165,13 +167,20 @@ class Table extends React.Component{
     render(){
         return(
             <>
+                {this.state.isNotification?
+                    <NotificationComponent 
+                        tipo="Success"
+                        titulo="Titulo Notificacao"
+                        nomeCarro="Corola"
+                    /> 
+                : null}
                 <Paginator 
                     totalItems={this.state.listUsers.length} 
                     currentPage={this.state.currentPage} 
                     startsOn={this.state.startsOn} 
                     endsOn={this.state.endsOn} 
                     onPageChange={this.onPageChange}
-                    />
+                />
                 {this.state.isOpenModal?
                     <div className="divModal"> 
                         <EditModal 

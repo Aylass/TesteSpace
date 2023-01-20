@@ -1,0 +1,58 @@
+.notificationBoxSuccess{
+    display: inline-flex;
+    background-color: #8ae9c8;
+    justify-content: center;
+    width: 30%;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    animation-name: animateModal;
+    animation-duration: 0.5s;
+}
+.notificationBoxError{
+    display: inline-flex;
+    background-color: #fb847d;
+    justify-content: center;
+    width: 30%;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    animation-name: animateModal;
+    animation-duration: 0.5s;
+}
+.notificationBoxWarning{
+    display: inline-flex;
+    background-color: #fbec7d;
+    justify-content: center;
+    width: 30%;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    animation-name: animateModal;
+    animation-duration: 0.5s;
+}
+  
+/* Add Animation */
+@keyframes animateModal {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+.notificationHeaderBtn{
+    display: flex;
+    justify-content: flex-end !important;
+    margin-left: 100px;
+    margin-top: 10px;
+    margin-right: 5px;
+    border-radius: 100px;
+    border:  2px solid #ffffffc6;
+    background-color: #ffffffb0;
+}
+.notificationTitle{
+    display: flex;
+    align-items: flex-end;
+    margin-left: 110px;
+}
+.line{
+    width: 90%;
+    border-color: rgb(255, 255, 255);
+}
+.notificationContent{
+    margin: 0px 10px 20px 10px;
+}
