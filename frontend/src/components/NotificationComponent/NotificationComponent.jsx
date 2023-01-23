@@ -35,7 +35,7 @@ class NotificationComponent extends React.Component{
                     <hr className="line"/>
                     <div className="notificationContent">
                         <span>
-                            Carro de {this.props.nomeCarro} foi editado com 
+                            {this.props.notificationDescription}
                             {this.props.tipo === "Success"? 
                                 " sucesso"
                                 : this.props.tipo === "Error"? 

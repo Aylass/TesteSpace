@@ -25,6 +25,7 @@ class Table extends React.Component{
         this.listAccess = this.props.dataAccess;
         this.listAdresses = this.props.dataAddresses;
         this.typeNotification = "Warning";
+        this.notificationDescription = "";
 
         //Modal
         this.openEditModal = this.openEditModal.bind(this);
@@ -88,6 +89,7 @@ class Table extends React.Component{
     onChangedModalCar(modalCar) {
         try {
             this.typeNotification = "Success";
+            
             let listCarsObjectCopy = {...this.state.listCars};
             let listUserObjectCopy = [...this.state.listUsers];
             const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
@@ -97,15 +99,16 @@ class Table extends React.Component{
                 const user = this.state.listUsers[i];
                 if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_first_name === this.state.modalUser.user_first_name)){
                     listUserObjectCopy[i].user_car_id = newCarId;
+                    this.notificationDescription = `Carro de ${user.user_first_name} foi editado com`;
                     break;
                 }
             }
             this.setState({
                 listCars: listCarsObjectCopy,
                 listUsers: listUserObjectCopy});
-            this.forceUpdate()
         } catch (error) {
             this.typeNotification = "Error";
+            this.notificationDescription = `Ocorreu um erro.`;
         }
     }
 
@@ -182,7 +185,7 @@ class Table extends React.Component{
                     <NotificationComponent 
                         tipo={this.typeNotification}
                         titulo="Edição de Carro"
-                        nomeCarro={this.state.modalUser.user_first_name}
+                        notificationDescription={this.notificationDescription}
                         closeNotification={this.isNotificationOpen}
                     /> 
                 : null}
