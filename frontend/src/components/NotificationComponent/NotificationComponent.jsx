@@ -5,13 +5,25 @@ class NotificationComponent extends React.Component{
 
     constructor(props){
         super(props);
-        setTimeout(this.props.closeNotification, 5000);
+        this.state = {
+            exitAnimation: ""
+        }
+    }
+    componentDidMount(){
+        setTimeout(() => {
+            this.setState({exitAnimation: "Exit"})
+        }, 3000);
+    }
+    componentDidUpdate(){
+        setTimeout(() => {
+            this.props.closeNotification()
+        }, 100);
     }
     
     render(){
         return(
             <>
-                <div className={"notificationBox" + this.props.tipo}>
+                <div className={"notificationBox" + this.props.tipo + this.state.exitAnimation}>
                     <span className="notificationTitle">{this.props.titulo}</span>
                     <button className="notificationHeaderBtn" onClick={this.props.closeNotification}>x</button>
                     <hr className="line"/>
@@ -32,7 +44,3 @@ class NotificationComponent extends React.Component{
     }
 }
 export default NotificationComponent;
-
-// titlo texto e tipo(erro/sucesso/warning)
-//     ter um x 
-//     timeout pra sair da tela sozinho props

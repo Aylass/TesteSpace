@@ -14,6 +14,22 @@
     margin-top: 10px;
     margin-left: 250px;
 }
+.notificationBoxSuccessExit{
+    position: fixed;
+    z-index: 100;
+    display: inline-flex;
+    background-color: #8ae9c8ed;
+    justify-content: center;
+    width: 30%;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    animation-name: animateNotificationExit;
+    animation-duration: 0.5s;
+    border: 5px solid #93f9d6;
+    margin-top: 10px;
+    margin-left: 250px;
+}
+
 .notificationBoxError{
     position: fixed;
     z-index: 100;
@@ -23,12 +39,28 @@
     width: 30%;
     flex-wrap: wrap;
     border-radius: 10px;
-    animation-name: animateModal;
+    animation-name: animateNotificationEnter;
     animation-duration: 0.5s;
     border: 10px solid #ff918b;
     margin-top: 10px;
     margin-left: 250px;
 }
+.notificationBoxErrorExit{
+    position: fixed;
+    z-index: 100;
+    display: inline-flex;
+    background-color: #ef7b75eb;
+    justify-content: center;
+    width: 30%;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    animation-name: animateNotificationExit;
+    animation-duration: 0.5s;
+    border: 10px solid #ff918b;
+    margin-top: 10px;
+    margin-left: 250px;
+}
+
 .notificationBoxWarning{
     position: fixed;
     z-index: 100;
@@ -38,7 +70,22 @@
     width: 30%;
     flex-wrap: wrap;
     border-radius: 10px;
-    animation-name: animateModal;
+    animation-name: animateNotificationEnter;
+    animation-duration: 0.5s;
+    border: 5px solid #fff07c;
+    margin-top: 10px;
+    margin-left: 250px;
+}
+.notificationBoxWarningExit{
+    position: fixed;
+    z-index: 100;
+    display: inline-flex;
+    background-color: #ebde76e7;
+    justify-content: center;
+    width: 30%;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    animation-name: animateNotificationExit;
     animation-duration: 0.5s;
     border: 5px solid #fff07c;
     margin-top: 10px;
@@ -49,6 +96,10 @@
 @keyframes animateNotificationEnter {
     from {top: -300px; opacity: 0}
     to {top: 0; opacity: 1}
+}
+@keyframes animateNotificationExit {
+    from {top: 0; opacity: 1}
+    to {top: -300px; opacity: 0}
 }
 
 .notificationHeaderBtn{
