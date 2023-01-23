@@ -1,5 +1,6 @@
 import React from "react";
 import "./NotificationComponent.css";
+import PropTypes from "prop-types";
 
 class NotificationComponent extends React.Component{
 
@@ -8,13 +9,18 @@ class NotificationComponent extends React.Component{
         this.state = {
             exitAnimation: ""
         }
+        this.handleCloseNotification = this.handleCloseNotification.bind(this);
     }
+
     componentDidMount(){
         setTimeout(() => {
-            this.setState({exitAnimation: "Exit"})
+            this.setState({exitAnimation: "Exit"}, () => {
+                this.handleCloseNotification();
+            })
         }, 3000);
     }
-    componentDidUpdate(){
+
+    handleCloseNotification(){
         setTimeout(() => {
             this.props.closeNotification()
         }, 100);
@@ -42,5 +48,12 @@ class NotificationComponent extends React.Component{
             </>
         )
     }
+}
+
+NotificationComponent.propTypes={
+    closeNotification: PropTypes.func,
+    titulo: PropTypes.string.isRequired,
+    tipo: PropTypes.string,
+    nomeCarro: PropTypes.string,
 }
 export default NotificationComponent;
