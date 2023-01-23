@@ -54,6 +54,6 @@ NotificationComponent.propTypes={
     closeNotification: PropTypes.func,
     titulo: PropTypes.string.isRequired,
     tipo: PropTypes.string,
-    nomeCarro: PropTypes.string,
+    notificationDescription: PropTypes.string,
 }
 export default NotificationComponent;

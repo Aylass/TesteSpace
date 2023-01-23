@@ -1,7 +1,7 @@
 import React from "react";
 import "./Table.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faUserSecret, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faUserSecret, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import InputComponent from "../InputComponent/Input";
 import NotificationComponent from "../NotificationComponent/NotificationComponent";
 
@@ -25,7 +25,7 @@ class Table extends React.Component{
         this.listAccess = this.props.dataAccess;
         this.listAdresses = this.props.dataAddresses;
         this.typeNotification = "Warning";
-        this.notificationDescription = "";
+        this.notificationDescription = "Confira os dados inseridos.";
 
         //Modal
         this.openEditModal = this.openEditModal.bind(this);
@@ -97,7 +97,7 @@ class Table extends React.Component{
             listCarsObjectCopy[newCarId] = modalCar;
             for(let i=0; i<this.state.listUsers.length; i++){
                 const user = this.state.listUsers[i];
-                if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_first_name === this.state.modalUser.user_first_name)){
+                if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_id === this.state.modalUser.user_id)){
                     listUserObjectCopy[i].user_car_id = newCarId;
                     this.notificationDescription = `Carro de ${user.user_first_name} foi editado com`;
                     break;
@@ -219,6 +219,48 @@ class Table extends React.Component{
     }
 }
 
+class Menu extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            animateOpenMenu: "",
+            isMenuOpen: false
+        }
+        this.openMenu = this.openMenu.bind(this);
+    }
+    openMenu() {
+        let aux = "";
+        if(!this.state.isMenuOpen){
+            aux = "change";
+        }
+        this.setState({
+            animateOpenMenu: aux,
+            isMenuOpen: !this.state.isMenuOpen
+        });
+    }
+    render(){
+        return(
+            <div className="container">
+                <div onClick={this.openMenu}>
+                    <div className={"bar1" + this.state.animateOpenMenu}></div>
+                    <div className={"bar2" + this.state.animateOpenMenu}></div>
+                    <div className={"bar3" + this.state.animateOpenMenu}></div>
+                </div>
+                
+                {this.state.isMenuOpen? 
+                    <div className="buttonsWrapper">
+                        <button className="menuButton">Usuários</button>
+                        <button className="menuButton">Carros</button>
+                        <button className="menuButton">Trabalhos</button>
+                    </div>
+                    :
+                    <></>
+                }
+            </div>
+        )
+    }
+}
+
 class Paginator extends React.Component{
     constructor(props){
         super(props);
@@ -271,6 +313,7 @@ class Paginator extends React.Component{
     render(){
         return(
             <>
+                <Menu/>
                 <div className="paginatorWrapper">
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
                     <p className="paginatorPara">Total: {this.props.totalItems}</p>
