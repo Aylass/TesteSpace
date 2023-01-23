@@ -24,6 +24,7 @@ class Table extends React.Component{
         this.listProducts = this.props.dataProducts;
         this.listAccess = this.props.dataAccess;
         this.listAdresses = this.props.dataAddresses;
+        this.typeNotification = "Warning";
 
         //Modal
         this.openEditModal = this.openEditModal.bind(this);
@@ -85,22 +86,27 @@ class Table extends React.Component{
     }
     
     onChangedModalCar(modalCar) {
-        let listCarsObjectCopy = {...this.state.listCars};
-        let listUserObjectCopy = [...this.state.listUsers];
-        const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
-        modalCar.car_id = newCarId
-        listCarsObjectCopy[newCarId] = modalCar;
-        for(let i=0; i<this.state.listUsers.length; i++){
-            const user = this.state.listUsers[i];
-            if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_first_name === this.state.modalUser.user_first_name)){
-                listUserObjectCopy[i].user_car_id = newCarId;
-                break;
+        try {
+            this.typeNotification = "Success";
+            let listCarsObjectCopy = {...this.state.listCars};
+            let listUserObjectCopy = [...this.state.listUsers];
+            const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
+            modalCar.car_id = newCarId
+            listCarsObjectCopy[newCarId] = modalCar;
+            for(let i=0; i<this.state.listUsers.length; i++){
+                const user = this.state.listUsers[i];
+                if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_first_name === this.state.modalUser.user_first_name)){
+                    listUserObjectCopy[i].user_car_id = newCarId;
+                    break;
+                }
             }
-        }
-        this.setState({
-            listCars: listCarsObjectCopy,
-            listUsers: listUserObjectCopy});//ta atualizando
+            this.setState({
+                listCars: listCarsObjectCopy,
+                listUsers: listUserObjectCopy});
             this.forceUpdate()
+        } catch (error) {
+            this.typeNotification = "Error";
+        }
     }
 
     mapItems(){
@@ -174,8 +180,8 @@ class Table extends React.Component{
             <>
                 {this.state.isNotification?
                     <NotificationComponent 
-                        tipo="Success"
-                        titulo="Titulo Notificacao"
+                        tipo={this.typeNotification}
+                        titulo="Edição de Carro"
                         nomeCarro={this.state.modalUser.user_first_name}
                         closeNotification={this.isNotificationOpen}
                     /> 
@@ -318,7 +324,6 @@ class EditModal extends React.Component{
         }else{ //editing
             this.setState({
                 isEditing: false});
-                //cria um objeto para comportar o carro novo
                 let newCar = {
                     car_id: this.props.modalData.car_id,
                     car_fuel: this.state.gasolinaData,
@@ -327,7 +332,6 @@ class EditModal extends React.Component{
                     car_name: this.state.nomeData,
                     car_type: this.state.tipoData
                 }
-                //manda o objeto do carro novo pro pai
                 this.props.onChildChangedModalCar(newCar,this.props.modalUser);
                 this.props.openNotification();
         }
