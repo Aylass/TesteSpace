@@ -9,6 +9,8 @@ class Table extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            mainList: this.props.dataRow,
+            numMainList: 1,
             isOpenModal: false,
             isNotification: false,
             modalData: null,
@@ -38,6 +40,21 @@ class Table extends React.Component{
 
         //Paginator
         this.onPageChange = this.onPageChange.bind(this);
+        this.mainListChange = this.mainListChange.bind(this);
+    }
+
+    mainListChange(numb){
+        //menu seleciona usuário
+        let currentList = this.state.mainList;
+        if(numb === 2){ //menu seleciona carro
+            currentList = this.props.dataCars;
+        }else if(numb === 3){//menu seleciona trabalho
+            currentList = this.props.dataJobs;
+        }
+        this.setState({
+            mainList: currentList,
+            numMainList: numb
+        });
     }
 
     isNotificationOpen(){
@@ -190,6 +207,7 @@ class Table extends React.Component{
                     /> 
                 : null}
                 <Paginator 
+                    mainListChange={this.mainListChange}
                     totalItems={this.state.listUsers.length} 
                     currentPage={this.state.currentPage} 
                     startsOn={this.state.startsOn} 
@@ -211,7 +229,15 @@ class Table extends React.Component{
                 <table>
                     {this.buildHeader()}
                     <tbody>
-                        {this.mapItems()}
+                        { this.state.numMainList === 1?
+                            this.mapItemsUser()
+                            : this.state.numMainList === 2?
+                                <>
+                                </>
+                            :
+                                <>
+                                </>
+                        }
                     </tbody>
                 </table>
             </>
@@ -238,6 +264,7 @@ class Menu extends React.Component{
             isMenuOpen: !this.state.isMenuOpen
         });
     }
+
     render(){
         return(
             <div className="container">
@@ -249,9 +276,9 @@ class Menu extends React.Component{
                 
                 {this.state.isMenuOpen? 
                     <div className="buttonsWrapper">
-                        <button className="menuButton">Usuários</button>
-                        <button className="menuButton">Carros</button>
-                        <button className="menuButton">Trabalhos</button>
+                        <button className="menuButton" onClick={() => {this.props.mainListChange(1)}}>Usuários</button>
+                        <button className="menuButton" onClick={() => {this.props.mainListChange(2)}}>Carros</button>
+                        <button className="menuButton" onClick={() => {this.props.mainListChange(3)}}>Trabalhos</button>
                     </div>
                     :
                     <></>
@@ -313,7 +340,7 @@ class Paginator extends React.Component{
     render(){
         return(
             <>
-                <Menu/>
+                <Menu mainListChange={this.props.mainListChange}/>
                 <div className="paginatorWrapper">
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
                     <p className="paginatorPara">Total: {this.props.totalItems}</p>
