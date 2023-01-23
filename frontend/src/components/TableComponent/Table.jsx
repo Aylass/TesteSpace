@@ -509,6 +509,16 @@ class ItemBody extends React.Component{
        this.setState({tabOpenModal : tab});
    }
 
+    shouldComponentUpdate(nextProps, nextState){
+        if(nextState.tabOpenModal !== this.state.tabOpenModal){
+            return true;
+        }
+        if(nextProps.currentCar !== this.props.currentCar){
+            return true;
+        }
+        return false;
+    }
+
     render(){
         return(
             <tr className="modal">
@@ -532,7 +542,6 @@ class ItemBody extends React.Component{
                 <td colSpan="5" rowSpan="1">
                     <Modal  
                         openModal={this.state.tabOpenModal} 
-                        user={this.props.user} 
                         currentCar={this.props.currentCar}
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
@@ -555,16 +564,6 @@ class Modal extends React.Component{
         if(this.props.currentAccess !== undefined){
             this.stringCutter = this.props.currentAccess.user_access_user_agent.split(" ");
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState){
-        if(nextProps.openModal !== this.state.tabOpenModal){
-            this.setState({
-                tabOpenModal : nextProps.openModal,
-            })
-            return true;
-        }
-        return false;
     }
 
     render(){
