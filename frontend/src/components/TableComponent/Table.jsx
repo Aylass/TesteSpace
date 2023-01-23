@@ -549,13 +549,22 @@ class Modal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            tabOpenModal : 0,
+            tabOpenModal : this.props.openModal,
         }
         this.stringCutter = []
         if(this.props.currentAccess !== undefined){
             this.stringCutter = this.props.currentAccess.user_access_user_agent.split(" ");
         }
-       
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        if(nextProps.openModal !== this.state.tabOpenModal){
+            this.setState({
+                tabOpenModal : nextProps.openModal,
+            })
+            return true;
+        }
+        return false;
     }
 
     render(){
