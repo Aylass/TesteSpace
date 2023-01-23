@@ -12,6 +12,7 @@
     animation-duration: 0.5s;
     border: 5px solid #93f9d6;
     margin-top: 10px;
+    margin-left: 250px;
 }
 .notificationBoxError{
     position: fixed;
@@ -26,6 +27,7 @@
     animation-duration: 0.5s;
     border: 10px solid #ff918b;
     margin-top: 10px;
+    margin-left: 250px;
 }
 .notificationBoxWarning{
     position: fixed;
@@ -40,6 +42,7 @@
     animation-duration: 0.5s;
     border: 5px solid #fff07c;
     margin-top: 10px;
+    margin-left: 250px;
 }
   
 /* Add Animation */
