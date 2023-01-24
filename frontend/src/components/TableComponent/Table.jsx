@@ -4,8 +4,101 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faUserSecret, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import InputComponent from "../InputComponent/Input";
 import NotificationComponent from "../NotificationComponent/NotificationComponent";
+import PropTypes from "prop-types";
 
 class Table extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            currentPage: 1,
+            startsOn: 0,
+            endsOn: 20,
+        }
+
+        /*Paginator Bind*/
+        this.onPageChange = this.onPageChange.bind(this);
+    }
+
+
+    /*Paginator*/
+    onPageChange(start, end, current){
+        this.setState({
+            startsOn: start,
+            endsOn: end,
+            currentPage: current
+        });
+    }
+
+    /*Builds*/ 
+    buildHeader(listHeader){
+        return(
+            <>
+                {
+                    <thead>
+                        <tr>
+                            {listHeader.map((column) => {
+                                    return <th key={`column_${column}`}>{column}</th>
+                                })}
+                        </tr>
+                    </thead>
+                }
+            </>
+        );
+    }
+    buildBody(dataList, columnsList, tagId, auxCarDataList, auxJobDataList){
+        const list = [];
+        for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
+            const data = dataList[index];
+            list.push(
+                <tr key={`line_${data[tagId]}`} className="item">
+                    {this.buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList)}
+                </tr>
+            );
+        }
+        return list;
+    }
+    buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList){
+        return(
+            <>
+                <Item 
+                    columnsList={columnsList}
+                    data={data}
+                    tagId={tagId}
+                    auxCarDataList={auxCarDataList}
+                    auxJobDataList={auxJobDataList}
+                ></Item>
+            </>
+        );
+    }
+
+    render(){
+        return(
+            <>
+                <Paginator 
+                    mainListChange={this.mainListChange}
+                    totalItems={this.props.dataList.length} 
+                    currentPage={this.state.currentPage} 
+                    startsOn={this.state.startsOn} 
+                    endsOn={this.state.endsOn} 
+                    onPageChange={this.onPageChange}
+                />
+                <table>
+                    {this.buildHeader(this.props.columns,this.props.chosenList)}
+                    <tbody>
+                        {this.buildBody(
+                            this.props.dataList,
+                            this.props.columns,
+                            this.props.tagId,
+                            this.props.auxCarDataList,
+                            this.props.auxJobDataList)}
+                    </tbody>
+                </table>
+            </>
+        )
+    }
+}
+
+class TableOld extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -43,8 +136,13 @@ class Table extends React.Component{
         this.mainListChange = this.mainListChange.bind(this);
     }
 
+    changetoArray(){
+
+    }
+
     mainListChange(numb){
         //menu seleciona usuário
+        
         let currentList = this.state.mainList;
         if(numb === 2){ //menu seleciona carro
             currentList = this.props.dataCars;
@@ -63,15 +161,39 @@ class Table extends React.Component{
 
     buildHeader(){
         return(
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Nascimento</th>
-                    <th>Salário</th>
-                    <th>Carro</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
+            <>
+                {this.state.numMainList === 1?
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Nascimento</th>
+                            <th>Salário</th>
+                            <th>Carro</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                : this.state.numMainList === 2?
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Modelo</th>
+                            <th>Tipo</th>
+                            <th>Fabricante</th>
+                            <th>Gasolina</th>
+                        </tr>
+                    </thead>
+                :
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Título</th>
+                            <th>Endereço</th>
+                            <th>Moeda</th>
+                            <th>Salário</th>
+                        </tr>
+                    </thead>
+                }
+            </>
         );
     }
 
@@ -129,7 +251,7 @@ class Table extends React.Component{
         }
     }
 
-    mapItems(){
+    mapItemsUser(){
         const list = [];
         for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
             const user = this.state.listUsers[index];
@@ -173,8 +295,14 @@ class Table extends React.Component{
                 
                 //user Endereços-------------------------------------------------------
                 const userCurrentAddresses = this.props.dataAddresses[userId];
-
             list.push(<Item 
+                object={user}
+                numbList={this.props.numbList}
+                column1={userName}
+                column2={userDate}
+                column3={userCurrentJob?.user_job_salary || ""}
+                column4={"buttom"}
+                column5={userStatus}
                     modalData={this.onChildChangedModalData}
                     key={`item_${user.user_id}`} 
                     name={userName} 
@@ -194,6 +322,43 @@ class Table extends React.Component{
         }
         return list;
     }
+
+    mapItemsCars(){
+        const list = [];
+        for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
+            const car = this.state.mainList[index];
+            list.push(<Item 
+                object={car}
+                numbList={this.props.numbList}
+                column1={car.car_name}
+                column2={car.car_model}
+                column3={car.car_type}
+                column4={car.car_manufacturer}
+                column5={car.car_fuel}
+            />);
+        }
+        return list
+    }
+
+    mapItemsJobs(){
+        const list = [];
+        for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
+            const job = this.state.mainList[index];
+
+            const salaryFormated = job.user_job_salary?.replace(".", ",") || "";
+            list.push(<Item 
+                object={job}
+                numbList={this.props.numbList}
+                column1={job.user_job_id}
+                column2={job.user_job_title}
+                column3={job.user_job_address}
+                column4={job.user_job_salary_currency_symbol}
+                column5={salaryFormated}
+            />);
+        }
+        return list
+    }
+   
 
     render(){
         return(
@@ -232,11 +397,9 @@ class Table extends React.Component{
                         { this.state.numMainList === 1?
                             this.mapItemsUser()
                             : this.state.numMainList === 2?
-                                <>
-                                </>
+                                this.mapItemsCars()
                             :
-                                <>
-                                </>
+                                this.mapItemsJobs()
                         }
                     </tbody>
                 </table>
@@ -294,7 +457,6 @@ class Paginator extends React.Component{
         const totalItems = this.props.totalItems;
         const numMaxPages = Math.ceil(totalItems / 20);
         
-
         this.numPages = numMaxPages;
         
         this.btnChangeOption = this.btnChangeOption.bind(this);
@@ -340,7 +502,6 @@ class Paginator extends React.Component{
     render(){
         return(
             <>
-                <Menu mainListChange={this.props.mainListChange}/>
                 <div className="paginatorWrapper">
                     <p className="paginatorPara">Exibindo: {this.props.startsOn+1}-{this.props.endsOn}</p>
                     <p className="paginatorPara">Total: {this.props.totalItems}</p>
@@ -499,6 +660,107 @@ class EditModal extends React.Component{
 }
 
 class Item extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    render(){
+        
+        return(
+            <>
+                {this.props.auxCarDataList !== "notNeeded" && this.props.auxJobDataList !== "notNeeded"? 
+                    this.props.columnsList.map((column) => {
+                        if((column === "Salário") 
+                        && (this.props.auxJobDataList[this.props.data[this.props.tagId]] !== undefined)){
+                            const salaryFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+                                                            .user_job_salary
+                                                            ?.replace(".", ",") || "";
+                            const currencyFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+                                                            .user_job_salary_currency_symbol;
+
+                            return(
+                                <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
+                                    {currencyFormated + " " + salaryFormated}
+                                </td>
+                            )
+                        }
+                        else if(column === "Carro"){
+                            const currentCar = this.props.auxCarDataList[this.props.data.user_car_id];
+                            return(
+                                <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
+                                    {currentCar.car_name}
+                                </td>
+                            )
+                        }
+                        else if(column === "Status"){
+                            return(
+                                <td>{this.props.data.status === true?
+                                        <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> 
+                                    : 
+                                    this.props.data.status === false?
+                                        <FontAwesomeIcon style={{color : '#FF6347'}} icon={faUser} /> 
+                                    :
+                                        <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
+                                }</td>
+                            )
+                        }
+                        return(
+                            <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{this.props.data[column]}</td>
+                        )
+                    })
+                :
+                    this.props.columnsList.map((column) => {
+                        return(
+                            <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{this.props.data[column]}</td>
+                        )
+                    })
+                }
+                
+            </>
+        );
+    }
+}
+
+class Itemold2 extends React.Component{
+    constructor(props){
+        super(props);
+        
+        this.state = {
+         isOpenItem : false,
+        }
+    }
+    
+    render(){
+        return(
+            <>
+                <tr 
+                    onClick={
+                        this.props.numbList === 1?
+                         this.toggleBodyItem
+                         : null
+                    } 
+                    className="item"
+                    >
+                        <td>{this.props.column1}</td>
+                        <td>{this.props.column2}</td>
+                        <td>{this.props.column3}</td>
+                        <td>{this.props.column4}</td>
+                        <td>{this.props.column5}</td>
+                </tr>
+                {this.state.isOpenItem === false? null :
+                    <ItemBody 
+                        user={this.state.itemUser} 
+                        currentCar={this.props.currentCar}
+                        currentJob={this.props.currentJob}
+                        currentProduct={this.props.currentProduct}
+                        currentAccess={this.props.currentAccess}
+                        currentAdresses={this.props.currentAdresses}
+                    />}
+            </>
+        )
+    }
+}
+
+class ItemVelho extends React.Component{
     constructor(props){
         super(props);
         
