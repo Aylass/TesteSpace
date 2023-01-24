@@ -13,12 +13,68 @@ class Table extends React.Component{
             currentPage: 1,
             startsOn: 0,
             endsOn: 20,
+            isOpenModal: false,
+            modalData: null, //current user car from Modal
+            modalUser: null, //current user from Modal
+            isNotification: false,
         }
+
+        /*Notification*/
+        this.typeNotification = "Warning";
 
         /*Paginator Bind*/
         this.onPageChange = this.onPageChange.bind(this);
+        /*Edit Modal Bind*/
+        this.changeIsOpenModal = this.changeIsOpenModal.bind(this);
+        this.changeModalData = this.changeModalData.bind(this);
+        this.isNotificationOpen = this.isNotificationOpen.bind(this);
+        this.onChangedModalCar = this.onChangedModalCar.bind(this);
     }
 
+    /*Notification*/
+    isNotificationOpen(){
+        this.setState({
+            isNotification: !this.state.isNotification,});
+            console.log(this.state.isNotification)
+    }
+
+    /*Edit Modal*/
+    changeIsOpenModal(bool){
+        console.log("chamo", bool)
+        this.setState({
+            isOpenModal: bool
+        });
+    }
+    changeModalData(user, car){
+        this.setState({
+            modalUser: user,
+            modalData: car
+        });
+    }
+
+    onChangedModalCar(modalCar) {
+        try {
+            this.typeNotification = "Success";
+            
+            let listCarsObjectCopy = {...this.props.auxCarDataList};
+            let listUserObjectCopy = [...this.props.dataList];
+            const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
+            modalCar.car_id = newCarId
+            listCarsObjectCopy[newCarId] = modalCar;
+            for(let i=0; i<this.props.dataList.length; i++){
+                const user = this.props.dataList[i];
+                if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_id === this.state.modalUser.user_id)){
+                    listUserObjectCopy[i].user_car_id = newCarId;
+                    this.notificationDescription = `Carro de ${user.user_first_name} foi editado com`;
+                    break;
+                }
+            }
+            this.props.saveEditedData(listUserObjectCopy,listCarsObjectCopy);
+        } catch (error) {
+            this.typeNotification = "Error";
+            this.notificationDescription = `Ocorreu um erro.`;
+        }
+    }
 
     /*Paginator*/
     onPageChange(start, end, current){
@@ -61,19 +117,33 @@ class Table extends React.Component{
         return(
             <>
                 <Item 
+                    isOpenModal={this.state.isOpenModal}
+                    changeIsOpenModal={this.changeIsOpenModal}
+
                     columnsList={columnsList}
                     data={data}
                     tagId={tagId}
                     auxCarDataList={auxCarDataList}
                     auxJobDataList={auxJobDataList}
+
+                    changeModalData={this.changeModalData}
                 ></Item>
             </>
         );
     }
 
     render(){
+        console.log(this.state.isNotification)
         return(
             <>
+                {this.isNotification?
+                    <NotificationComponent 
+                        tipo={this.typeNotification}
+                        titulo="Edição de Carro"
+                        notificationDescription={this.notificationDescription}
+                        closeNotification={this.isNotificationOpen}
+                    /> 
+                : null}
                 <Paginator 
                     mainListChange={this.mainListChange}
                     totalItems={this.props.dataList.length} 
@@ -82,6 +152,20 @@ class Table extends React.Component{
                     endsOn={this.state.endsOn} 
                     onPageChange={this.onPageChange}
                 />
+                {this.state.isOpenModal?
+                    <div className="divModal"> 
+                        <EditModal 
+                            isOpenModal={this.state.isOpenModal} 
+                            modalData={this.state.modalData} 
+                            modalUser={this.state.modalUser}
+
+                            onChangedModalCar={this.onChangedModalCar}
+                            changeIsOpenModal={this.changeIsOpenModal} 
+                        
+                            openNotification={this.isNotificationOpen}
+                        /> 
+                    </div>
+                : <></>}
                 <table>
                     {this.buildHeader(this.props.columns,this.props.chosenList)}
                     <tbody>
@@ -227,6 +311,7 @@ class TableOld extends React.Component{
     
     onChangedModalCar(modalCar) {
         try {
+            console.log("ola")
             this.typeNotification = "Success";
             
             let listCarsObjectCopy = {...this.state.listCars};
@@ -386,7 +471,7 @@ class TableOld extends React.Component{
                             modalData={this.state.modalData} 
                             modalUser={this.state.modalUser}
                             onChildChangedModalCar={this.onChangedModalCar} 
-                            callbackParent={this.onChildChanged} 
+                            //changeIsOpenModallalala={this.onChildChanged} 
                             openNotification={this.isNotificationOpen}
                         /> 
                     </div>
@@ -566,7 +651,7 @@ class EditModal extends React.Component{
                     car_name: this.state.nomeData,
                     car_type: this.state.tipoData
                 }
-                this.props.onChildChangedModalCar(newCar,this.props.modalUser);
+                this.props.onChangedModalCar(newCar,this.props.modalUser);
                 this.props.openNotification();
         }
     }
@@ -610,13 +695,17 @@ class EditModal extends React.Component{
     }
 
     listenerClick(event){
-        if (this.wrapperRef && !this.wrapperRef.contains(event.target) && this.props.isOpenModal) {
-            this.props.callbackParent(false);
+        if (this.wrapperRef 
+            && !this.wrapperRef.contains(event.target) 
+            && this.props.isOpenModal
+            && event.target.className !== "btnVisualizar"
+        ) {
+            this.props.changeIsOpenModal(false);
         }
     }
     listenerESC(event){
             if(event.keyCode === 27)
-                this.props.callbackParent(false);
+                this.props.changeIsOpenModal(false);
     }
 
     componentDidMount(){
@@ -633,7 +722,7 @@ class EditModal extends React.Component{
         return(
             <div ref={this.setWrapperRef} className="modal">
                 <div className="modal-content">
-                    <button className="closeModalButton" onClick={() => this.props.callbackParent(false)}>X</button>
+                    <button className="closeModalButton" onClick={() => this.props.changeIsOpenModal(false)}>X</button>
 
                         <b>{!this.state.isEditing? "": "Edição de "}Carro</b><br/><hr/>
 
@@ -649,7 +738,7 @@ class EditModal extends React.Component{
                             : 
                             <>
                                 <button className={this.state.disabledSaveBtn? "saveModalButtonDisable" : "saveModalButton"} disabled={this.state.disabledSaveBtn} onClick={this.setIsEditing}>Salvar</button>
-                                <button className={"cancelModalButton"} onClick={() => this.props.callbackParent(false)}>Cancelar</button>
+                                <button className={"cancelModalButton"} onClick={() => this.props.changeIsOpenModal(false)}>Cancelar</button>
                             </>
 
                         }
@@ -662,7 +751,19 @@ class EditModal extends React.Component{
 class Item extends React.Component{
     constructor(props){
         super(props);
+
+        this.viewButtonFunc = this.viewButtonFunc.bind(this);
     }
+
+    viewButtonFunc(){
+        
+        // this.props.modalData(this.props.currentCar);
+        // this.props.onChildChangedModalUserData(this.props.user);
+        // this.props.openEditModal(event);
+        this.props.changeIsOpenModal(true);
+        this.props.changeModalData(this.props.data, this.props.auxCarDataList[this.props.data.user_car_id]);
+    }
+    
     render(){
         
         return(
@@ -687,7 +788,7 @@ class Item extends React.Component{
                             const currentCar = this.props.auxCarDataList[this.props.data.user_car_id];
                             return(
                                 <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
-                                    {currentCar.car_name}
+                                    <button className="btnVisualizar" onClick={this.viewButtonFunc} >Visualizar</button>
                                 </td>
                             )
                         }

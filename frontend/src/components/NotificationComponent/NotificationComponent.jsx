@@ -10,6 +10,7 @@ class NotificationComponent extends React.Component{
             exitAnimation: ""
         }
         this.handleCloseNotification = this.handleCloseNotification.bind(this);
+        console.log("notificatipon")
     }
 
     componentDidMount(){

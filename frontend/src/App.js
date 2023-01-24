@@ -33,6 +33,12 @@ function App() {
       setJobAuxList(Object.values(usersJobs));
     }
   }
+
+  function saveEditedData(newUserList, newCarList){
+    setCarAuxList(newCarList);
+    setMainList(newUserList);
+  }
+
   return(
     <div className="App">
       <Menu mainListChange={mainListChange}/>
@@ -43,6 +49,8 @@ function App() {
         auxCarDataList={auxCarList}
         auxJobDataList={auxJobList}
         tagId={Object.keys(mainList[0])[0]}
+
+        saveEditedData={saveEditedData}
       />
     </div>
   );
