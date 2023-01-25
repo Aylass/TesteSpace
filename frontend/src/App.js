@@ -16,9 +16,9 @@ function App() {
   const [mainList, setMainList] = useState(users);
   const [auxCarList, setCarAuxList] = useState(Object.values(usersCars));
   const [auxJobList, setJobAuxList] = useState(Object.values(usersJobs));
-  const [auxProductList, setProductList] = useState(Object.values(usersProducts));
-  const [auxAccessList, setAccessList] = useState(Object.values(usersAccess));
-  const [auxAddressesList, setAddressesList] = useState(Object.values(usersAddresses));
+  const [auxProductList] = useState(Object.values(usersProducts));
+  const [auxAccessList] = useState(Object.values(usersAccess));
+  const [auxAddressesList] = useState(Object.values(usersAddresses));
   const [chosenList, setChosenList] = useState(1);
   
   function mainListChange(numb) {
