@@ -32,12 +32,29 @@ class Table extends React.Component{
         this.onChangedModalCar = this.onChangedModalCar.bind(this);
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        if(nextProps.dataList !== this.props.dataList){
+            return true;
+        }
+        if(nextProps.auxCarList !== this.props.auxCarList){
+            return true;
+        }
+        if(nextState.isOpenModal !== this.state.isOpenModal){
+            return true;
+        }
+        if(nextState.currentPage !== this.state.currentPage){
+            return true;
+        }
+        if(nextState.isNotification !== this.state.isNotification){
+            return true;
+        }
+        return false;
+    }
+
     /*Notification*/
     isNotificationOpen(){
-        console.log("chamo aq")
         this.setState({
-            isNotification: true,});
-            console.log("notificationOpen",this.state.isNotification)
+            isNotification: !this.state.isNotification,});
     }
 
     /*Edit Modal*/
@@ -56,7 +73,7 @@ class Table extends React.Component{
     onChangedModalCar(modalCar) {
         try {
             this.typeNotification = "Success";
-            console.log("changeModalCar")
+            console.log("changeModalCar", this.typeNotification)
             let listCarsObjectCopy = {...this.props.auxCarDataList};
             let listUserObjectCopy = [...this.props.dataList];
             const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
@@ -88,7 +105,6 @@ class Table extends React.Component{
 
     /*Builds*/ 
     buildHeader(listHeader){
-        console.log(translation)
         return(
             <>
                 {
@@ -141,7 +157,7 @@ class Table extends React.Component{
     render(){
         return(
             <>
-                {this.isNotification?
+                {this.state.isNotification?
                     <NotificationComponent 
                         tipo={this.typeNotification}
                         titulo="Edição de Carro"
@@ -315,7 +331,6 @@ class TableOld extends React.Component{
     }
     
     onChangedModalCar(modalCar) {
-        console.log("oi")
         try {
             this.typeNotification = "Success";
             
@@ -764,8 +779,17 @@ class Item extends React.Component{
         this.setIsOpenItem = this.setIsOpenItem.bind(this);
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        if(nextProps.auxCarDataList !== this.props.auxCarDataList){
+            return true;
+        }
+        if(nextState.isOpenItem !== this.state.isOpenItem){
+            return true;
+        }
+        return false;
+    }
+
     setIsOpenItem(){
-        console.log("clico")
         this.setState({
             isOpenItem: !this.state.isOpenItem
         });
@@ -923,8 +947,7 @@ class ItemVelho extends React.Component{
         this.props.onChildChangedModalUserData(this.props.user);
         this.props.openEditModal(event);
     }
-        setIsOpenItem(){
-        console.log("openItem")
+    setIsOpenItem(){
         this.setState({
             isOpenItem: !this.state.isOpenItem
         });
