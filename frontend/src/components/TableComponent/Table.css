@@ -1,18 +1,18 @@
 table{
     display: table;
+    width: 100%;
 }
 table, th, td {
     border: 4px solid white;
     border-collapse: collapse;
 }
 thead th {
-    width: 25%;
+    width: 10%;
 }
 th {
     padding: 10px;
     background-color: #beeded;
 }
-
 
 tr.item:nth-of-type(even) {
     background-color: #beeded;

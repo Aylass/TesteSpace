@@ -16,6 +16,9 @@ function App() {
   const [mainList, setMainList] = useState(users);
   const [auxCarList, setCarAuxList] = useState(Object.values(usersCars));
   const [auxJobList, setJobAuxList] = useState(Object.values(usersJobs));
+  const [auxProductList, setProductList] = useState(Object.values(usersProducts));
+  const [auxAccessList, setAccessList] = useState(Object.values(usersAccess));
+  const [auxAddressesList, setAddressesList] = useState(Object.values(usersAddresses));
   const [chosenList, setChosenList] = useState(1);
   
   function mainListChange(numb) {
@@ -48,6 +51,9 @@ function App() {
         dataList={mainList}
         auxCarDataList={auxCarList}
         auxJobDataList={auxJobList}
+        auxProductList={auxProductList}
+        auxAccessList={auxAccessList}
+        auxAddressesList={auxAddressesList}
         tagId={Object.keys(mainList[0])[0]}
 
         saveEditedData={saveEditedData}

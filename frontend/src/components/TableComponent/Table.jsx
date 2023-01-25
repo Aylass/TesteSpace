@@ -5,6 +5,7 @@ import { faUser, faUserSecret, faArrowRight, faArrowLeft} from '@fortawesome/fre
 import InputComponent from "../InputComponent/Input";
 import NotificationComponent from "../NotificationComponent/NotificationComponent";
 import PropTypes from "prop-types";
+import translation from '../../users/Translation';
 
 class Table extends React.Component{
     constructor(props){
@@ -33,14 +34,14 @@ class Table extends React.Component{
 
     /*Notification*/
     isNotificationOpen(){
+        console.log("chamo aq")
         this.setState({
-            isNotification: !this.state.isNotification,});
-            console.log(this.state.isNotification)
+            isNotification: true,});
+            console.log("notificationOpen",this.state.isNotification)
     }
 
     /*Edit Modal*/
     changeIsOpenModal(bool){
-        console.log("chamo", bool)
         this.setState({
             isOpenModal: bool
         });
@@ -55,7 +56,7 @@ class Table extends React.Component{
     onChangedModalCar(modalCar) {
         try {
             this.typeNotification = "Success";
-            
+            console.log("changeModalCar")
             let listCarsObjectCopy = {...this.props.auxCarDataList};
             let listUserObjectCopy = [...this.props.dataList];
             const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
@@ -87,13 +88,14 @@ class Table extends React.Component{
 
     /*Builds*/ 
     buildHeader(listHeader){
+        console.log(translation)
         return(
             <>
                 {
-                    <thead>
-                        <tr>
+                    <thead key={`Header`}>
+                        <tr key={`HeaderColumn`}>
                             {listHeader.map((column) => {
-                                    return <th key={`column_${column}`}>{column}</th>
+                                    return <th key={`column_${column}`}>{translation[column]? translation[column] : column}</th>
                                 })}
                         </tr>
                     </thead>
@@ -106,9 +108,9 @@ class Table extends React.Component{
         for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
             const data = dataList[index];
             list.push(
-                <tr key={`line_${data[tagId]}`} className="item">
+                <>
                     {this.buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList)}
-                </tr>
+                </>
             );
         }
         return list;
@@ -119,12 +121,16 @@ class Table extends React.Component{
                 <Item 
                     isOpenModal={this.state.isOpenModal}
                     changeIsOpenModal={this.changeIsOpenModal}
-
+                    
                     columnsList={columnsList}
                     data={data}
                     tagId={tagId}
+
                     auxCarDataList={auxCarDataList}
                     auxJobDataList={auxJobDataList}
+                    auxProductList={this.props.auxProductList}
+                    auxAccessList={this.props.auxAccessList}
+                    auxAddressesList={this.props.auxAddressesList}
 
                     changeModalData={this.changeModalData}
                 ></Item>
@@ -133,7 +139,6 @@ class Table extends React.Component{
     }
 
     render(){
-        console.log(this.state.isNotification)
         return(
             <>
                 {this.isNotification?
@@ -166,9 +171,9 @@ class Table extends React.Component{
                         /> 
                     </div>
                 : <></>}
-                <table>
+                <table key={`Table`}>
                     {this.buildHeader(this.props.columns,this.props.chosenList)}
-                    <tbody>
+                    <tbody key={`Tbody`}>
                         {this.buildBody(
                             this.props.dataList,
                             this.props.columns,
@@ -310,8 +315,8 @@ class TableOld extends React.Component{
     }
     
     onChangedModalCar(modalCar) {
+        console.log("oi")
         try {
-            console.log("ola")
             this.typeNotification = "Success";
             
             let listCarsObjectCopy = {...this.state.listCars};
@@ -551,7 +556,7 @@ class Paginator extends React.Component{
     selectOptions(){
         const optionsArray = [];
         for (let page = 1; page <= this.numPages; page++) {
-            optionsArray.push(<option key={'option' + page} value={page}>{page} Pagina</option>);
+            optionsArray.push(<option key={'option_' + page + '_' + this.props.mainListChange} value={page}>{page} Pagina</option>);
         }
         return optionsArray;
     }
@@ -751,8 +756,19 @@ class EditModal extends React.Component{
 class Item extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            isOpenItem: false,
+        }
 
         this.viewButtonFunc = this.viewButtonFunc.bind(this);
+        this.setIsOpenItem = this.setIsOpenItem.bind(this);
+    }
+
+    setIsOpenItem(){
+        console.log("clico")
+        this.setState({
+            isOpenItem: !this.state.isOpenItem
+        });
     }
 
     viewButtonFunc(){
@@ -767,56 +783,71 @@ class Item extends React.Component{
     render(){
         
         return(
-            <>
-                {this.props.auxCarDataList !== "notNeeded" && this.props.auxJobDataList !== "notNeeded"? 
-                    this.props.columnsList.map((column) => {
-                        if((column === "Salário") 
-                        && (this.props.auxJobDataList[this.props.data[this.props.tagId]] !== undefined)){
-                            const salaryFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
-                                                            .user_job_salary
-                                                            ?.replace(".", ",") || "";
-                            const currencyFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
-                                                            .user_job_salary_currency_symbol;
+            <>            
+                <tr key={`line_${this.props.tagId}`} className="item" onClick={this.setIsOpenItem}>
+                    {this.props.auxCarDataList !== "notNeeded" && this.props.auxJobDataList !== "notNeeded"? 
+                        this.props.columnsList.map((column) => {
+                            if((column === "Salário") 
+                            && (this.props.auxJobDataList[this.props.data[this.props.tagId]] !== undefined)){
+                                const salaryFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+                                                                .user_job_salary
+                                                                ?.replace(".", ",") || "";
+                                const currencyFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+                                                                .user_job_salary_currency_symbol;
 
+                                return(
+                                    <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
+                                        {currencyFormated + " " + salaryFormated}
+                                    </td>
+                                )
+                            }
+                            else if(column === "Carro"){
+                                const currentCar = this.props.auxCarDataList[this.props.data.user_car_id];
+                                return(
+                                    <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
+                                        <button className="btnVisualizar" onClick={this.viewButtonFunc} >Visualizar</button>
+                                    </td>
+                                )
+                            }
+                            else if(column === "Status"){
+                                return(
+                                    <td key={`item_${this.props.data[this.props.tagId]}_${column}`}>
+                                        {this.props.data.status === true?
+                                            <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> 
+                                        : 
+                                        this.props.data.status === false?
+                                            <FontAwesomeIcon style={{color : '#FF6347'}} icon={faUser} /> 
+                                        :
+                                            <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
+                                    }</td>
+                                )
+                            }
                             return(
-                                <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
-                                    {currencyFormated + " " + salaryFormated}
-                                </td>
+                                <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{this.props.data[column]}</td>
                             )
-                        }
-                        else if(column === "Carro"){
-                            const currentCar = this.props.auxCarDataList[this.props.data.user_car_id];
+                        })
+                    :
+                        this.props.columnsList.map((column) => {
                             return(
-                                <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
-                                    <button className="btnVisualizar" onClick={this.viewButtonFunc} >Visualizar</button>
-                                </td>
+                                <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{this.props.data[column]}</td>
                             )
-                        }
-                        else if(column === "Status"){
-                            return(
-                                <td>{this.props.data.status === true?
-                                        <FontAwesomeIcon style={{color : '#20B2AA'}} icon={faUser} /> 
-                                    : 
-                                    this.props.data.status === false?
-                                        <FontAwesomeIcon style={{color : '#FF6347'}} icon={faUser} /> 
-                                    :
-                                        <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
-                                }</td>
-                            )
-                        }
-                        return(
-                            <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{this.props.data[column]}</td>
-                        )
-                    })
-                :
-                    this.props.columnsList.map((column) => {
-                        return(
-                            <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{this.props.data[column]}</td>
-                        )
-                    })
+                        })
+                    }
+                </tr>
+                {this.props.auxCarDataList !== "notNeeded" && this.props.auxJobDataList !== "notNeeded" && 
+                    this.state.isOpenItem === true?
+                        <ItemBody 
+                            user={this.props.data} 
+                            currentCar={this.props.auxCarDataList[this.props.data.user_car_id]}
+                            currentJob={this.props.auxJobDataList[this.props.data.user_job_id]}
+                            currentProduct={this.props.auxProductList[this.props.data.user_product_buyed_id]}
+                            currentAccess={this.props.auxAccessList[this.props.data.user_access_id]}
+                            currentAdresses={this.props.auxAddressesList[this.props.data.user_address_id]}
+                        />
+                    : null
                 }
-                
             </>
+
         );
     }
 }
@@ -891,6 +922,12 @@ class ItemVelho extends React.Component{
         this.props.onChildChangedModalUserData(this.props.user);
         this.props.openEditModal(event);
     }
+        setIsOpenItem(){
+        console.log("openItem")
+        this.setState({
+            isOpenItem: !this.state.isOpenItem
+        });
+    }
 
     render(){
         
@@ -957,7 +994,7 @@ class ItemBody extends React.Component{
 
     render(){
         return(
-            <tr className="modal">
+            <tr key={`itemBody_${this.props.user}`} className="modal">
                 <td>
                     <div className="tabItemBody" onClick={() => this.toggleModal(1)}> 
                         <span>Carro</span>
