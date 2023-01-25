@@ -781,10 +781,11 @@ class Item extends React.Component{
     }
     
     render(){
-        
         return(
             <>            
-                <tr key={`line_${this.props.tagId}`} className="item" onClick={this.setIsOpenItem}>
+                <tr key={`line_${this.props.tagId}`} 
+                    className="item" 
+                    onClick={this.props.auxCarDataList !== "notNeeded" && this.props.auxJobDataList !== "notNeeded"? this.setIsOpenItem:null}>
                     {this.props.auxCarDataList !== "notNeeded" && this.props.auxJobDataList !== "notNeeded"? 
                         this.props.columnsList.map((column) => {
                             if((column === "Salário") 
