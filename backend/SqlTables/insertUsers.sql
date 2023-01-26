@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     `user_job_id` INT,
     `user_product_buyed_id` INT,
     `user_car_id` INT,
-    `status` VARCHAR(5) CHARACTER SET utf8
+    `status` BOOLEAN
 );
 INSERT INTO users VALUES (1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL),
 	(2,'Felipe','2021-04-01 23:04:24',70,44,2,30,25,'False'),
