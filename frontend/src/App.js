@@ -1,5 +1,5 @@
 import './App.css';
-import React from "react";
+import React, { useEffect } from "react";
 import Table from './components/TableComponent/Table';
 import Menu from './components/MenuComponent/MenuComponent';
 import users from './users/users';
@@ -21,6 +21,13 @@ function App() {
   const [auxAddressesList] = useState(Object.values(usersAddresses));
   const [chosenList, setChosenList] = useState(1);
   
+  useEffect(() => {
+    fetch('http://localhost:8080/getData')
+      .then( async function(response) {
+        setMainList(await response.json());
+      }).catch(err => console.log(err));
+
+  },[]);
   function mainListChange(numb) {
     //menu seleciona usuário
     setCarAuxList("notNeeded");
@@ -60,19 +67,7 @@ function App() {
       />
     </div>
   );
-  
-  // return (
-  //   <div className="App">
-  //     <Table 
-  //       dataRow={users} 
-  //       dataCars={usersCars} 
-  //       dataJobs={usersJobs} 
-  //       dataProducts={usersProducts} 
-  //       dataAccess={usersAccess}
-  //       dataAddresses={usersAddresses}
-  //     ></Table>
-  //   </div>
-  // );
+
 }
 
 export default App;
