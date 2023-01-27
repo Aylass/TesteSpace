@@ -4,6 +4,7 @@ const getData = require('../controller/getData').getData;
 const getCar = require('../controller/getCar').getCar;
 
 router.get('/getData', getData);
+router.get('/getCar', getCar);
 
 
 module.exports = router;

@@ -27,7 +27,13 @@ function App() {
         setMainList(await response.json());
       }).catch(err => console.log(err));
 
+    fetch('http://localhost:8080/getCar')
+      .then( async function(response) {
+        setCarAuxList(await response.json());
+      }).catch(err => console.log(err));
+
   },[]);
+
   function mainListChange(numb) {
     //menu seleciona usuário
     setCarAuxList("notNeeded");
