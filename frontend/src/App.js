@@ -16,19 +16,20 @@ function App() {
   const [mainList, setMainList] = useState(users);
   const [auxCarList, setCarAuxList] = useState(Object.values(usersCars));
   const [auxJobList, setJobAuxList] = useState(Object.values(usersJobs));
-  const [auxProductList] = useState(Object.values(usersProducts));
-  const [auxAccessList] = useState(Object.values(usersAccess));
-  const [auxAddressesList] = useState(Object.values(usersAddresses));
+  const [auxProductList,setAuxProductList] = useState(Object.values(usersProducts));
+  const [auxAccessList, setAuxAccessList] = useState(Object.values(usersAccess));
+  const [auxAddressesList, setAuxAddressesList] = useState(Object.values(usersAddresses));
   const [chosenList, setChosenList] = useState(1);
   
   useEffect(() => {
     fetch('http://localhost:8080/getData')
       .then( async function(response) {
         const data = await response.json();
-        //console.log(data)
+        console.log(data)
         setMainList(data.user);
         setCarAuxList(data.car);
         setJobAuxList(data.job);
+        setAuxAccessList(data.access);
       }).catch(err => console.log(err));
   },[]);
 
