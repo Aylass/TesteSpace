@@ -24,14 +24,12 @@ function App() {
   useEffect(() => {
     fetch('http://localhost:8080/getData')
       .then( async function(response) {
-        setMainList(await response.json());
+        const data = await response.json();
+        //console.log(data)
+        setMainList(data.user);
+        setCarAuxList(data.car);
+        setJobAuxList(data.job);
       }).catch(err => console.log(err));
-
-    fetch('http://localhost:8080/getCar')
-      .then( async function(response) {
-        setCarAuxList(await response.json());
-      }).catch(err => console.log(err));
-
   },[]);
 
   function mainListChange(numb) {
