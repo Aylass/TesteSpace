@@ -1,15 +1,39 @@
+DROP table users
+
+
 CREATE TABLE IF NOT EXISTS users (
-    `user_id` INT,
-    `user_first_name` VARCHAR(14) CHARACTER SET utf8,
-    `user_birth_date` DATETIME,
-    `user_access_id` INT,
-    `user_address_id` INT,
-    `user_job_id` INT,
-    `user_product_buyed_id` INT,
-    `user_car_id` INT,
-    `status` BOOLEAN
-);
-INSERT INTO users VALUES (1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL),
+    user_id INT NOT NULL PRIMARY KEY,
+    user_first_name VARCHAR(300),
+    user_birth_date DATE,
+    user_access_id INT,
+    user_address_id INT,
+    user_job_id INT,
+    user_product_buyed_id INT,
+    user_car_id INT,
+    status BOOLEAN
+)
+
+select * from users
+
+ALTER TABLE users 
+   ADD CONSTRAINT user_access_id
+      FOREIGN KEY(user_access_id) 
+      REFERENCES users_access(user_access_id),
+   ADD CONSTRAINT user_address_id
+      FOREIGN KEY(user_address_id) 
+      REFERENCES users_address(user_address_id),
+   ADD CONSTRAINT user_job_id
+      FOREIGN KEY(user_job_id) 
+      REFERENCES users_job(user_job_id),
+   ADD CONSTRAINT user_product_buyed_id
+      FOREIGN KEY(user_product_buyed_id) 
+      REFERENCES users_products_buyed(user_product_buyed_id),
+   ADD CONSTRAINT user_car_id
+      FOREIGN KEY(user_car_id) 
+      REFERENCES users_cars(car_id)
+
+INSERT INTO users VALUES 
+	(1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL),
 	(2,'Felipe','2021-04-01 23:04:24',70,44,2,30,25,'False'),
 	(3,'Guilherme','2020-12-20 14:12:48',59,73,21,63,56,NULL),
 	(4,'Morgana','2021-02-01 00:02:45',63,96,48,36,88,'False'),
@@ -37,7 +61,7 @@ INSERT INTO users VALUES (1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL
 	(26,'Vitor','2020-10-19 11:10:50',24,88,17,64,89,'False'),
 	(27,'Pedro Henrique','2021-04-13 08:04:10',99,55,10,89,60,NULL),
 	(28,'Enzo Gabriel','2021-05-11 04:05:34',59,99,40,80,47,'False'),
-	(29,'Maria Júlia','2020-11-27 00:11:00',7,19,84,75,0,NULL),
+	(29,'Maria Júlia','2020-11-27 00:11:00',7,19,84,75,NULL,NULL),
 	(30,'Théo','2020-08-08 23:08:23',65,81,74,1,54,'True'),
 	(31,'Raul','2020-12-07 01:12:55',21,98,85,64,21,NULL),
 	(32,'Carla','2021-02-24 00:02:46',39,95,47,80,42,'False'),
@@ -46,7 +70,7 @@ INSERT INTO users VALUES (1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL
 	(35,'Ana Clara','2020-12-08 00:12:03',36,77,72,76,62,'True'),
 	(36,'Maria Clara','2020-10-20 17:10:13',2,38,19,16,38,'False'),
 	(37,'Esther','2020-08-10 06:08:39',23,46,46,68,22,NULL),
-	(38,'Danilo','2020-12-02 14:12:17',0,69,5,53,18,'False'),
+	(38,'Danilo','2020-12-02 14:12:17',NULL,69,5,53,18,'False'),
 	(39,'Dalila','2021-02-27 18:02:31',84,30,55,77,51,NULL),
 	(40,'César','2020-10-23 13:10:38',39,82,15,64,13,'True'),
 	(41,'Isabel','2021-04-29 05:04:58',73,51,29,28,90,NULL),
@@ -74,14 +98,14 @@ INSERT INTO users VALUES (1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL
 	(63,'Heloísa','2021-07-23 18:07:51',42,67,17,53,10,NULL),
 	(64,'Dalila','2020-11-04 18:11:27',64,69,85,40,1,'False'),
 	(65,'Benjamin','2021-01-21 05:01:10',47,6,48,73,19,'True'),
-	(66,'Sarah','2021-06-30 03:06:23',0,11,4,0,56,'False'),
+	(66,'Sarah','2021-06-30 03:06:23',NULL,11,4,NULL,56,'False'),
 	(67,'Eduarda','2021-03-30 14:03:53',8,64,59,21,49,NULL),
 	(68,'Vitória','2021-05-06 22:05:24',42,62,34,22,35,'False'),
 	(69,'Maria Cecília','2020-12-29 04:12:23',50,62,29,52,31,NULL),
 	(70,'Isabelly','2021-06-09 20:06:27',33,80,84,54,79,'True'),
 	(71,'Isabel','2021-06-26 02:06:47',70,8,4,64,80,NULL),
 	(72,'Nataniel','2020-11-18 12:11:20',75,55,15,23,38,'False'),
-	(73,'Yango','2021-01-10 15:01:03',0,95,62,96,49,NULL),
+	(73,'Yango','2021-01-10 15:01:03',NULL,95,62,96,49,NULL),
 	(74,'Marina','2021-06-08 03:06:44',74,9,22,62,47,'False'),
 	(75,'Guilherme','2020-08-14 06:08:02',18,65,16,26,87,'True'),
 	(76,'Antonella','2020-10-18 11:10:28',43,75,32,47,84,'False'),
@@ -94,7 +118,7 @@ INSERT INTO users VALUES (1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL
 	(83,'Maitê','2021-01-31 06:01:54',11,9,58,17,83,NULL),
 	(84,'Cecília','2021-05-06 03:05:56',62,73,23,37,80,'False'),
 	(85,'Danilo','2021-04-06 12:04:59',72,63,43,88,26,'True'),
-	(86,'Antônio','2021-02-02 22:02:13',68,63,78,0,67,'False'),
+	(86,'Antônio','2021-02-02 22:02:13',68,63,78,NULL,67,'False'),
 	(87,'Gúbio','2020-09-24 12:09:17',68,51,20,28,80,NULL),
 	(88,'Natália','2020-09-30 16:09:11',7,80,32,78,56,'False'),
 	(89,'Ígor','2020-12-15 08:12:59',41,82,47,37,71,NULL),
@@ -102,10 +126,10 @@ INSERT INTO users VALUES (1,'Alexandre','2021-07-25 07:07:20',11,95,9,94,75,NULL
 	(91,'Eloá','2020-10-25 00:10:24',92,14,22,39,11,NULL),
 	(92,'Yango','2020-11-20 17:11:16',85,10,75,13,6,'False'),
 	(93,'Júlio César','2021-04-21 20:04:24',53,32,29,35,67,NULL),
-	(94,'Yango','2020-09-04 23:09:15',21,49,0,62,20,'False'),
+	(94,'Yango','2020-09-04 23:09:15',21,49,NULL,62,20,'False'),
 	(95,'Gabriel','2020-11-04 19:11:18',27,15,22,76,30,'True'),
 	(96,'Maria Júlia','2020-11-05 16:11:32',62,42,28,88,48,'False'),
 	(97,'Matheus','2021-01-02 02:01:34',13,44,79,99,2,NULL),
 	(98,'Carla','2020-08-28 23:08:06',40,22,57,69,38,'False'),
 	(99,'Morgana','2020-08-09 09:08:38',18,73,83,24,68,NULL),
-	(100,'Sílvia','2020-12-11 06:12:20',25,91,88,85,74,'True');
+	(100,'Sílvia','2020-12-11 06:12:20',25,91,88,85,74,'True')
