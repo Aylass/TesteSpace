@@ -1,14 +1,25 @@
-const http = require('http');
+const express = require('express');
+const app = express();
+const port = normalizaPort(process.env.PORT || '8080');
+const router = express.Router();
+const indexRoute = require('./src/router/routes.js');
+var cors = require('cors');
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
-const hostname = '127.0.0.1';
-const port = 3000;
+function normalizaPort(val) {
+    const port = parseInt(val, 10);
+    if (isNaN(port)) {
+        return val;
+    }
+    if (port >= 0) {
+            return port;
+        }
+    return false;
+}
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.use('/',indexRoute);
+app.listen(port, function () {
+    console.log(`app listening on port ${port}`)
+})
