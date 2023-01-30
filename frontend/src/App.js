@@ -23,42 +23,37 @@ function App() {
   useEffect(() => {
     fetch('http://localhost:8080/getData')
       .then( async function(response) {
-        console.log("passo")
         const data = await response.json();
-        console.log(data)
-        setMainList(data.user);
-        setAuxUsersList(data.user);
-        setCarAuxList(data.car);
-        setJobAuxList(data.job);
-        setAuxAccessList(data.access);
-        setAuxAddressesList(data.address);
-        setAuxProductList(data.products);
-        // if((mainList === undefined)
-        //   ||(auxCarList === undefined)
-        //   ||(auxJobList === undefined)
-        //   ||(auxAccessList === undefined)
-        //   ||(auxAddressesList === undefined)
-        //   ||(auxProductList === undefined)){
-        //     console.log("caiu")
-        //     console.log(mainList)
-        //     console.log(auxCarList)
-        //     console.log(auxJobList)
-        //     console.log(auxAccessList)
-        //     console.log(auxAddressesList)
-        //     console.log(auxProductList)
-        //   setIsLoading(false);
-        //   setIsNotificationOpen(true);
-        // }else{
-          setIsLoading(false);
-          setIsNotificationOpen(false);
-        //}
+        verify(data);
       }).catch(
         err => {
           setIsLoading(false);
           setIsNotificationOpen(true);
-          console.log("oii",err)
         });
   },[]);
+
+  function verify(data){
+    if((data.user === undefined)
+      ||(data.car === undefined)
+      ||(data.job === undefined)
+      ||(data.access === undefined)
+      ||(data.address === undefined)
+      ||(data.products === undefined)
+    ){
+      setIsLoading(false);
+      setIsNotificationOpen(true);
+     }else {
+      setMainList(data.user);
+      setAuxUsersList(data.user);
+      setCarAuxList(data.car);
+      setJobAuxList(data.job);
+      setAuxAccessList(data.access);
+      setAuxAddressesList(data.address);
+      setAuxProductList(data.products);
+      setIsLoading(false);
+      setIsNotificationOpen(false);
+    }
+  }
 
   function mainListChange(numb) {
     //menu seleciona usuário
@@ -82,7 +77,7 @@ function App() {
 
   if(isLoading){
     return(
-      <div class="lds-roller">
+      <div className="lds-roller">
         {/*bolinhas*/}
         <div></div>
         <div></div>
