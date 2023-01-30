@@ -24,7 +24,7 @@ function App() {
     fetch('http://localhost:8080/getData')
       .then( async function(response) {
         const data = await response.json();
-        verify(data);
+        verifyDataInconsistency(data);
       }).catch(
         err => {
           setIsLoading(false);
@@ -32,7 +32,7 @@ function App() {
         });
   },[]);
 
-  function verify(data){
+  function verifyDataInconsistency(data){
     if((data.user === undefined)
       ||(data.car === undefined)
       ||(data.job === undefined)
@@ -50,8 +50,7 @@ function App() {
       setAuxAccessList(data.access);
       setAuxAddressesList(data.address);
       setAuxProductList(data.products);
-      setIsLoading(false);
-      setIsNotificationOpen(false);
+      setTimeout(()=>{setIsLoading(false)}, 800)
     }
   }
 
@@ -97,7 +96,7 @@ function App() {
         <NotificationComponent 
             tipo="Error"
             titulo="Acesso ao banco"
-            notificationDescription="Acesso ao bando de dados com"
+            notificationDescription="Acesso ao banco de dados com"
             closeNotification={()=>{}}
         />
        : 

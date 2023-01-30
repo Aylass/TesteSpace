@@ -414,6 +414,8 @@ class Item extends React.Component{
 
         this.viewButtonFunc = this.viewButtonFunc.bind(this);
         this.setIsOpenItem = this.setIsOpenItem.bind(this);
+        this.formateSalary = this.formateSalary.bind(this);
+        this.formateDate = this.formateDate.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -436,6 +438,22 @@ class Item extends React.Component{
         this.props.changeIsOpenModal(true);
         this.props.changeModalData(this.props.data, this.props.auxCarDataList[this.props.data.user_car_id]);
     }
+
+    formateSalary(){
+        const salaryFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+                                                                .user_job_salary
+                                                                ?.replace(".", ",") || "";
+        const currencyFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+                                                                .user_job_salary_currency_symbol;
+        return currencyFormated + " " + salaryFormated;
+    }
+    formateDate(date){
+        let newdate = new Date(date);
+        const day = newdate.getDate() < 10? "0" + newdate.getDate() : newdate.getDate();
+        const month = (newdate.getMonth() + 1) < 10? "0" + (newdate.getMonth() + 1) : (newdate.getMonth() + 1);
+        let dataFormated = day + "/" + month + "/" + newdate.getFullYear(); 
+        return(dataFormated);
+    }
     
     render(){
         return(
@@ -448,15 +466,10 @@ class Item extends React.Component{
                         this.props.columnsList.map((column) => {
                             if((column === "Salário") 
                             && (this.props.auxJobDataList[this.props.data[this.props.tagId]] !== undefined)){
-                                const salaryFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
-                                                                .user_job_salary
-                                                                ?.replace(".", ",") || "";
-                                const currencyFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
-                                                                .user_job_salary_currency_symbol;
-
+                                const salary = this.formateSalary();
                                 return(
                                     <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >
-                                        {currencyFormated + " " + salaryFormated}
+                                        {salary}
                                     </td>
                                 )
                             }
@@ -478,6 +491,11 @@ class Item extends React.Component{
                                         :
                                             <FontAwesomeIcon style={{color : '#4F4F4F'}} icon={faUserSecret} />
                                     }</td>
+                                )
+                            }else if(column === "user_birth_date"){
+                                const birthdate = this.formateDate(this.props.data[column]);
+                                return(
+                                    <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{birthdate}</td>
                                 )
                             }
                             return(
