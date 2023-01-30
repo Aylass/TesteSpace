@@ -26,10 +26,10 @@ exports.users = function getUsers() {
         return client
             .query(query)
             .then(successful)
-            .catch(err => console.log(err));
+            .catch(err => console.log("erroo",err));
     }
 
     return client.connect()
         .then(executeQuery)
-        .catch(err => console.log(err))
+        .catch(err => console.log("erroo",err))
 }

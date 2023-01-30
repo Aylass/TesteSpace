@@ -8,31 +8,45 @@ import usersJobs from './users/users_job';
 import usersProducts from './users/users_products_buyed';
 import usersAccess from './users/users_access';
 import usersAddresses from './users/users_address';
+import NotificationComponent from "./components/NotificationComponent/NotificationComponent";
 import { useState } from 'react';
 
 
 function App() {
 
-  const [mainList, setMainList] = useState(users);
+  const [mainList, setMainList] = useState();
   const [auxCarList, setCarAuxList] = useState();
-  const [auxJobList, setJobAuxList] = useState(Object.values(usersJobs));
-  const [auxProductList,setAuxProductList] = useState(Object.values(usersProducts));
-  const [auxAccessList, setAuxAccessList] = useState(Object.values(usersAccess));
-  const [auxAddressesList, setAuxAddressesList] = useState(Object.values(usersAddresses));
+  const [auxJobList, setJobAuxList] = useState();
+  const [auxProductList,setAuxProductList] = useState();
+  const [auxAccessList, setAuxAccessList] = useState();
+  const [auxAddressesList, setAuxAddressesList] = useState();
   const [chosenList, setChosenList] = useState(1);
+
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
     fetch('http://localhost:8080/getData')
       .then( async function(response) {
+        console.log("passo")
         const data = await response.json();
         console.log(data)
         setMainList(data.user);
-        //setCarAuxList(data.car);
+        setCarAuxList(data.car);
         setJobAuxList(data.job);
         setAuxAccessList(data.access);
         setAuxAddressesList(data.address);
         setAuxProductList(data.products);
-      }).catch(err => console.log(err));
+
+
+        setIsNotificationOpen(false);
+        setIsLoading(false);
+      }).catch(
+        err => {
+          setIsLoading(false);
+          setIsNotificationOpen(true);
+          console.log("oii",err)
+        });
   },[]);
 
   function mainListChange(numb) {
@@ -56,22 +70,37 @@ function App() {
     setMainList(newUserList);
   }
 
+  if(isLoading){
+    return(<p>loadingggg</p>)
+  }
+
   return(
     <div className="App">
-      <Menu mainListChange={mainListChange}/>
-      <Table
-        columns={chosenList === 1? ["user_first_name","user_birth_date","Salário","Carro","Status"] : Object.keys(mainList[0])}
-        
-        dataList={mainList}
-        auxCarDataList={auxCarList}
-        auxJobDataList={auxJobList}
-        auxProductList={auxProductList}
-        auxAccessList={auxAccessList}
-        auxAddressesList={auxAddressesList}
-        tagId={Object.keys(mainList[0])[0]}
+      {isNotificationOpen? 
+        <NotificationComponent 
+            tipo="Error"
+            titulo="Acesso ao banco"
+            notificationDescription="Acesso ao bando de dados com"
+            closeNotification={()=>{}}
+        />
+       : 
+      <>
+        <Menu mainListChange={mainListChange}/>
+        <Table
+          columns={chosenList === 1? ["user_first_name","user_birth_date","Salário","Carro","Status"] : Object.keys(mainList[0])}
+          
+          dataList={mainList}
+          auxCarDataList={auxCarList}
+          auxJobDataList={auxJobList}
+          auxProductList={auxProductList}
+          auxAccessList={auxAccessList}
+          auxAddressesList={auxAddressesList}
+          tagId={Object.keys(mainList[0])[0]}
 
-        saveEditedData={saveEditedData}
-      />
+          saveEditedData={saveEditedData}
+        />
+      </>
+      }
     </div>
   );
 
