@@ -81,7 +81,19 @@ function App() {
   }
 
   if(isLoading){
-    return(<p>loadingggg</p>)
+    return(
+      <div class="lds-roller">
+        {/*bolinhas*/}
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    )
   }
 
   return(
