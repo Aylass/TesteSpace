@@ -14,7 +14,7 @@ import { useState } from 'react';
 function App() {
 
   const [mainList, setMainList] = useState(users);
-  const [auxCarList, setCarAuxList] = useState(Object.values(usersCars));
+  const [auxCarList, setCarAuxList] = useState();
   const [auxJobList, setJobAuxList] = useState(Object.values(usersJobs));
   const [auxProductList,setAuxProductList] = useState(Object.values(usersProducts));
   const [auxAccessList, setAuxAccessList] = useState(Object.values(usersAccess));
@@ -27,9 +27,11 @@ function App() {
         const data = await response.json();
         console.log(data)
         setMainList(data.user);
-        setCarAuxList(data.car);
+        //setCarAuxList(data.car);
         setJobAuxList(data.job);
         setAuxAccessList(data.access);
+        setAuxAddressesList(data.address);
+        setAuxProductList(data.products);
       }).catch(err => console.log(err));
   },[]);
 
