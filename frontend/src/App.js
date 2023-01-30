@@ -2,12 +2,6 @@ import './App.css';
 import React, { useEffect } from "react";
 import Table from './components/TableComponent/Table';
 import Menu from './components/MenuComponent/MenuComponent';
-import users from './users/users';
-import usersCars from './users/users_cars';
-import usersJobs from './users/users_job';
-import usersProducts from './users/users_products_buyed';
-import usersAccess from './users/users_access';
-import usersAddresses from './users/users_address';
 import NotificationComponent from "./components/NotificationComponent/NotificationComponent";
 import { useState } from 'react';
 
@@ -15,6 +9,7 @@ import { useState } from 'react';
 function App() {
 
   const [mainList, setMainList] = useState();
+  const [auxUsersList, setAuxUsersList] = useState();
   const [auxCarList, setCarAuxList] = useState();
   const [auxJobList, setJobAuxList] = useState();
   const [auxProductList,setAuxProductList] = useState();
@@ -32,15 +27,31 @@ function App() {
         const data = await response.json();
         console.log(data)
         setMainList(data.user);
+        setAuxUsersList(data.user);
         setCarAuxList(data.car);
         setJobAuxList(data.job);
         setAuxAccessList(data.access);
         setAuxAddressesList(data.address);
         setAuxProductList(data.products);
-
-
-        setIsNotificationOpen(false);
-        setIsLoading(false);
+        // if((mainList === undefined)
+        //   ||(auxCarList === undefined)
+        //   ||(auxJobList === undefined)
+        //   ||(auxAccessList === undefined)
+        //   ||(auxAddressesList === undefined)
+        //   ||(auxProductList === undefined)){
+        //     console.log("caiu")
+        //     console.log(mainList)
+        //     console.log(auxCarList)
+        //     console.log(auxJobList)
+        //     console.log(auxAccessList)
+        //     console.log(auxAddressesList)
+        //     console.log(auxProductList)
+        //   setIsLoading(false);
+        //   setIsNotificationOpen(true);
+        // }else{
+          setIsLoading(false);
+          setIsNotificationOpen(false);
+        //}
       }).catch(
         err => {
           setIsLoading(false);
@@ -51,17 +62,16 @@ function App() {
 
   function mainListChange(numb) {
     //menu seleciona usuário
-    setCarAuxList("notNeeded");
-    setJobAuxList("notNeeded");
     setChosenList(numb);
     if((numb === 2)&&(numb !== chosenList)){ //menu seleciona carro
-      setMainList(Object.values(usersCars));
+      setMainList(auxCarList);
+      setChosenList(2);
     }else if((numb === 3)&&(numb !== chosenList)){//menu seleciona trabalho
-      setMainList(Object.values(usersJobs));
+      setMainList(auxJobList);
+      setChosenList(3);
     }else if((numb === 1)&&(numb !== chosenList)){
-      setMainList(users);
-      setCarAuxList(Object.values(usersCars));
-      setJobAuxList(Object.values(usersJobs));
+      setMainList(auxUsersList);
+      setChosenList(1);
     }
   }
 
@@ -90,8 +100,8 @@ function App() {
           columns={chosenList === 1? ["user_first_name","user_birth_date","Salário","Carro","Status"] : Object.keys(mainList[0])}
           
           dataList={mainList}
-          auxCarDataList={auxCarList}
-          auxJobDataList={auxJobList}
+          auxCarDataList={(chosenList !== 1)? "notNeeded": auxCarList}
+          auxJobDataList={(chosenList !== 1)? "notNeeded": auxJobList}
           auxProductList={auxProductList}
           auxAccessList={auxAccessList}
           auxAddressesList={auxAddressesList}
