@@ -2,6 +2,11 @@ import React from "react";
 import "./NotificationComponent.css";
 import PropTypes from "prop-types";
 
+/**
+     * @function frontend\src\components\NotificationComponent\NotificationComponent
+     * @summary - Handle notifications
+     * @returns {Element} - Return a react element
+     */
 class NotificationComponent extends React.Component{
 
     constructor(props){
@@ -20,6 +25,10 @@ class NotificationComponent extends React.Component{
         }, 3000);
     }
 
+    /**
+     * @function frontend\src\components\NotificationComponent\NotificationComponent.handleCloseNotification
+     * @summary - Close notification when father calls
+     */
     handleCloseNotification(){
         setTimeout(() => {
             this.props.closeNotification()
