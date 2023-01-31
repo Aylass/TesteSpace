@@ -1,6 +1,12 @@
 import React from "react";
 import "./MenuComponent.css";
+import PropTypes from "prop-types";
 
+/**
+     * @function frontend\src\components\MenuComponent\Menu
+     * @summary - Handle menu behavior and style
+     * @returns {Element} - Return a react element
+     */
 class Menu extends React.Component{
     constructor(props){
         super(props);
@@ -10,6 +16,10 @@ class Menu extends React.Component{
         }
         this.openMenu = this.openMenu.bind(this);
     }
+    /**
+     * @function frontend\src\components\MenuComponent\Menu.openMenu
+     * @summary - Open menu and start animation
+     */
     openMenu() {
         let aux = "";
         if(!this.state.isMenuOpen){
@@ -43,5 +53,7 @@ class Menu extends React.Component{
         )
     }
 }
-
+Menu.propTypes={
+    mainListChange: PropTypes.func,
+}
 export default Menu;
