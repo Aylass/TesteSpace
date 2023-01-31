@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 
-exports.user = function insertCar(data) {
+exports.user = function updateUser(data) {
  
     let returnedObj = {result: null, error: null};
 

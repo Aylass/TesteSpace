@@ -91,30 +91,19 @@ function App() {
     setCarAuxList(newCarList);
     setMainList(newUserList);
     setNewCar(newCar);
-    const updateUser = {
+    const updateUserCar = {
       "car_id": newCar.car_id,
-      "user_id": userID
+      "user_id": userID,
+      "newCar": newCar
   }
 
-    fetch('http://localhost:8080/insertCar', {
+    fetch('http://localhost:8080/updateUsersCars', {
       method: "POST",
-      body: JSON.stringify(newCar),
+      body: JSON.stringify(updateUserCar),
       headers: { "Content-type": "application/json; charset=UTF-8" }
     })
         .then(async function (response) {
           const res = await response.json();
-          fetch('http://localhost:8080/updateUser', {
-            method: "POST",
-            body: JSON.stringify(updateUser),
-            headers: { "Content-type": "application/json; charset=UTF-8" }
-          })
-            .then(async function (response) {
-              const res = await response.json();
-            }).catch(
-              err => {
-                setIsLoading(false);
-                setIsNotificationOpen(true);
-              });
       }).catch(
         err => {
           setIsLoading(false);
