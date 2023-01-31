@@ -23,6 +23,8 @@ function App() {
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const[newCar, setNewCar] = useState();
   
   useEffect(() => {
     fetch('http://localhost:8080/getData')
@@ -85,9 +87,25 @@ function App() {
    * @function frontend\src\App.saveEditedData
    * @summary - Save edited data
    */
-  function saveEditedData(newUserList, newCarList){
+  function saveEditedData(newUserList, newCarList, newCar){
     setCarAuxList(newCarList);
     setMainList(newUserList);
+    setNewCar(newCar);
+    console.log("New car",newCar)
+
+    fetch('http://localhost:8080/insertCar', {
+      method: "POST",
+      body: JSON.stringify(newCar),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+    })
+      .then( async function(response) {
+        const res = await response.json();
+        console.log(res)
+      }).catch(
+        err => {
+          setIsLoading(false);
+          setIsNotificationOpen(true);
+        });
   }
 
   if(isLoading){
