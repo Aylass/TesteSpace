@@ -106,7 +106,7 @@ class Table extends React.Component{
                     break;
                 }
             }
-            this.props.saveEditedData(listUserObjectCopy,listCarsObjectCopy,modalCar);
+            this.props.saveEditedData(listUserObjectCopy,listCarsObjectCopy,modalCar,this.state.modalUser.user_id);
         } catch (error) {
             this.typeNotification = "Error";
             this.notificationDescription = `Ocorreu um erro.`;

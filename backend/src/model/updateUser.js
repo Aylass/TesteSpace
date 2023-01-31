@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 
-exports.car = function insertCar(carData) {
+exports.user = function insertCar(data) {
  
     let returnedObj = {result: null, error: null};
 
@@ -12,19 +12,13 @@ exports.car = function insertCar(carData) {
         port: 5432,
     })
 
-    if((carData === undefined)
-        ||(carData.car_id === undefined)
-        ||(carData.car_fuel === undefined)
-        ||(carData.car_manufacturer === undefined)
-        ||(carData.car_model === undefined)
-        ||(carData.car_name === undefined)
-        ||(carData.car_type === undefined)
+    if((data.car_id === undefined)||(data.user_id === undefined)
     ){
         returnedObj.error = "Errooooo";
         return returnedObj;
     }
 
-    const query = `INSERT INTO users_cars (car_id, car_fuel, car_manufacturer, car_model, car_name, car_type) VALUES (${carData.car_id}, '${carData.car_fuel}', '${carData.car_manufacturer}', '${carData.car_model}', '${carData.car_name}', '${carData.car_type}') `
+   const query = `UPDATE users set user_car_id=${data.car_id} WHERE user_id=${data.user_id}`
 
     const executeQuery = () => {
         const successful = (res) => {
