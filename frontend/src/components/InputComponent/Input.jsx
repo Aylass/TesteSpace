@@ -1,4 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+/**
+     * @function frontend\src\components\InputComponent\InputComponent
+     * @summary - Handle inputs behavior and style
+     * @returns {Element} - Return a react element
+     */
 class InputComponent extends React.Component{
 
     shouldComponentUpdate(nextProps){
@@ -24,6 +31,13 @@ class InputComponent extends React.Component{
             />
         )
     }
+}
+InputComponent.propTypes={
+    placeholder: PropTypes.string,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    value: PropTypes.string,
+    disabled: PropTypes.bool,
 }
 
 export default InputComponent;
