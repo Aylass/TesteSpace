@@ -6,6 +6,11 @@ import InputComponent from "../InputComponent/Input";
 import NotificationComponent from "../NotificationComponent/NotificationComponent";
 import translation from '../../users/Translation';
 
+/**
+     * @function frontend\src\components\TableComponent\Table.jsx
+     * @summary - Shows data in table format
+     * @returns {Element} - Return a react element
+     */
 class Table extends React.Component{
     constructor(props){
         super(props);
@@ -51,17 +56,29 @@ class Table extends React.Component{
     }
 
     /*Notification*/
+    /**
+     * @function frontend\src\components\TableComponent\Table.isNotificationOpen
+     * @summary - Toggle notification
+     */
     isNotificationOpen(){
         this.setState({
             isNotification: !this.state.isNotification,});
     }
 
     /*Edit Modal*/
+    /**
+     * @function frontend\src\components\TableComponent\Table.changeIsOpenModal
+     * @summary - Toggle edit modal
+     */
     changeIsOpenModal(bool){
         this.setState({
             isOpenModal: bool
         });
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table.changeModalData
+     * @summary - Change modal user and car data
+     */
     changeModalData(user, car){
         this.setState({
             modalUser: user,
@@ -69,6 +86,10 @@ class Table extends React.Component{
         });
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table.onChangedModalCar
+     * @summary - Change modal car to the edited new car
+     */
     onChangedModalCar(modalCar) {
         try {
             this.typeNotification = "Success";
@@ -93,6 +114,10 @@ class Table extends React.Component{
     }
 
     /*Paginator*/
+    /**
+     * @function frontend\src\components\TableComponent\Table.onPageChange
+     * @summary - Toggle current page
+     */
     onPageChange(start, end, current){
         this.setState({
             startsOn: start,
@@ -101,7 +126,12 @@ class Table extends React.Component{
         });
     }
 
-    /*Builds*/ 
+    /*Builds*/
+     /**
+     * @function frontend\src\components\TableComponent\Table.buildHeader
+     * @summary - Shows list as table header
+     * @returns {Element} - Return a react element
+     */
     buildHeader(listHeader){
         return(
             <thead key={`Header`}>
@@ -113,6 +143,11 @@ class Table extends React.Component{
             </thead>
         );
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table.buildBody
+     * @summary - Shows list as table list
+     * @returns {Element} - Return a react element
+     */
     buildBody(dataList, columnsList, tagId, auxCarDataList, auxJobDataList){
         const list = [];
         for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
@@ -123,6 +158,11 @@ class Table extends React.Component{
         }
         return list;
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table.buildItem
+     * @summary - Shows each item in a Item component
+     * @returns {Element} - Return a react element
+     */
     buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList){
         return(
             <Item 
@@ -195,6 +235,11 @@ class Table extends React.Component{
     }
 }
 
+/**
+     * @function frontend\src\components\TableComponent\Table\Paginator
+     * @summary - Manage page change
+     * @returns {Element} - Return a react element
+     */
 class Paginator extends React.Component{
     constructor(props){
         super(props);
@@ -207,6 +252,10 @@ class Paginator extends React.Component{
         this.handlePageOptionChange = this.handlePageOptionChange.bind(this);
     }  
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\Paginator.selectOptions
+     * @summary - Manage main list selected
+     */
     selectOptions(){
         const optionsArray = [];
         for (let page = 1; page <= this.numPages; page++) {
@@ -215,6 +264,10 @@ class Paginator extends React.Component{
         return optionsArray;
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\Paginator.selectOptions
+     * @summary - Manage next or previous pages
+     */
     btnChangeOption(isRight){
         let count = this.props.currentPage;
         let newStart;
@@ -234,6 +287,10 @@ class Paginator extends React.Component{
         }
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\Paginator.handlePageOptionChange
+     * @summary - Manage next or previous pages variables
+     */
     handlePageOptionChange(event) {
         let newOptionValue = parseInt(event.target.value);
         let newStart = 20 * (newOptionValue - 1);
@@ -259,6 +316,11 @@ class Paginator extends React.Component{
     }
 }
 
+/**
+     * @function frontend\src\components\TableComponent\Table\EditModal
+     * @summary - Manage and handle edit car from a current user
+     * @returns {Element} - Return a react element
+     */
 class EditModal extends React.Component{
     constructor(props){
         super(props);
@@ -287,11 +349,19 @@ class EditModal extends React.Component{
         this.wrapperRef = React.createRef();
     }
     
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.setWrapperRef
+     * @summary - Verify current node has reference
+     */
     setWrapperRef(node){
         if(node !== undefined)
         this.wrapperRef = node;
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.setIsEditing
+     * @summary - Create a new car to call Table.onChangedModalCar
+     */
     setIsEditing(event){
         event.stopPropagation();
         if(this.state.isEditing === false){ //not editing
@@ -313,7 +383,10 @@ class EditModal extends React.Component{
         }
     }
 
-
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.hasSomeInputChanged
+     * @summary - Verify if some input has changed
+     */
     hasSomeInputChanged(nome, modelo, fabricante, tipo, gasolina){
         if((nome ===  this.props.modalData.car_name)
         && (modelo ===  this.props.modalData.car_model)
@@ -325,26 +398,46 @@ class EditModal extends React.Component{
         }
         return false;
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.onNameChanged
+     * @summary - Save car name variable
+     */
     onNameChanged(data){
         this.setState({
             nomeData: data.target.value,
             disabledSaveBtn: this.hasSomeInputChanged(data.target.value, this.state.modeloData, this.state.fabricanteData, this.state.tipoData, this.state.gasolinaData)});
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.onModeloChanged
+     * @summary - Save car model variable
+     */
     onModeloChanged(data){
         this.setState({
             modeloData: data.target.value,
             disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, data.target.value, this.state.fabricanteData, this.state.tipoData, this.state.gasolinaData)});
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.onFabricanteChanged
+     * @summary - Save car manufacturer variable
+     */
     onFabricanteChanged(data){
         this.setState({
             fabricanteData: data.target.value,
             disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, data.target.value, this.state.tipoData, this.state.gasolinaData)});
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.onTipoChanged
+     * @summary - Save car type variable
+     */
     onTipoChanged(data){
         this.setState({
             tipoData: data.target.value,
             disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, this.state.fabricanteData, data.target.value, this.state.gasolinaData)});
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.onGasolinaChanged
+     * @summary - Save car fuel variable
+     */
     onGasolinaChanged(data){
         this.setState({
             gasolinaData: data.target.value,
