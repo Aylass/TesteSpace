@@ -443,7 +443,10 @@ class EditModal extends React.Component{
             gasolinaData: data.target.value,
             disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, this.state.fabricanteData, this.state.tipoData, data.target.value)});
     }
-
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.listenerClick
+     * @summary - Listener mouse click and verify if element clicked is on EditModal component.
+     */
     listenerClick(event){
         if (this.wrapperRef 
             && !this.wrapperRef.contains(event.target) 
@@ -453,6 +456,10 @@ class EditModal extends React.Component{
             this.props.changeIsOpenModal(false);
         }
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table\EditModal.listenerClick
+     * @summary - Listener ESC click and close EditModal
+     */
     listenerESC(event){
             if(event.keyCode === 27)
                 this.props.changeIsOpenModal(false);
@@ -498,6 +505,11 @@ class EditModal extends React.Component{
     }
 }
 
+/**
+     * @function frontend\src\components\TableComponent\Table\Item
+     * @summary - Wrapp all line data
+     * @returns {Element} - Return a react element
+     */
 class Item extends React.Component{
     constructor(props){
         super(props);
@@ -521,17 +533,29 @@ class Item extends React.Component{
         return false;
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\Item.setIsOpenItem
+     * @summary - Toggle isOpenItem variable
+     */
     setIsOpenItem(){
         this.setState({
             isOpenItem: !this.state.isOpenItem
         });
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\Item.viewButtonFunc
+     * @summary - Handle view button behavior
+     */
     viewButtonFunc(){
         this.props.changeIsOpenModal(true);
         this.props.changeModalData(this.props.data, this.props.auxCarDataList[this.props.data.user_car_id]);
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\Item.formateSalary
+     * @summary - Formate salary data
+     */
     formateSalary(){
         const salaryFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
                                                                 .user_job_salary
@@ -540,6 +564,10 @@ class Item extends React.Component{
                                                                 .user_job_salary_currency_symbol;
         return currencyFormated + " " + salaryFormated;
     }
+    /**
+     * @function frontend\src\components\TableComponent\Table\Item.formateDate
+     * @summary - Formate date data
+     */
     formateDate(date){
         let newdate = new Date(date);
         const day = newdate.getDate() < 10? "0" + newdate.getDate() : newdate.getDate();
@@ -621,6 +649,11 @@ class Item extends React.Component{
     }
 }
 
+/**
+     * @function frontend\src\components\TableComponent\Table\ItemBody
+     * @summary - Handle item body data
+     * @returns {Element} - Return a react element
+     */
 class ItemBody extends React.Component{
     constructor(props){
         super(props);
@@ -631,9 +664,13 @@ class ItemBody extends React.Component{
         this.toggleModal = this.toggleModal.bind(this);
     }
 
+    /**
+     * @function frontend\src\components\TableComponent\Table\ItemBody.toggleModal
+     * @summary - Toggle item modal
+     */
     toggleModal(tab){
        this.setState({tabOpenModal : tab});
-   }
+    }
 
     shouldComponentUpdate(nextProps, nextState){
         if(nextState.tabOpenModal !== this.state.tabOpenModal){
@@ -680,6 +717,11 @@ class ItemBody extends React.Component{
     }
 }
 
+/**
+     * @function frontend\src\components\TableComponent\Table\Modal
+     * @summary - Handle item data in a modal
+     * @returns {Element} - Return a react element
+     */
 class Modal extends React.Component{
     constructor(props){
         super(props);
