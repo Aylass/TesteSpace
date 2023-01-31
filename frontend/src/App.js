@@ -127,6 +127,7 @@ function App() {
     )
   }
 
+  console.log("auxCarList",auxCarList)
   return (
     <div className="App">
       {isNotificationOpen ?

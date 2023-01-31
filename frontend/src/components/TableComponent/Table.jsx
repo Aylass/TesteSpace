@@ -1,7 +1,7 @@
 import React from "react";
 import "./Table.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faUserSecret, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import { faUser, faUserSecret, faArrowRight, faArrowLeft, faBriefcaseClock} from '@fortawesome/free-solid-svg-icons'
 import InputComponent from "../InputComponent/Input";
 import NotificationComponent from "../NotificationComponent/NotificationComponent";
 import translation from '../../users/Translation';
@@ -38,9 +38,17 @@ class Table extends React.Component{
 
     shouldComponentUpdate(nextProps, nextState){
         if(nextProps.dataList !== this.props.dataList){
+            this.setState({
+                currentPage: 1,
+                startsOn: 0,
+                endsOn: 20,});
             return true;
         }
         if(nextProps.auxCarList !== this.props.auxCarList){
+            this.setState({
+                currentPage: 1,
+                startsOn: 0,
+                endsOn: 20,});
             return true;
         }
         if(nextState.isOpenModal !== this.state.isOpenModal){
@@ -152,9 +160,11 @@ class Table extends React.Component{
         const list = [];
         for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
             const data = dataList[index];
-            list.push(
-                this.buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList)
-            );
+            if(data !== undefined){
+                list.push(
+                    this.buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList)
+                );
+            }else{break;}
         }
         return list;
     }
@@ -639,7 +649,7 @@ class Item extends React.Component{
                             currentJob={this.props.auxJobDataList[this.props.data.user_job_id]}
                             currentProduct={this.props.auxProductList[this.props.data.user_product_buyed_id]}
                             currentAccess={this.props.auxAccessList[this.props.data.user_access_id]}
-                            currentAdresses={this.props.auxAddressesList[this.props.data.user_address_id]}
+                            currentAddresses={this.props.auxAddressesList[this.props.data.user_address_id]}
                         />
                     : null
                 }
@@ -709,7 +719,7 @@ class ItemBody extends React.Component{
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
                         currentAccess={this.props.currentAccess}
-                        currentAdresses={this.props.currentAdresses}
+                        currentAddresses={this.props.currentAddresses}
                     />
                 </td>
             </tr>
@@ -796,10 +806,10 @@ class Modal extends React.Component{
                                 <b>Endereço</b><br/><hr/>
                             </div>
                             <p className="tab">  
-                                País: {this.props.currentAdresses?.user_address_country || ""} <br/>         
-                                Estado: {this.props.currentAdresses?.user_address_state || ""} <br/>
-                                Cidade: {this.props.currentAdresses?.user_address_city || ""} <br/>
-                                Rua: {this.props.currentAdresses?.user_address_street_address || ""} <br/>
+                                País: {this.props.currentAddresses?.user_address_country || ""} <br/>         
+                                Estado: {this.props.currentAddresses?.user_address_state || ""} <br/>
+                                Cidade: {this.props.currentAddresses?.user_address_city || ""} <br/>
+                                Rua: {this.props.currentAddresses?.user_address_street_address || ""} <br/>
                             </p>
                         </>
                         : 
