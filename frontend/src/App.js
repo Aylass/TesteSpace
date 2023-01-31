@@ -5,7 +5,11 @@ import Menu from './components/MenuComponent/MenuComponent';
 import NotificationComponent from "./components/NotificationComponent/NotificationComponent";
 import { useState } from 'react';
 
-
+/**
+     * @function frontend\src\App
+     * @summary - Handle application behavior
+     * @returns {Element} - Return a react element
+     */
 function App() {
 
   const [mainList, setMainList] = useState();
@@ -32,6 +36,10 @@ function App() {
         });
   },[]);
 
+  /**
+     * @function frontend\src\App.verifyDataInconsistency
+     * @summary - Verify if some of backend data are undefined
+     */
   function verifyDataInconsistency(data){
     if((data.user === undefined)
       ||(data.car === undefined)
@@ -54,6 +62,10 @@ function App() {
     }
   }
 
+  /**
+     * @function frontend\src\App.mainListChange
+     * @summary - Handle main list change when Menu component says
+     */
   function mainListChange(numb) {
     //menu seleciona usuário
     setChosenList(numb);
@@ -69,6 +81,10 @@ function App() {
     }
   }
 
+  /**
+   * @function frontend\src\App.saveEditedData
+   * @summary - Save edited data
+   */
   function saveEditedData(newUserList, newCarList){
     setCarAuxList(newCarList);
     setMainList(newUserList);
