@@ -24,8 +24,6 @@ function App() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [newCar, setNewCar] = useState();
-
   useEffect(() => {
     fetch('http://localhost:8080/getData')
       .then(async function (response) {
@@ -89,8 +87,8 @@ function App() {
    */
   function saveEditedData(newUserList, newCarList, newCar, userID) {
     setCarAuxList(newCarList);
+    setAuxUsersList(newUserList);
     setMainList(newUserList);
-    setNewCar(newCar);
     const updateUserCar = {
       "car_id": newCar.car_id,
       "user_id": userID,

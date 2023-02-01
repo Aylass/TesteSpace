@@ -42,6 +42,7 @@ class Table extends React.Component{
                 currentPage: 1,
                 startsOn: 0,
                 endsOn: 20,});
+                console.log("atualiza")
             return true;
         }
         if(nextProps.auxCarList !== this.props.auxCarList){
@@ -49,6 +50,7 @@ class Table extends React.Component{
                 currentPage: 1,
                 startsOn: 0,
                 endsOn: 20,});
+                console.log("atualiza")
             return true;
         }
         if(nextState.isOpenModal !== this.state.isOpenModal){
@@ -101,14 +103,17 @@ class Table extends React.Component{
     onChangedModalCar(modalCar) {
         try {
             this.typeNotification = "Success";
-            let listCarsObjectCopy = {...this.props.auxCarDataList};
+            let listCarsObjectCopy = [...this.props.auxCarDataList];
             let listUserObjectCopy = [...this.props.dataList];
-            const newCarId = (Object.keys(listCarsObjectCopy).length) + 1;
+            const newCarId = listCarsObjectCopy.length+1;
+            console.log(listCarsObjectCopy.length+1)
             modalCar.car_id = newCarId
-            listCarsObjectCopy[newCarId] = modalCar;
+            console.log("antes", listCarsObjectCopy)
+            listCarsObjectCopy.push(modalCar);
+            console.log("depois", listCarsObjectCopy)
             for(let i=0; i<this.props.dataList.length; i++){
                 const user = this.props.dataList[i];
-                if((user.user_car_id === this.state.modalUser.user_car_id)&&(user.user_id === this.state.modalUser.user_id)){
+                if(user.user_id === this.state.modalUser.user_id){
                     listUserObjectCopy[i].user_car_id = newCarId;
                     this.notificationDescription = `Carro de ${user.user_first_name} foi editado com`;
                     break;
@@ -158,7 +163,7 @@ class Table extends React.Component{
      */
     buildBody(dataList, columnsList, tagId, auxCarDataList, auxJobDataList){
         const list = [];
-        for (let index = this.state.startsOn; index < this.state.endsOn; index++) {
+        for (let index = this.state.startsOn; index < this.state.endsOn+1; index++) {
             const data = dataList[index];
             if(data !== undefined){
                 list.push(
@@ -486,6 +491,9 @@ class EditModal extends React.Component{
     }
 
     render(){
+        console.log("edit modal",this.props.modalData)
+        console.log("edit car name",this.props.modalData?.car_name)
+        console.log("edit nomeData",this.state.nomeData)
         return(
             <div ref={this.setWrapperRef} className="modal">
                 <div className="modal-content">
@@ -559,7 +567,10 @@ class Item extends React.Component{
      */
     viewButtonFunc(){
         this.props.changeIsOpenModal(true);
-        this.props.changeModalData(this.props.data, this.props.auxCarDataList[this.props.data.user_car_id]);
+        let currentUserCar;
+        currentUserCar = this.props.auxCarDataList.filter((car, index, array) => {return car.car_id === this.props.data.user_car_id});
+
+        this.props.changeModalData(this.props.data, currentUserCar[0]);
     }
 
     /**
@@ -587,6 +598,11 @@ class Item extends React.Component{
     }
     
     render(){
+        let currentCar;
+        if((this.props.auxCarDataList !== "notNeeded") && (this.props.auxJobDataList !== "notNeeded")){
+            const currentUserCarId = this.props.data.user_car_id;
+            currentCar = this.props.auxCarDataList.filter((car, index, array) => {;return car.car_id === currentUserCarId});
+        }
         return(
             <>            
                 <tr key={`line_${this.props.data[this.props.tagId]}`} 
@@ -645,7 +661,7 @@ class Item extends React.Component{
                     this.state.isOpenItem === true?
                         <ItemBody 
                             user={this.props.data} 
-                            currentCar={this.props.auxCarDataList[this.props.data.user_car_id]}
+                            currentCar={currentCar?.[0]}
                             currentJob={this.props.auxJobDataList[this.props.data.user_job_id]}
                             currentProduct={this.props.auxProductList[this.props.data.user_product_buyed_id]}
                             currentAccess={this.props.auxAccessList[this.props.data.user_access_id]}
