@@ -29,6 +29,7 @@ class Table extends React.Component{
 
         /*Paginator Bind*/
         this.onPageChange = this.onPageChange.bind(this);
+
         /*Edit Modal Bind*/
         this.changeIsOpenModal = this.changeIsOpenModal.bind(this);
         this.changeModalData = this.changeModalData.bind(this);
@@ -42,7 +43,6 @@ class Table extends React.Component{
                 currentPage: 1,
                 startsOn: 0,
                 endsOn: 20,});
-                console.log("atualiza")
             return true;
         }
         if(nextProps.auxCarList !== this.props.auxCarList){
@@ -50,7 +50,6 @@ class Table extends React.Component{
                 currentPage: 1,
                 startsOn: 0,
                 endsOn: 20,});
-                console.log("atualiza")
             return true;
         }
         if(nextState.isOpenModal !== this.state.isOpenModal){
@@ -103,16 +102,17 @@ class Table extends React.Component{
     onChangedModalCar(modalCar) {
         try {
             this.typeNotification = "Success";
+
             let listCarsObjectCopy = [...this.props.auxCarDataList];
             let listUserObjectCopy = [...this.props.dataList];
+
             const newCarId = listCarsObjectCopy.length+1;
-            console.log(listCarsObjectCopy.length+1)
-            modalCar.car_id = newCarId
-            console.log("antes", listCarsObjectCopy)
+            modalCar.car_id = newCarId;
             listCarsObjectCopy.push(modalCar);
-            console.log("depois", listCarsObjectCopy)
+
             for(let i=0; i<this.props.dataList.length; i++){
                 const user = this.props.dataList[i];
+
                 if(user.user_id === this.state.modalUser.user_id){
                     listUserObjectCopy[i].user_car_id = newCarId;
                     this.notificationDescription = `Carro de ${user.user_first_name} foi editado com`;
@@ -163,8 +163,10 @@ class Table extends React.Component{
      */
     buildBody(dataList, columnsList, tagId, auxCarDataList, auxJobDataList){
         const list = [];
+
         for (let index = this.state.startsOn; index < this.state.endsOn+1; index++) {
             const data = dataList[index];
+
             if(data !== undefined){
                 list.push(
                     this.buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList)
@@ -205,8 +207,8 @@ class Table extends React.Component{
             <>
                 {this.state.isNotification?
                     <NotificationComponent 
-                        tipo={this.typeNotification}
-                        titulo="Edição de Carro"
+                        type={this.typeNotification}
+                        title="Edição de Carro"
                         notificationDescription={this.notificationDescription}
                         closeNotification={this.isNotificationOpen}
                     /> 
@@ -214,10 +216,12 @@ class Table extends React.Component{
                 <Paginator 
                     key={Math.random()}
                     mainListChange={this.mainListChange}
+
                     totalItems={this.props.dataList.length} 
                     currentPage={this.state.currentPage} 
                     startsOn={this.state.startsOn} 
                     endsOn={this.state.endsOn} 
+
                     onPageChange={this.onPageChange}
                 />
                 {this.state.isOpenModal?
@@ -273,9 +277,11 @@ class Paginator extends React.Component{
      */
     selectOptions(){
         const optionsArray = [];
+
         for (let page = 1; page <= this.numPages; page++) {
-            optionsArray.push(<option key={'option_' + page} value={page}>{page} Pagina</option>);
+            optionsArray.push(<option key={'option_' + page} value={page}>{page} Página</option>);
         }
+
         return optionsArray;
     }
 
@@ -285,13 +291,15 @@ class Paginator extends React.Component{
      */
     btnChangeOption(isRight){
         let count = this.props.currentPage;
+
         let newStart;
         let newEnd;
-        if(isRight){//direita
+
+        if(isRight){//right
             count = count+1;
             newStart = parseInt(this.props.startsOn + 20);
             newEnd = parseInt(this.props.endsOn + 20);
-        }else{//esquerda
+        }else{//left
             count = count-1;
             newStart = parseInt(this.props.startsOn - 20);
             newEnd = parseInt(this.props.endsOn - 20); 
@@ -307,11 +315,11 @@ class Paginator extends React.Component{
      * @summary - Manage next or previous pages variables
      */
     handlePageOptionChange(event) {
-        let newOptionValue = parseInt(event.target.value);
-        let newStart = 20 * (newOptionValue - 1);
-        let newEnd =  20 * newOptionValue;
+        const newOptionValue = parseInt(event.target.value);
+        const newStart = 20 * (newOptionValue - 1);
+        const newEnd =  20 * newOptionValue;
 
-        //atualizar end start
+        //update end start
         this.props.onPageChange(newStart, newEnd, newOptionValue);
     }
 
@@ -343,25 +351,37 @@ class EditModal extends React.Component{
             disabledSaveBtn: true,
             carData: this.props.carData,
             isEditing: false,
-            nomeData: this.props.modalData?.car_name || "Nome",
-            modeloData: this.props.modalData?.car_model || "Modelo",
-            fabricanteData: this.props.modalData?.car_manufacturer || "Fabricante",
-            tipoData: this.props.modalData?.car_type || "Tipo",
-            gasolinaData: this.props.modalData?.car_fuel || "Gasolina",
+            nameData: this.props.modalData?.car_name || "Nome",
+            modelData: this.props.modalData?.car_model || "Modelo",
+            manufacturerData: this.props.modalData?.car_manufacturer || "Fabricante",
+            typeData: this.props.modalData?.car_type || "Tipo",
+            fuelData: this.props.modalData?.car_fuel || "Gasolina",
         }
     
+        //Functions to close the Modal
         this.listenerClick = this.listenerClick.bind(this);
         this.listenerESC = this.listenerESC.bind(this);
         this.setIsEditing = this.setIsEditing.bind(this);
 
+        //Handle inputs change
         this.onNameChanged = this.onNameChanged.bind(this);
-        this.onModeloChanged = this.onModeloChanged.bind(this);
-        this.onFabricanteChanged = this.onFabricanteChanged.bind(this);
-        this.onTipoChanged = this.onTipoChanged.bind(this);
-        this.onGasolinaChanged = this.onGasolinaChanged.bind(this);
+        this.onModelChanged = this.onModelChanged.bind(this);
+        this.onManufacturerChanged = this.onManufacturerChanged.bind(this);
+        this.onTypeChanged = this.onTypeChanged.bind(this);
+        this.onFuelChanged = this.onFuelChanged.bind(this);
 
+        //Save element reference
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.wrapperRef = React.createRef();
+    }
+
+    componentDidMount(){
+        document.addEventListener('click', this.listenerClick);
+        document.addEventListener('keydown', this.listenerESC);
+    }
+    componentWillUnmount(){
+        document.removeEventListener('click', this.listenerClick);
+        document.removeEventListener('keydown', this.listenerESC);
     }
     
     /**
@@ -370,7 +390,7 @@ class EditModal extends React.Component{
      */
     setWrapperRef(node){
         if(node !== undefined)
-        this.wrapperRef = node;
+            this.wrapperRef = node;
     }
 
     /**
@@ -379,22 +399,23 @@ class EditModal extends React.Component{
      */
     setIsEditing(event){
         event.stopPropagation();
+
         if(this.state.isEditing === false){ //not editing
              this.setState({
                 isEditing: true});
         }else{ //editing
             this.setState({
                 isEditing: false});
-                let newCar = {
+                const newCar = {
                     car_id: this.props.modalData.car_id,
-                    car_fuel: this.state.gasolinaData,
-                    car_manufacturer: this.state.fabricanteData,
-                    car_model: this.state.modeloData,
-                    car_name: this.state.nomeData,
-                    car_type: this.state.tipoData
+                    car_fuel: this.state.fuelData,
+                    car_manufacturer: this.state.manufacturerData,
+                    car_model: this.state.modelData,
+                    car_name: this.state.nameData,
+                    car_type: this.state.typeData
                 }
-                this.props.onChangedModalCar(newCar,this.props.modalUser);
-                this.props.openNotification();
+            this.props.onChangedModalCar(newCar,this.props.modalUser);
+            this.props.openNotification();
         }
     }
 
@@ -402,12 +423,12 @@ class EditModal extends React.Component{
      * @function frontend\src\components\TableComponent\Table\EditModal.hasSomeInputChanged
      * @summary - Verify if some input has changed
      */
-    hasSomeInputChanged(nome, modelo, fabricante, tipo, gasolina){
-        if((nome ===  this.props.modalData.car_name)
-        && (modelo ===  this.props.modalData.car_model)
-        && (fabricante ===  this.props.modalData.car_manufacturer)
-        && (tipo ===  this.props.modalData.car_type)
-        && (gasolina ===  this.props.modalData.car_fuel)
+    hasSomeInputChanged(name, model, manufacturer, type, fuel){
+        if((name ===  this.props.modalData.car_name)
+        && (model ===  this.props.modalData.car_model)
+        && (manufacturer ===  this.props.modalData.car_manufacturer)
+        && (type ===  this.props.modalData.car_type)
+        && (fuel ===  this.props.modalData.car_fuel)
         ){//disable button
             return true;
         }
@@ -419,44 +440,44 @@ class EditModal extends React.Component{
      */
     onNameChanged(data){
         this.setState({
-            nomeData: data.target.value,
-            disabledSaveBtn: this.hasSomeInputChanged(data.target.value, this.state.modeloData, this.state.fabricanteData, this.state.tipoData, this.state.gasolinaData)});
+            nameData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(data.target.value, this.state.modelData, this.state.manufacturerData, this.state.typeData, this.state.fuelData)});
     }
     /**
-     * @function frontend\src\components\TableComponent\Table\EditModal.onModeloChanged
+     * @function frontend\src\components\TableComponent\Table\EditModal.onModelChanged
      * @summary - Save car model variable
      */
-    onModeloChanged(data){
+    onModelChanged(data){
         this.setState({
-            modeloData: data.target.value,
-            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, data.target.value, this.state.fabricanteData, this.state.tipoData, this.state.gasolinaData)});
+            modelData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nameData, data.target.value, this.state.manufacturerData, this.state.typeData, this.state.fuelData)});
     }
     /**
-     * @function frontend\src\components\TableComponent\Table\EditModal.onFabricanteChanged
+     * @function frontend\src\components\TableComponent\Table\EditModal.onManufacturerChanged
      * @summary - Save car manufacturer variable
      */
-    onFabricanteChanged(data){
+    onManufacturerChanged(data){
         this.setState({
-            fabricanteData: data.target.value,
-            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, data.target.value, this.state.tipoData, this.state.gasolinaData)});
+            manufacturerData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nameData, this.state.modelData, data.target.value, this.state.typeData, this.state.fuelData)});
     }
     /**
-     * @function frontend\src\components\TableComponent\Table\EditModal.onTipoChanged
+     * @function frontend\src\components\TableComponent\Table\EditModal.onTypeChanged
      * @summary - Save car type variable
      */
-    onTipoChanged(data){
+    onTypeChanged(data){
         this.setState({
-            tipoData: data.target.value,
-            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, this.state.fabricanteData, data.target.value, this.state.gasolinaData)});
+            typeData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nameData, this.state.modelData, this.state.manufacturerData, data.target.value, this.state.fuelData)});
     }
     /**
-     * @function frontend\src\components\TableComponent\Table\EditModal.onGasolinaChanged
+     * @function frontend\src\components\TableComponent\Table\EditModal.onFuelChanged
      * @summary - Save car fuel variable
      */
-    onGasolinaChanged(data){
+    onFuelChanged(data){
         this.setState({
-            gasolinaData: data.target.value,
-            disabledSaveBtn: this.hasSomeInputChanged(this.state.nomeData, this.state.modeloData, this.state.fabricanteData, this.state.tipoData, data.target.value)});
+            fuelData: data.target.value,
+            disabledSaveBtn: this.hasSomeInputChanged(this.state.nameData, this.state.modelData, this.state.manufacturerData, this.state.typeData, data.target.value)});
     }
     /**
      * @function frontend\src\components\TableComponent\Table\EditModal.listenerClick
@@ -480,20 +501,7 @@ class EditModal extends React.Component{
                 this.props.changeIsOpenModal(false);
     }
 
-    componentDidMount(){
-        document.addEventListener('click', this.listenerClick);
-        document.addEventListener('keydown', this.listenerESC);
-    }
-
-    componentWillUnmount(){
-        document.removeEventListener('click', this.listenerClick);
-        document.removeEventListener('keydown', this.listenerESC);
-    }
-
     render(){
-        console.log("edit modal",this.props.modalData)
-        console.log("edit car name",this.props.modalData?.car_name)
-        console.log("edit nomeData",this.state.nomeData)
         return(
             <div ref={this.setWrapperRef} className="modal">
                 <div className="modal-content">
@@ -502,12 +510,13 @@ class EditModal extends React.Component{
                         <b>{!this.state.isEditing? "": "Edição de "}Carro</b><br/><hr/>
 
                         <div className="inputGrid">
-                            <p>Carro: </p>  <InputComponent disabled={!this.state.isEditing} data={this.state.nomeData} onChange={this.onNameChanged} />    
-                            <p>Modelo: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.modeloData} onChange={this.onModeloChanged}/> 
-                            <p>Fabricante: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.fabricanteData} onChange={this.onFabricanteChanged}/> 
-                            <p>Tipo: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.tipoData} onChange={this.onTipoChanged}/>
-                            <p>Gasolina: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.gasolinaData} onChange={this.onGasolinaChanged}/>
+                            <p>Carro: </p>  <InputComponent disabled={!this.state.isEditing} data={this.state.nameData} onChange={this.onNameChanged} />    
+                            <p>Modelo: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.modelData} onChange={this.onModelChanged}/> 
+                            <p>Fabricante: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.manufacturerData} onChange={this.onManufacturerChanged}/> 
+                            <p>Tipo: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.typeData} onChange={this.onTypeChanged}/>
+                            <p>Gasolina: </p> <InputComponent disabled={!this.state.isEditing} data={this.state.fuelData} onChange={this.onFuelChanged}/>
                         </div>
+
                         { this.state.isEditing === false?
                                 <button className={"editModalButton"} onClick={this.setIsEditing}>Editar</button>
                             : 
@@ -515,7 +524,6 @@ class EditModal extends React.Component{
                                 <button className={this.state.disabledSaveBtn? "saveModalButtonDisable" : "saveModalButton"} disabled={this.state.disabledSaveBtn} onClick={this.setIsEditing}>Salvar</button>
                                 <button className={"cancelModalButton"} onClick={() => this.props.changeIsOpenModal(false)}>Cancelar</button>
                             </>
-
                         }
                 </div>
             </div>
@@ -525,7 +533,7 @@ class EditModal extends React.Component{
 
 /**
      * @function frontend\src\components\TableComponent\Table\Item
-     * @summary - Wrapp all line data
+     * @summary - Wrap all line data
      * @returns {Element} - Return a react element
      */
 class Item extends React.Component{
@@ -537,6 +545,8 @@ class Item extends React.Component{
 
         this.viewButtonFunc = this.viewButtonFunc.bind(this);
         this.setIsOpenItem = this.setIsOpenItem.bind(this);
+
+        //Formate variables
         this.formateSalary = this.formateSalary.bind(this);
         this.formateDate = this.formateDate.bind(this);
     }
@@ -578,31 +588,37 @@ class Item extends React.Component{
      * @summary - Formate salary data
      */
     formateSalary(){
-        const salaryFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+        const salaryFormatted = this.props.auxJobDataList[this.props.data[this.props.tagId]]
                                                                 .user_job_salary
                                                                 ?.replace(".", ",") || "";
-        const currencyFormated = this.props.auxJobDataList[this.props.data[this.props.tagId]]
+
+        const currencyFormatted = this.props.auxJobDataList[this.props.data[this.props.tagId]]
                                                                 .user_job_salary_currency_symbol;
-        return currencyFormated + " " + salaryFormated;
+
+        return (currencyFormatted + " " + salaryFormatted);
     }
     /**
      * @function frontend\src\components\TableComponent\Table\Item.formateDate
      * @summary - Formate date data
      */
     formateDate(date){
-        let newdate = new Date(date);
-        const day = newdate.getDate() < 10? "0" + newdate.getDate() : newdate.getDate();
-        const month = (newdate.getMonth() + 1) < 10? "0" + (newdate.getMonth() + 1) : (newdate.getMonth() + 1);
-        let dataFormated = day + "/" + month + "/" + newdate.getFullYear(); 
-        return(dataFormated);
+        let newDate = new Date(date);
+
+        const day = newDate.getDate() < 10? "0" + newDate.getDate() : newDate.getDate();
+        const month = (newDate.getMonth() + 1) < 10? "0" + (newDate.getMonth() + 1) : (newDate.getMonth() + 1);
+
+        const dataFormatted = day + "/" + month + "/" + newDate.getFullYear(); 
+        return(dataFormatted);
     }
     
     render(){
         let currentCar;
+
         if((this.props.auxCarDataList !== "notNeeded") && (this.props.auxJobDataList !== "notNeeded")){
             const currentUserCarId = this.props.data.user_car_id;
             currentCar = this.props.auxCarDataList.filter((car, index, array) => {;return car.car_id === currentUserCarId});
         }
+
         return(
             <>            
                 <tr key={`line_${this.props.data[this.props.tagId]}`} 
@@ -640,9 +656,9 @@ class Item extends React.Component{
                                     }</td>
                                 )
                             }else if(column === "user_birth_date"){
-                                const birthdate = this.formateDate(this.props.data[column]);
+                                const birthDate = this.formateDate(this.props.data[column]);
                                 return(
-                                    <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{birthdate}</td>
+                                    <td key={`item_${this.props.data[this.props.tagId]}_${column}`} >{birthDate}</td>
                                 )
                             }
                             return(
@@ -690,14 +706,6 @@ class ItemBody extends React.Component{
         this.toggleModal = this.toggleModal.bind(this);
     }
 
-    /**
-     * @function frontend\src\components\TableComponent\Table\ItemBody.toggleModal
-     * @summary - Toggle item modal
-     */
-    toggleModal(tab){
-       this.setState({tabOpenModal : tab});
-    }
-
     shouldComponentUpdate(nextProps, nextState){
         if(nextState.tabOpenModal !== this.state.tabOpenModal){
             return true;
@@ -706,6 +714,14 @@ class ItemBody extends React.Component{
             return true;
         }
         return false;
+    }
+
+    /**
+     * @function frontend\src\components\TableComponent\Table\ItemBody.toggleModal
+     * @summary - Toggle item modal
+     */
+    toggleModal(tab){
+       this.setState({tabOpenModal : tab});
     }
 
     render(){
@@ -730,7 +746,8 @@ class ItemBody extends React.Component{
                 </td>
                 <td colSpan="5" rowSpan="1">
                     <Modal  
-                        openModal={this.state.tabOpenModal} 
+                        openModal={this.state.tabOpenModal}
+
                         currentCar={this.props.currentCar}
                         currentJob={this.props.currentJob}
                         currentProduct={this.props.currentProduct}
@@ -754,7 +771,9 @@ class Modal extends React.Component{
         this.state = {
             tabOpenModal : this.props.openModal,
         }
+
         this.stringCutter = []
+        //Formate the current user access data
         if(this.props.currentAccess !== undefined){
             this.stringCutter = this.props.currentAccess.user_access_user_agent.split(" ");
         }
@@ -764,7 +783,7 @@ class Modal extends React.Component{
         return(
             <>
                 {
-                    this.props.openModal === 1? //Tab Carro
+                    this.props.openModal === 1? //Tab Car
                         <>  
                             <div>
                                 <b>Carro</b><br/><hr/>
@@ -778,7 +797,7 @@ class Modal extends React.Component{
                             </p> 
                         </>
                         :
-                        this.props.openModal === 2? //Tab Emprego
+                        this.props.openModal === 2? //Tab Job
                         <>  
                             <div>
                                 <b>Emprego</b><br/><hr/>
@@ -790,7 +809,7 @@ class Modal extends React.Component{
                             </p>
                         </>
                         :
-                        this.props.openModal === 3? //Tab Produto
+                        this.props.openModal === 3? //Tab Product
                         <>  
                             <div>
                                 <b>Produto</b><br/><hr/>
@@ -802,7 +821,7 @@ class Modal extends React.Component{
                             </p>
                         </>
                         :
-                        this.props.openModal === 4? //Tab Acessos
+                        this.props.openModal === 4? //Tab Access
                         <>  
                             <div>
                                 <b>Acessos</b><br/><hr/>
@@ -816,7 +835,7 @@ class Modal extends React.Component{
                             </p>
                         </>
                         :
-                        this.props.openModal === 5? //Tab Endereço
+                        this.props.openModal === 5? //Tab Address
                         <>  
                             <div>
                                 <b>Endereço</b><br/><hr/>

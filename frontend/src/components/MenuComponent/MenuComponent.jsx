@@ -15,6 +15,9 @@ class Menu extends React.Component{
             isMenuOpen: false
         }
         this.openMenu = this.openMenu.bind(this);
+
+        this.buildButtonsMap = this.buildButtonsMap.bind(this);
+        this.buildButtons = this.buildButtons.bind(this);
     }
     /**
      * @function frontend\src\components\MenuComponent\Menu.openMenu
@@ -31,6 +34,28 @@ class Menu extends React.Component{
         });
     }
 
+    buildButtonsMap(menuItems){
+        const list = [];
+
+        for (let index = 0; index < menuItems.length; index++) {
+            list.push(
+                this.buildButtons(menuItems[index].label, menuItems[index].btnFunction)
+            );
+        }
+        return list;
+    }
+
+    buildButtons(label, buttonFunction){
+        return(
+            <button 
+                className="menuButton"
+                key={`menuButton_${buttonFunction}`} 
+                onClick={()=>this.props.btnFunction(buttonFunction)}>
+                {label}
+            </button>
+        )
+    }
+
     render(){
         return(
             <div className="container">
@@ -42,9 +67,7 @@ class Menu extends React.Component{
                 
                 {this.state.isMenuOpen? 
                     <div className="buttonsWrapper">
-                        <button className="menuButton" onClick={() => {this.props.mainListChange(1)}}>Usuários</button>
-                        <button className="menuButton" onClick={() => {this.props.mainListChange(2)}}>Carros</button>
-                        <button className="menuButton" onClick={() => {this.props.mainListChange(3)}}>Trabalhos</button>
+                        {this.buildButtonsMap(this.props.menuItems)}
                     </div>
                     :
                     <></>
@@ -53,7 +76,9 @@ class Menu extends React.Component{
         )
     }
 }
+
 Menu.propTypes={
-    mainListChange: PropTypes.func,
+    menuItems: PropTypes.array,
+    btnFunction: PropTypes.func
 }
 export default Menu;

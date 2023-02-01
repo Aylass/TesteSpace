@@ -13,16 +13,20 @@ import { useState } from 'react';
 function App() {
 
   const [mainList, setMainList] = useState();
+
   const [auxUsersList, setAuxUsersList] = useState();
   const [auxCarList, setCarAuxList] = useState();
   const [auxJobList, setJobAuxList] = useState();
   const [auxProductList, setAuxProductList] = useState();
   const [auxAccessList, setAuxAccessList] = useState();
   const [auxAddressesList, setAuxAddressesList] = useState();
+
   const [chosenList, setChosenList] = useState(1);
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [menuItems, setMenuItems] = useState();
 
   useEffect(() => {
     fetch('http://localhost:8080/getData')
@@ -58,6 +62,22 @@ function App() {
       setAuxAccessList(data.access);
       setAuxAddressesList(data.address);
       setAuxProductList(data.products);
+
+      setMenuItems([
+        {
+          "label" : "Usuários",
+          "btnFunction" : 1
+        },
+        {
+          "label" : "Carros",
+          "btnFunction" : 2
+        },
+        {
+          "label" : "Trabalhos",
+          "btnFunction" : 3
+        }
+      ]);
+
       setTimeout(() => { setIsLoading(false) }, 800)
     }
   }
@@ -89,24 +109,25 @@ function App() {
     setCarAuxList(newCarList);
     setAuxUsersList(newUserList);
     setMainList(newUserList);
+
     const updateUserCar = {
       "car_id": newCar.car_id,
       "user_id": userID,
       "newCar": newCar
-  }
+    }
 
     fetch('http://localhost:8080/updateUsersCars', {
       method: "POST",
       body: JSON.stringify(updateUserCar),
       headers: { "Content-type": "application/json; charset=UTF-8" }
     })
-        .then(async function (response) {
-          const res = await response.json();
-      }).catch(
-        err => {
-          setIsLoading(false);
-          setIsNotificationOpen(true);
-        });
+    .then(async function (response) {
+      const res = await response.json();
+    }).catch(
+    err => {
+      setIsLoading(false);
+      setIsNotificationOpen(true);
+    });
   }
 
   if (isLoading) {
@@ -127,16 +148,16 @@ function App() {
 
   return (
     <div className="App">
-      {isNotificationOpen ?
+      {isNotificationOpen?
         <NotificationComponent
-          tipo="Error"
-          titulo="Acesso ao banco"
+          type="Error"
+          title="Acesso ao banco"
           notificationDescription="Acesso ao banco de dados com"
           closeNotification={() => { }}
         />
         :
         <>
-          <Menu mainListChange={mainListChange} />
+          <Menu menuItems={menuItems} btnFunction={mainListChange}/>
           <Table
             columns={chosenList === 1 ? ["user_first_name", "user_birth_date", "Salário", "Carro", "Status"] : Object.keys(mainList[0])}
 
@@ -154,7 +175,6 @@ function App() {
       }
     </div>
   );
-
 }
 
 export default App;

@@ -38,16 +38,16 @@ class NotificationComponent extends React.Component{
     render(){
         return(
             <>
-                <div className={"notificationBox" + this.props.tipo + this.state.exitAnimation}>
-                    <span className="notificationTitle">{this.props.titulo}</span>
+                <div className={"notificationBox" + this.props.title + this.state.exitAnimation}>
+                    <span className="notificationTitle">{this.props.title}</span>
                     <button className="notificationHeaderBtn" onClick={this.props.closeNotification}>x</button>
                     <hr className="line"/>
                     <div className="notificationContent">
                         <span>
                             {this.props.notificationDescription}
-                            {this.props.tipo === "Success"? 
+                            {this.props.type === "Success"? 
                                 " sucesso"
-                                : this.props.tipo === "Error"? 
+                                : this.props.type === "Error"? 
                                 " erro" 
                                 : " um aviso"
                             }.
@@ -61,8 +61,8 @@ class NotificationComponent extends React.Component{
 
 NotificationComponent.propTypes={
     closeNotification: PropTypes.func,
-    titulo: PropTypes.string.isRequired,
-    tipo: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    type: PropTypes.string,
     notificationDescription: PropTypes.string,
 }
 export default NotificationComponent;
