@@ -13,7 +13,7 @@ exports.access = function getAccess() {
         port: 5432,
     })
 
-    const query = "SELECT * FROM users_access";
+    const query = "SELECT * FROwwM users_access";
 
     const executeQuery = () => {
         const successful = (res) => {
@@ -29,7 +29,7 @@ exports.access = function getAccess() {
             .then(successful)
             .catch((error) => {
                 const date = new Date();
-                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getAccess.txt`,
+                fs.writeFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getAccess.txt`,
                 error.toString(),
                     function (err) {
                         if (err) throw err;
