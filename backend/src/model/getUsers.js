@@ -1,4 +1,5 @@
 const { Client } = require('pg');
+var fs = require('fs');
 
 exports.users = function getUsers() {
  
@@ -26,10 +27,30 @@ exports.users = function getUsers() {
         return client
             .query(query)
             .then(successful)
-            .catch(err => console.log("erroo",err));
+            .catch((error) => {
+                const date = new Date();
+                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+                error.toString(),
+                    function (err) {
+                        if (err) throw err;
+                        console.log('Saved!');
+                    }
+                );
+                console.log("erroo",err)
+            });
     }
 
     return client.connect()
         .then(executeQuery)
-        .catch(err => console.log("erroo",err))
+        .catch((error) => {
+            const date = new Date();
+            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+            error.toString(),
+                function (err) {
+                    if (err) throw err;
+                    console.log('Saved!');
+                }
+            );
+            console.log("erroo",error)
+        });
 }

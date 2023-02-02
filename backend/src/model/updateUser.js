@@ -1,4 +1,5 @@
 const { Client } = require('pg');
+var fs = require('fs');
 
 exports.user = function updateUser(data) {
  
@@ -32,10 +33,14 @@ exports.user = function updateUser(data) {
         return client
             .query(query)
             .then(successful)
-            .catch(err => console.log("erroo",err));
+            .catch(err =>
+                console.log("erroo",err));
     }
 
     return client.connect()
         .then(executeQuery)
         .catch(err => console.log("erroo",err))
 }
+
+//ano-mes-dia-hora-min-sec-model.txt é o nome do arq
+//contet = err
