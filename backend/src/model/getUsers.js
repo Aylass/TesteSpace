@@ -36,7 +36,6 @@ exports.users = function getUsers() {
                         console.log('Saved!');
                     }
                 );
-                console.log("erroo",err)
             });
     }
 
@@ -51,6 +50,5 @@ exports.users = function getUsers() {
                     console.log('Saved!');
                 }
             );
-            console.log("erroo",error)
         });
 }
