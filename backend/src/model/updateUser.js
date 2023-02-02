@@ -33,14 +33,28 @@ exports.user = function updateUser(data) {
         return client
             .query(query)
             .then(successful)
-            .catch(err =>
-                console.log("erroo",err));
+            .catch((error) => {
+                const date = new Date();
+                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+                error.toString(),
+                    function (err) {
+                        if (err) throw err;
+                        console.log('Saved!');
+                    }
+                );
+            });
     }
 
     return client.connect()
         .then(executeQuery)
-        .catch(err => console.log("erroo",err))
+        .catch((error) => {
+            const date = new Date();
+            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+            error.toString(),
+                function (err) {
+                    if (err) throw err;
+                    console.log('Saved!');
+                }
+            );
+        });
 }
-
-//ano-mes-dia-hora-min-sec-model.txt é o nome do arq
-//contet = err
