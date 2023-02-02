@@ -13,7 +13,7 @@ exports.address = function getAddress() {
         port: 5432,
     })
 
-    const query = "SELECT * FROM users_access";
+    const query = "SELECT * FROM users_address";
 
     const executeQuery = () => {
         const successful = (res) => {
@@ -29,7 +29,7 @@ exports.address = function getAddress() {
             .then(successful)
             .catch((error) => {
                 const date = new Date();
-                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getAddress.txt`,
                 error.toString(),
                     function (err) {
                         if (err) throw err;
@@ -43,7 +43,7 @@ exports.address = function getAddress() {
         .then(executeQuery)
         .catch((error) => {
             const date = new Date();
-            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getAddress.txt`,
             error.toString(),
                 function (err) {
                     if (err) throw err;

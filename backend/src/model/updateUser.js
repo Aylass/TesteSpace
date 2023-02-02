@@ -35,7 +35,7 @@ exports.user = function updateUser(data) {
             .then(successful)
             .catch((error) => {
                 const date = new Date();
-                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-updateUser.txt`,
                 error.toString(),
                     function (err) {
                         if (err) throw err;
@@ -49,7 +49,7 @@ exports.user = function updateUser(data) {
         .then(executeQuery)
         .catch((error) => {
             const date = new Date();
-            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-updateUser.txt`,
             error.toString(),
                 function (err) {
                     if (err) throw err;

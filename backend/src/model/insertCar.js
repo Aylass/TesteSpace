@@ -41,7 +41,7 @@ exports.car = function insertCar(carData) {
             .then(successful)
             .catch((error) => {
                 const date = new Date();
-                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+                fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-insertCar.txt`,
                 error.toString(),
                     function (err) {
                         if (err) throw err;
@@ -55,7 +55,7 @@ exports.car = function insertCar(carData) {
         .then(executeQuery)
         .catch((error) => {
             const date = new Date();
-            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-getUsers.txt`,
+            fs.appendFile(`./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-insertCar.txt`,
             error.toString(),
                 function (err) {
                     if (err) throw err;
