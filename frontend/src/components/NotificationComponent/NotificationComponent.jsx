@@ -38,7 +38,7 @@ class NotificationComponent extends React.Component{
     render(){
         return(
             <>
-                <div className={"notificationBox" + this.props.title + this.state.exitAnimation}>
+                <div className={"notificationBox" + this.props.type + this.state.exitAnimation}>
                     <span className="notificationTitle">{this.props.title}</span>
                     <button className="notificationHeaderBtn" onClick={this.props.closeNotification}>x</button>
                     <hr className="line"/>
