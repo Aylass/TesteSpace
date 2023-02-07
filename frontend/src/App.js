@@ -271,7 +271,20 @@ function App() {
             setCopyAuxUsersList(auxUsersListCopy);
           }
         }, {
-          label: "user_job_id", onChange: () => { }
+          label: "user_job_id", onChange: (data, id, dataId) => {
+            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
+
+            for (let index = 0; index < copyAuxUsersList.length; index++) {
+              const item = copyAuxUsersList[index];
+
+              if (item[dataId] === id) {
+                item.user_job_id = data;
+                auxUsersListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxUsersList(auxUsersListCopy);
+          }
         }, {
           label: "user_product_buyed_id", onChange: () => { }
         }, {
