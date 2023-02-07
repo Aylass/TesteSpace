@@ -70,8 +70,6 @@ class FormContent extends React.Component{
     }
 
     render(){
-        console.log("fields", this.props.fields)
-        console.log("data", this.props.data)
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}

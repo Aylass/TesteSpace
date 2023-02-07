@@ -60,7 +60,6 @@ class PageContent extends React.Component{
             
             optionsArray.push(<option key={'optionObject_' + index} value={object[this.objectStringId]}>{object[this.objectStringId]}</option>);
         }
-        console.log("oi",this.objectStringId)
         return optionsArray;
     }
     /**
@@ -85,7 +84,7 @@ class PageContent extends React.Component{
     }
 
     render(){
-        console.log(this.props.lists[this.state.selectedList])
+        
         return (
             <div className="">
                 <span>Lista Escolhida: </span>

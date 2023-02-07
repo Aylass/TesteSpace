@@ -46,7 +46,6 @@ function App() {
     fetch('http://localhost:8080/getData')
       .then(async function (response) {
         const data = await response.json();
-        console.log("effect")
         verifyDataInconsistency(data);
       }).catch(
         err => {
@@ -79,7 +78,6 @@ function App() {
      * @summary - Verify if some of backend data are undefined
      */
   function verifyDataInconsistency(data) {
-    console.log("oaaaaaaaaaaaaaaaaaaaaaa");
     if ((data.user === undefined)
       || (data.car === undefined)
       || (data.job === undefined)
@@ -184,7 +182,6 @@ function App() {
           setIsNotificationOpen(true);
         });
   }
-  console.log("app atualizando")
 
   if (isLoading) {
     return (
@@ -423,8 +420,75 @@ function App() {
       {
         "id": 2,
         "name": "Trabalhos",
-        "list": auxJobList
-      },
+        "list": copyAuxJobList,
+        "fields": [{
+          label: "user_job_id"
+        },{
+          label: "user_job_title",
+          onChange: (data, id, dataId) => {
+            let auxJobListCopy = deepCloneArray(copyAuxJobList);
+              
+            for (let index = 0; index < copyAuxJobList.length; index++) {
+              const item = copyAuxJobList[index];
+
+              if (item[dataId] === id) {
+                item.user_job_title = data;
+                auxJobListCopy[index] = item;
+              }
+            }
+            setCopyAuxJobList(auxJobListCopy);
+          }
+        },{
+          label: "user_job_address",
+          onChange: (data, id, dataId) => {
+            let auxJobListCopy = deepCloneArray(copyAuxJobList);
+
+            for (let index = 0; index < copyAuxJobList.length; index++) {
+              const item = copyAuxJobList[index];
+
+              if (item[dataId] === id) {
+                item.user_job_address = data;
+                auxJobListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxJobList(auxJobListCopy);
+          }
+        },{
+          label: "user_job_salary",
+          onChange: (data, id, dataId) => {
+            let auxJobListCopy = deepCloneArray(copyAuxJobList);
+
+            for (let index = 0; index < copyAuxJobList.length; index++) {
+              const item = copyAuxJobList[index];
+
+              if (item[dataId] === id) {
+                item.user_job_salary = data;
+                auxJobListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxJobList(auxJobListCopy);
+          }
+        },{
+          label: "user_job_salary_currency_symbol",
+          onChange: (data, id, dataId) => {
+            let auxJobListCopy = deepCloneArray(copyAuxJobList);
+
+            for (let index = 0; index < copyAuxJobList.length; index++) {
+              const item = copyAuxJobList[index];
+
+              if (item[dataId] === id) {
+                item.user_job_salary_currency_symbol = data;
+                auxJobListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxJobList(auxJobListCopy);
+          }
+        },
+      ]
+      }
     ]);
     return (
       <div className="App">
