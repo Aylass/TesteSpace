@@ -335,7 +335,26 @@ function App() {
       {
         "id": 1,
         "name": "Carros",
-        "list": auxCarList
+        "list": copyAuxCarList,
+        "fields": [{
+          label: "car_id"
+        }, {
+          label: "car_fuel",
+          onChange: (data, id, dataId) => {
+            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
+
+            for (let index = 0; index < copyAuxCarList.length; index++) {
+              const item = copyAuxCarList[index];
+
+              if (item[dataId] === id) {
+                item.user_first_name = data;
+                auxCarsListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxCarList(auxCarsListCopy);
+          }
+        },{}]
       },
       {
         "id": 2,

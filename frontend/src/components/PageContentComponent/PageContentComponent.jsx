@@ -53,13 +53,14 @@ class PageContent extends React.Component{
      */
     selectObject(){
         const optionsArray = [];
+        this.objectStringId = this.props.lists[this.state?.selectedList]?.fields?.[0].label;
 
         for (let index = 0; index < this.props.lists[this.state.selectedList].list.length; index++) {
             const object = this.props.lists[this.state.selectedList].list[index];
             
             optionsArray.push(<option key={'optionObject_' + index} value={object[this.objectStringId]}>{object[this.objectStringId]}</option>);
         }
-
+        console.log("oi",this.objectStringId)
         return optionsArray;
     }
     /**
@@ -84,7 +85,7 @@ class PageContent extends React.Component{
     }
 
     render(){
-        
+        console.log(this.props.lists[this.state.selectedList])
         return (
             <div className="">
                 <span>Lista Escolhida: </span>
