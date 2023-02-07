@@ -347,14 +347,78 @@ function App() {
               const item = copyAuxCarList[index];
 
               if (item[dataId] === id) {
-                item.user_first_name = data;
+                item.car_fuel = data;
                 auxCarsListCopy[index] = item;
               }
             }
 
             setCopyAuxCarList(auxCarsListCopy);
           }
-        },{}]
+        },{
+          label: "car_manufacturer",
+          onChange: (data, id, dataId) => {
+            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
+
+            for (let index = 0; index < copyAuxCarList.length; index++) {
+              const item = copyAuxCarList[index];
+
+              if (item[dataId] === id) {
+                item.car_manufacturer = data;
+                auxCarsListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxCarList(auxCarsListCopy);
+          }
+        },{
+          label: "car_model",
+          onChange: (data, id, dataId) => {
+            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
+
+            for (let index = 0; index < copyAuxCarList.length; index++) {
+              const item = copyAuxCarList[index];
+
+              if (item[dataId] === id) {
+                item.car_model = data;
+                auxCarsListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxCarList(auxCarsListCopy);
+          }
+        },{
+          label: "car_name",
+          onChange: (data, id, dataId) => {
+            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
+
+            for (let index = 0; index < copyAuxCarList.length; index++) {
+              const item = copyAuxCarList[index];
+
+              if (item[dataId] === id) {
+                item.car_name = data;
+                auxCarsListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxCarList(auxCarsListCopy);
+          }
+        },{
+          label: "car_type",
+          onChange: (data, id, dataId) => {
+            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
+
+            for (let index = 0; index < copyAuxCarList.length; index++) {
+              const item = copyAuxCarList[index];
+
+              if (item[dataId] === id) {
+                item.car_type = data;
+                auxCarsListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxCarList(auxCarsListCopy);
+          }
+        }]
       },
       {
         "id": 2,
