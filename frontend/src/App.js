@@ -301,7 +301,20 @@ function App() {
             setCopyAuxUsersList(auxUsersListCopy);
           }
         }, {
-          label: "user_car_id", onChange: () => { }
+          label: "user_car_id", onChange: (data, id, dataId) => {
+            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
+
+            for (let index = 0; index < copyAuxUsersList.length; index++) {
+              const item = copyAuxUsersList[index];
+
+              if (item[dataId] === id) {
+                item.user_car_id = data;
+                auxUsersListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxUsersList(auxUsersListCopy);
+          }
         }, {
           label: "status", onChange: () => { }
         }]
