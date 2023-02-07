@@ -316,7 +316,20 @@ function App() {
             setCopyAuxUsersList(auxUsersListCopy);
           }
         }, {
-          label: "status", onChange: () => { }
+          label: "status", onChange: (data, id, dataId) => {
+            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
+
+            for (let index = 0; index < copyAuxUsersList.length; index++) {
+              const item = copyAuxUsersList[index];
+
+              if (item[dataId] === id) {
+                item.status = data;
+                auxUsersListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxUsersList(auxUsersListCopy);
+          }
         }]
       },
       {
