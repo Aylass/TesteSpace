@@ -9,9 +9,12 @@ class PageContent extends React.Component{
         super(props);
         this.state = {
             selectedList: 0,
-            selectedObject: 0,
-            callForm: false
+            selectedObject: 1,
+            callForm: false,
         }
+
+        this.objectStringId = this.props.lists[this.state?.selectedList]?.fields?.[0].label;
+        
         //Select List
         this.selectOptions = this.selectOptions.bind(this);
         this.handleListOptionChange = this.handleListOptionChange.bind(this);
@@ -20,6 +23,7 @@ class PageContent extends React.Component{
         this.selectObject = this.selectObject.bind(this);
         this.handleObjectOptionChange = this.handleObjectOptionChange.bind(this);
     }
+    
     /**
      * @function frontend\src\components\PageContentComponent\PageContentComponent.selectOptions
      * @summary - Manage main list selected
@@ -39,7 +43,7 @@ class PageContent extends React.Component{
      */
     handleListOptionChange(event){
         const value = parseInt(event.target.value)
-        console.log("value", this.props.lists[value].id)
+        
         this.setState({selectedList: this.props.lists[value].id}); 
     }
 
@@ -49,12 +53,11 @@ class PageContent extends React.Component{
      */
     selectObject(){
         const optionsArray = [];
-        const objectId = this.props.lists[this.state?.selectedList]?.fields?.[0].label;
 
         for (let index = 0; index < this.props.lists[this.state.selectedList].list.length; index++) {
             const object = this.props.lists[this.state.selectedList].list[index];
             
-            optionsArray.push(<option key={'optionObject_' + index} value={object[objectId]}>{object[objectId]}</option>);
+            optionsArray.push(<option key={'optionObject_' + index} value={object[this.objectStringId]}>{object[this.objectStringId]}</option>);
         }
 
         return optionsArray;
@@ -65,20 +68,30 @@ class PageContent extends React.Component{
      */
     handleObjectOptionChange(event){ 
         const value = parseInt(event.target.value)
-        this.setState({
-            selectedObject: this.props.lists[this.state.selectedList].list[value],
-            callForm: true
-        }); 
+
+        this.props.lists[this.state.selectedList].list.map(
+            (item)=>{
+
+                if(item[this.objectStringId] === value){
+                    
+                    this.setState({
+                        selectedObject: item,
+                        callForm: true
+                    });
+                }
+            }
+        );
     }
 
     render(){
+        
         return (
             <div className="">
                 <span>Lista Escolhida: </span>
                 <select className={style.selector} id="select" onChange={this.handleListOptionChange} value={this.state.selectedList} >
                     {this.selectOptions()}
                 </select>
-                <span className={style.label} >Item Escolhido: </span>
+                <span className={style.label} >Id do Item Escolhido: </span>
                 <select className={style.selector} id="selectObject" onChange={this.handleObjectOptionChange} value={this.state.selectedObject} >
                     {this.selectObject()}
                 </select>
@@ -87,6 +100,7 @@ class PageContent extends React.Component{
                         mainList={this.props.lists[this.state.selectedList].list}  
                         fields={this.props.lists[this.state.selectedList].fields}
                         data={this.state.selectedObject}
+                        dataId={this.objectStringId}
                     ></FormContent>
                     :
                     <></>

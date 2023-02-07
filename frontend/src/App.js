@@ -19,11 +19,16 @@ function App() {
   const [mainList, setMainList] = useState();
 
   const [auxUsersList, setAuxUsersList] = useState();
-  const [auxCarList, setCarAuxList] = useState();
-  const [auxJobList, setJobAuxList] = useState();
+  const [auxCarList, setAuxCarList] = useState();
+  const [auxJobList, setAuxJobList] = useState();
   const [auxProductList, setAuxProductList] = useState();
   const [auxAccessList, setAuxAccessList] = useState();
   const [auxAddressesList, setAuxAddressesList] = useState();
+
+  //List copys for CRUD actions
+  const [copyAuxUsersList, setCopyAuxUsersList] = useState();
+  const [copyAuxCarList, setCopyAuxCarList] = useState();
+  const [copyAuxJobList, setCopyAuxJobList] = useState();
 
   const [chosenList, setChosenList] = useState(1);
 
@@ -35,9 +40,9 @@ function App() {
 
   const [headerData, setHeaderData] = useState();
   const [selectHeaderOption, setSelectHeaderOption] = useState();
-  
+
   useEffect(() => {
-    
+
     fetch('http://localhost:8080/getData')
       .then(async function (response) {
         const data = await response.json();
@@ -53,7 +58,7 @@ function App() {
    * @function frontend\src\App.toggleSelectedHeaderOption
    * @summary - Toggle variable that controlles current config option selected
    */
-  function toggleSelectedHeaderOption(option){
+  function toggleSelectedHeaderOption(option) {
     setSelectHeaderOption(option);
   }
 
@@ -61,10 +66,10 @@ function App() {
      * @function frontend\src\App.toggleIsConfigOpen
      * @summary - Toggle variable that controlles config page
      */
-  function toggleIsConfigOpen(btnConfig){
-    if(btnConfig){
+  function toggleIsConfigOpen(btnConfig) {
+    if (btnConfig) {
       setIsConfigOpen(!isConfigOpen);
-    }else if(isConfigOpen === true){
+    } else if (isConfigOpen === true) {
       setIsConfigOpen(false);
     }
   }
@@ -86,40 +91,45 @@ function App() {
       setIsNotificationOpen(true);
     } else {
       setMainList(data.user);
+
       setAuxUsersList(data.user);
-      setCarAuxList(data.car);
-      setJobAuxList(data.job);
+      setAuxCarList(data.car);
+      setAuxJobList(data.job);
       setAuxAccessList(data.access);
       setAuxAddressesList(data.address);
       setAuxProductList(data.products);
 
+      setCopyAuxUsersList(deepCloneArray(data.user));
+      setCopyAuxCarList(deepCloneArray(data.car));
+      setCopyAuxJobList(deepCloneArray(data.job));
+
       setMenuItems([
         {
-          "label" : "Usuários",
-          "btnFunction" : 1
+          "label": "Usuários",
+          "btnFunction": 1
         },
         {
-          "label" : "Carros",
-          "btnFunction" : 2
+          "label": "Carros",
+          "btnFunction": 2
         },
         {
-          "label" : "Trabalhos",
-          "btnFunction" : 3
+          "label": "Trabalhos",
+          "btnFunction": 3
         }
       ]);
 
       setHeaderData([
         {
-          "label" : "Criar",
-          "btnFunction" : 1
+          "label": "Criar",
+          "btnFunction": 1
         },
         {
-          "label" : "Editar",
-          "btnFunction" : 2
+          "label": "Editar",
+          "btnFunction": 2
         },
         {
-          "label" : "Deletar",
-          "btnFunction" : 3
+          "label": "Deletar",
+          "btnFunction": 3
         },
       ]);
 
@@ -151,7 +161,7 @@ function App() {
    * @summary - Save edited data
    */
   function saveEditedData(newUserList, newCarList, newCar, userID) {
-    setCarAuxList(newCarList);
+    setAuxCarList(newCarList);
     setAuxUsersList(newUserList);
     setMainList(newUserList);
 
@@ -166,13 +176,13 @@ function App() {
       body: JSON.stringify(updateUserCar),
       headers: { "Content-type": "application/json; charset=UTF-8" }
     })
-    .then(async function (response) {
-      const res = await response.json();
-    }).catch(
-    err => {
-      setIsLoading(false);
-      setIsNotificationOpen(true);
-    });
+      .then(async function (response) {
+        const res = await response.json();
+      }).catch(
+        err => {
+          setIsLoading(false);
+          setIsNotificationOpen(true);
+        });
   }
   console.log("app atualizando")
 
@@ -190,67 +200,86 @@ function App() {
         <div></div>
       </div>
     )
-  }else{
-    console.log(auxUsersList)
+  } else {
+    
     const configList = ([
       {
-        "id" : 0,
-        "name" : "Usuários",
-        "list" : auxUsersList,
-        "fields" : [{
+        "id": 0,
+        "name": "Usuários",
+        "list": copyAuxUsersList,
+        "fields": [{
           label: "user_id"
-        },{
-          label: "user_first_name", 
-          onChange: (data, id)=>{
-            const auxUsersListCopy = auxUsersList;
-            console.log("idddd",id)
-            console.log("data",data)
-            auxUsersListCopy[id].user_first_name = data;
+        }, {
+          label: "user_first_name",
+          onChange: (data, id, dataId) => {
+            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
 
-            setAuxUsersList(auxUsersListCopy);
+            for (let index = 0; index < copyAuxUsersList.length; index++) {
+              const item = copyAuxUsersList[index];
+
+              if (item[dataId] === id) {
+                item.user_first_name = data;
+                auxUsersListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxUsersList(auxUsersListCopy);
           }
-        },{
-          label: "user_birth_date", onChange:()=>{}
-        },{
-          label: "user_access_id", onChange:()=>{}
-        },{
-          label: "user_address_id", onChange:()=>{}
-        },{
-          label: "user_job_id", onChange:()=>{}
-        },{
-          label: "user_product_buyed_id", onChange:()=>{}
-        },{
-          label: "user_car_id", onChange:()=>{}
-        },{
-          label: "status", onChange:()=>{}
+        }, {
+          label: "user_birth_date", onChange: (data, id, dataId) => {
+            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
+
+            for (let index = 0; index < copyAuxUsersList.length; index++) {
+              const item = copyAuxUsersList[index];
+
+              if (item[dataId] === id) {
+                item.user_birth_date = data;
+                auxUsersListCopy[index] = item;
+              }
+            }
+
+            setCopyAuxUsersList(auxUsersListCopy);
+          }
+        }, {
+          label: "user_access_id", onChange: () => { }
+        }, {
+          label: "user_address_id", onChange: () => { }
+        }, {
+          label: "user_job_id", onChange: () => { }
+        }, {
+          label: "user_product_buyed_id", onChange: () => { }
+        }, {
+          label: "user_car_id", onChange: () => { }
+        }, {
+          label: "status", onChange: () => { }
         }]
       },
       {
-        "id" : 1,
-        "name" : "Carros",
-        "list" : auxCarList
+        "id": 1,
+        "name": "Carros",
+        "list": auxCarList
       },
       {
-        "id" : 2,
-        "name" : "Trabalhos",
-        "list" : auxJobList
+        "id": 2,
+        "name": "Trabalhos",
+        "list": auxJobList
       },
     ]);
     return (
       <div className="App">
-        <Menu menuItems={menuItems} btnFunction={mainListChange} handleConfig={toggleIsConfigOpen}/>
-        {isNotificationOpen?
+        <Menu menuItems={menuItems} btnFunction={mainListChange} handleConfig={toggleIsConfigOpen} />
+        {isNotificationOpen ?
           <NotificationComponent
             type="Error"
             title="Acesso ao banco"
             notificationDescription="Acesso ao banco de dados com"
             closeNotification={() => { }}
           />
-          : isConfigOpen?
-              <>
-                <Header buttonsList={headerData} toggleSelectedHeaderOption={toggleSelectedHeaderOption}></Header>
-                <PageContent lists={configList}></PageContent>
-              </>
+          : isConfigOpen ?
+            <>
+              <Header buttonsList={headerData} toggleSelectedHeaderOption={toggleSelectedHeaderOption}></Header>
+              <PageContent lists={configList}></PageContent>
+            </>
             :
             <>
               <Table
@@ -271,6 +300,70 @@ function App() {
       </div>
     );
   }
+}
+
+/**
+ * @function module:web/javascripts/genericFunctions.deepCloneObject
+ * @summary Clones an object in deep level
+ * @param {object} obj - The object to be copied
+ * @returns {object} The clone of the passed object
+ */
+export function deepCloneObject(obj) {
+  if (obj == null || obj == undefined || typeof obj !== 'object' || Array.isArray(obj)) {
+    return null;
+  }
+  //Create an empty object
+  var cloneObject = {};
+
+  for (var property in obj) {
+    if (obj.hasOwnProperty(property)) {
+      //If it is an array
+      if (Array.isArray(obj[property])) {
+        cloneObject[property] = deepCloneArray(obj[property]);
+      }
+      //If it is an object
+      else if (typeof obj[property] === 'object') {
+        //Checks if it is a react object
+        cloneObject[property] = deepCloneObject(obj[property]);
+      }
+      else {
+        cloneObject[property] = obj[property];
+      }
+    }
+  }
+
+  return cloneObject;
+}
+
+/**
+* @function module:web/javascripts/genericFunctions.deepCloneArray
+* @summary Clones an array in deep level
+* @param {array} array - The array to be copied
+* @returns {array} The clone of the passed array
+*/
+export function deepCloneArray(array) {
+  if (!Array.isArray(array)) {
+    return null;
+  }
+
+  //Create an empty array
+  var cloneArray = [];
+
+  for (var i = 0; i < array.length; i++) {
+    //If it is an array
+    if (Array.isArray(array[i])) {
+      cloneArray.push(deepCloneArray(array[i]));
+    }
+    //If it is an object
+    else if (typeof array[i] === 'object') {
+      cloneArray.push(deepCloneObject(array[i]));
+    }
+    else {
+      cloneArray.push(array[i]);
+    }
+  }
+
+  return cloneArray;
 }
 
 export default App;

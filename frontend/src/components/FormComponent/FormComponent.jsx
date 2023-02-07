@@ -41,8 +41,9 @@ class FormContent extends React.Component{
         }
         const handleOnChange = (event) => {
             value = event.target.value;
+            
             if(typeof func === "function"){
-                func(value, index);
+                func(value, this.props.data[this.props.dataId], this.props.dataId);
             }
         }
         return(
@@ -82,6 +83,7 @@ class FormContent extends React.Component{
 FormContent.propTypes={
     mainList: PropTypes.array,
     fields: PropTypes.array,
-    data: PropTypes.object
+    data: PropTypes.object,
+    dataId: PropTypes.string
 }
 export default FormContent;
