@@ -34,6 +34,10 @@ class Menu extends React.Component{
         });
     }
 
+    /**
+     * @function frontend\src\components\MenuComponent\Menu.buildButtonsMap
+     * @summary - Takes every button data from list
+     */
     buildButtonsMap(menuItems){
         const list = [];
 
@@ -45,12 +49,18 @@ class Menu extends React.Component{
         return list;
     }
 
+    /**
+     * @function frontend\src\components\MenuComponent\Menu.buildButtons
+     * @summary - Creates header buttons
+     */
     buildButtons(label, buttonFunction){
         return(
             <button 
                 className="menuButton"
                 key={`menuButton_${buttonFunction}`} 
-                onClick={()=>this.props.btnFunction(buttonFunction)}>
+                onClick={()=> {this.props.btnFunction(buttonFunction)
+                    this.props.handleConfig(false)
+                }}>
                 {label}
             </button>
         )
@@ -68,6 +78,13 @@ class Menu extends React.Component{
                 {this.state.isMenuOpen? 
                     <div className="buttonsWrapper">
                         {this.buildButtonsMap(this.props.menuItems)}
+                        <hr/>
+                        <button 
+                            className="menuButton"
+                            key={`menuButton_config`} 
+                            onClick={()=>this.props.handleConfig(true)}>
+                            Configurações
+                        </button>
                     </div>
                     :
                     <></>
@@ -79,6 +96,7 @@ class Menu extends React.Component{
 
 Menu.propTypes={
     menuItems: PropTypes.array,
-    btnFunction: PropTypes.func
+    btnFunction: PropTypes.func,
+    handleConfig: PropTypes.func
 }
 export default Menu;

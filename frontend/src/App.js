@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import Table from './components/TableComponent/Table';
 import Menu from './components/MenuComponent/MenuComponent';
 import NotificationComponent from "./components/NotificationComponent/NotificationComponent";
+import Header from './components/HeaderComponent/HeaderComponent'
+import PageContent from './components/PageContentComponent/PageContentComponent';
 import { useState } from 'react';
 
 /**
@@ -11,6 +13,8 @@ import { useState } from 'react';
      * @returns {Element} - Return a react element
      */
 function App() {
+
+  //const [configList, setConfigList] = useState();
 
   const [mainList, setMainList] = useState();
 
@@ -27,11 +31,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [menuItems, setMenuItems] = useState();
+  const [isConfigOpen, setIsConfigOpen] = useState(true);
 
+  const [headerData, setHeaderData] = useState();
+  const [selectHeaderOption, setSelectHeaderOption] = useState();
+  
   useEffect(() => {
+    
     fetch('http://localhost:8080/getData')
       .then(async function (response) {
         const data = await response.json();
+        console.log("effect")
         verifyDataInconsistency(data);
       }).catch(
         err => {
@@ -39,12 +49,32 @@ function App() {
           setIsNotificationOpen(true);
         });
   }, []);
+  /**
+   * @function frontend\src\App.toggleSelectedHeaderOption
+   * @summary - Toggle variable that controlles current config option selected
+   */
+  function toggleSelectedHeaderOption(option){
+    setSelectHeaderOption(option);
+  }
+
+  /**
+     * @function frontend\src\App.toggleIsConfigOpen
+     * @summary - Toggle variable that controlles config page
+     */
+  function toggleIsConfigOpen(btnConfig){
+    if(btnConfig){
+      setIsConfigOpen(!isConfigOpen);
+    }else if(isConfigOpen === true){
+      setIsConfigOpen(false);
+    }
+  }
 
   /**
      * @function frontend\src\App.verifyDataInconsistency
      * @summary - Verify if some of backend data are undefined
      */
   function verifyDataInconsistency(data) {
+    console.log("oaaaaaaaaaaaaaaaaaaaaaa");
     if ((data.user === undefined)
       || (data.car === undefined)
       || (data.job === undefined)
@@ -76,6 +106,21 @@ function App() {
           "label" : "Trabalhos",
           "btnFunction" : 3
         }
+      ]);
+
+      setHeaderData([
+        {
+          "label" : "Criar",
+          "btnFunction" : 1
+        },
+        {
+          "label" : "Editar",
+          "btnFunction" : 2
+        },
+        {
+          "label" : "Deletar",
+          "btnFunction" : 3
+        },
       ]);
 
       setTimeout(() => { setIsLoading(false) }, 800)
@@ -129,6 +174,7 @@ function App() {
       setIsNotificationOpen(true);
     });
   }
+  console.log("app atualizando")
 
   if (isLoading) {
     return (
@@ -144,37 +190,87 @@ function App() {
         <div></div>
       </div>
     )
-  }
+  }else{
+    console.log(auxUsersList)
+    const configList = ([
+      {
+        "id" : 0,
+        "name" : "Usuários",
+        "list" : auxUsersList,
+        "fields" : [{
+          label: "user_id"
+        },{
+          label: "user_first_name", 
+          onChange: (data, id)=>{
+            const auxUsersListCopy = auxUsersList;
+            console.log("idddd",id)
+            console.log("data",data)
+            auxUsersListCopy[id].user_first_name = data;
 
-  return (
-    <div className="App">
-      {isNotificationOpen?
-        <NotificationComponent
-          type="Error"
-          title="Acesso ao banco"
-          notificationDescription="Acesso ao banco de dados com"
-          closeNotification={() => { }}
-        />
-        :
-        <>
-          <Menu menuItems={menuItems} btnFunction={mainListChange}/>
-          <Table
-            columns={chosenList === 1 ? ["user_first_name", "user_birth_date", "Salário", "Carro", "Status"] : Object.keys(mainList[0])}
-
-            dataList={mainList}
-            auxCarDataList={(chosenList !== 1) ? "notNeeded" : auxCarList}
-            auxJobDataList={(chosenList !== 1) ? "notNeeded" : auxJobList}
-            auxProductList={auxProductList}
-            auxAccessList={auxAccessList}
-            auxAddressesList={auxAddressesList}
-            tagId={Object.keys(mainList[0])[0]}
-
-            saveEditedData={saveEditedData}
+            setAuxUsersList(auxUsersListCopy);
+          }
+        },{
+          label: "user_birth_date", onChange:()=>{}
+        },{
+          label: "user_access_id", onChange:()=>{}
+        },{
+          label: "user_address_id", onChange:()=>{}
+        },{
+          label: "user_job_id", onChange:()=>{}
+        },{
+          label: "user_product_buyed_id", onChange:()=>{}
+        },{
+          label: "user_car_id", onChange:()=>{}
+        },{
+          label: "status", onChange:()=>{}
+        }]
+      },
+      {
+        "id" : 1,
+        "name" : "Carros",
+        "list" : auxCarList
+      },
+      {
+        "id" : 2,
+        "name" : "Trabalhos",
+        "list" : auxJobList
+      },
+    ]);
+    return (
+      <div className="App">
+        <Menu menuItems={menuItems} btnFunction={mainListChange} handleConfig={toggleIsConfigOpen}/>
+        {isNotificationOpen?
+          <NotificationComponent
+            type="Error"
+            title="Acesso ao banco"
+            notificationDescription="Acesso ao banco de dados com"
+            closeNotification={() => { }}
           />
-        </>
-      }
-    </div>
-  );
+          : isConfigOpen?
+              <>
+                <Header buttonsList={headerData} toggleSelectedHeaderOption={toggleSelectedHeaderOption}></Header>
+                <PageContent lists={configList}></PageContent>
+              </>
+            :
+            <>
+              <Table
+                columns={chosenList === 1 ? ["user_first_name", "user_birth_date", "Salário", "Carro", "Status"] : Object.keys(mainList[0])}
+
+                dataList={mainList}
+                auxCarDataList={(chosenList !== 1) ? "notNeeded" : auxCarList}
+                auxJobDataList={(chosenList !== 1) ? "notNeeded" : auxJobList}
+                auxProductList={auxProductList}
+                auxAccessList={auxAccessList}
+                auxAddressesList={auxAddressesList}
+                tagId={Object.keys(mainList[0])[0]}
+
+                saveEditedData={saveEditedData}
+              />
+            </>
+        }
+      </div>
+    );
+  }
 }
 
 export default App;

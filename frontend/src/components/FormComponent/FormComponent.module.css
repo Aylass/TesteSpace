@@ -1,0 +1,10 @@
+
+.formComponent{   
+    width: 100%;
+    margin: 0px 160px;
+    display: inline-grid;
+    justify-content: start;
+    padding-top: 1rem;
+    align-items: center;
+    justify-items: start;
+}

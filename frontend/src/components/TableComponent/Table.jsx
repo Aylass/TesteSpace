@@ -286,7 +286,7 @@ class Paginator extends React.Component{
     }
 
     /**
-     * @function frontend\src\components\TableComponent\Table\Paginator.selectOptions
+     * @function frontend\src\components\TableComponent\Table\Paginator.btnChangeOption
      * @summary - Manage next or previous pages
      */
     btnChangeOption(isRight){

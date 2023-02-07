@@ -1,0 +1,20 @@
+.headerButtons{
+    width: 100%;
+    background-color: #beeded;
+}
+
+.headerbtn{
+    background-color: #56afaf ;
+    border-radius: 0px 0px 20px 20px;
+    border: none;
+    padding: 5px;
+    color: white;
+    width: 30%;
+}
+.headerbtn:hover{
+    background-color: #3f8282;
+}
+.headerbtn:focus{
+    background-color: #beeded;
+    color: rgb(73, 73, 73);
+}
