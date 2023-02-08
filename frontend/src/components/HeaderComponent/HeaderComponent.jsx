@@ -51,7 +51,7 @@ class Header extends React.Component{
     }
 
     render(){
-        console.log(this.state.selectedBtn)
+        
         return (
             <div className="headerButtons">
                 {this.buildHeader(this.props.buttonsList)}

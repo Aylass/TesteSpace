@@ -34,3 +34,8 @@
 .btnCancel:hover{
     background-color: rgb(198, 64, 64);
 }
+.btnWrap{
+    margin-top: 20px;
+    display: flex;
+    margin-bottom: 20px;
+}

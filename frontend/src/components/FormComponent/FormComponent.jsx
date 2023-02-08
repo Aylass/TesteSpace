@@ -89,8 +89,10 @@ class FormContent extends React.Component{
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}
-                <button className={style.btnSave} onChange={this.props.buttonFunc}>{this.props.buttonLabel}</button>
-                <button className={style.btnCancel} onChange={this.props.buttonFunc}>{this.props.buttonCancelLabel}</button>
+                <div className={style.btnWrap}>
+                    <button className={style.btnSave} onChange={this.props.buttonFunc}>{this.props.buttonLabel}</button>
+                    <button className={style.btnCancel} onChange={this.props.buttonFunc}>{this.props.buttonCancelLabel}</button>
+                </div>
             </div>
         );
     }
@@ -99,7 +101,7 @@ class FormContent extends React.Component{
 FormContent.propTypes={
     mainList: PropTypes.array,
     fields: PropTypes.array,
-    
+
     data: PropTypes.object,
     dataId: PropTypes.string,
 
