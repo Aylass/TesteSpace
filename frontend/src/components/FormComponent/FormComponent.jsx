@@ -16,7 +16,7 @@ class FormContent extends React.Component{
 
     /**
      * @function frontend\src\components\FormComponent\FormComponent.buildForm
-     * @summary - Takes every button data from list
+     * @summary - Creates the fields for the current item
      */
     buildForm(){
         let list = [];
@@ -25,7 +25,7 @@ class FormContent extends React.Component{
                 list.push(
                     this.buildFieldsBoolean(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
                 );
-                console.log("é boolean", this.props.data[this.props.fields[index].label])
+                
             }else{
                 list.push(
                     this.buildFields(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
@@ -36,7 +36,7 @@ class FormContent extends React.Component{
     }
     /**
      * @function frontend\src\components\FormComponent\FormComponent.buildFields
-     * @summary - Creates header buttons
+     * @summary - Creates form fields
      */
     buildFields(index, label, value, func){
         const handleOnChange = (event) => {
@@ -60,7 +60,7 @@ class FormContent extends React.Component{
 
     /**
      * @function frontend\src\components\FormComponent\FormComponent.buildFieldsBoolean
-     * @summary - Creates header buttons
+     * @summary - Creates field for boolean variables
      */
     buildFieldsBoolean(index, label, value, func){
         const handleOnChange = (event) => {
@@ -81,8 +81,8 @@ class FormContent extends React.Component{
     }
 
     /**
-     * @function frontend\src\components\TableComponent\Table\EditModal.onModelChanged
-     * @summary - Save car model variable
+     * @function frontend\src\components\FormComponent\FormComponent.onInputChanged
+     * @summary - Save input data
      */
     onInputChanged(data){
         this.setState({
@@ -91,7 +91,7 @@ class FormContent extends React.Component{
     }
 
     render(){
-        console.log(typeof this.props.data.status)
+        
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}
