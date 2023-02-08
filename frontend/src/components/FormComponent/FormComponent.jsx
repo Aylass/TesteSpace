@@ -7,9 +7,6 @@ class FormContent extends React.Component{
 
     constructor(props){
         super(props);
-        this.state={
-            inputData: ""
-        }
         this.buildForm = this.buildForm.bind(this);
         this.buildFields = this.buildFields.bind(this);
     }
@@ -21,7 +18,8 @@ class FormContent extends React.Component{
     buildForm(){
         let list = [];
         for (let index = 0; index < this.props.fields.length; index++) {
-            if(typeof this.props.data[this.props.fields[index].label] == "boolean"){
+            
+            if((typeof this.props.data[this.props.fields[index].label] == "boolean") || (this.props.data[this.props.fields[index].label] === null)){
                 list.push(
                     this.buildFieldsBoolean(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
                 );
@@ -65,29 +63,25 @@ class FormContent extends React.Component{
     buildFieldsBoolean(index, label, value, func){
         const handleOnChange = (event) => {
             value = event.target.value;
+            let isTrueSet = "null";
+            if(value !== "null"){
+                console.log("né null", value)
+                isTrueSet = (value === "true");
+            }
             if(typeof func === "function"){
-                func(value, this.props.data[this.props.dataId], this.props.dataId);
+                func(isTrueSet, this.props.data[this.props.dataId], this.props.dataId);
             }
         }
         return(
             <>
                 <span key={`label_${label}`}>{label}: </span>
-                <select className={style.selector} name="" id="select_boolean">
-                    <option value={value}>True</option>
-                    <option value={!value}>False</option>
+                <select className={style.selector} id="select_boolean" onChange={handleOnChange} value={value}>
+                    <option value={true}>True</option>
+                    <option value={false}>False</option>
+                    <option value={"null"}>Null</option>
                 </select>
             </>
         )
-    }
-
-    /**
-     * @function frontend\src\components\FormComponent\FormComponent.onInputChanged
-     * @summary - Save input data
-     */
-    onInputChanged(data){
-        this.setState({
-            inputData: data.target.value,
-        });
     }
 
     render(){
@@ -95,6 +89,8 @@ class FormContent extends React.Component{
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}
+                <button className={style.btnSave} onChange={this.props.buttonFunc}>{this.props.buttonLabel}</button>
+                <button className={style.btnCancel} onChange={this.props.buttonFunc}>{this.props.buttonCancelLabel}</button>
             </div>
         );
     }
@@ -103,7 +99,12 @@ class FormContent extends React.Component{
 FormContent.propTypes={
     mainList: PropTypes.array,
     fields: PropTypes.array,
+    
     data: PropTypes.object,
-    dataId: PropTypes.string
+    dataId: PropTypes.string,
+
+    buttonLabel: PropTypes.string,
+    buttonFunc: PropTypes.func,
+    buttonCancelLabel: PropTypes.string,
 }
 export default FormContent;

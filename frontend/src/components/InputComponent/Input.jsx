@@ -35,8 +35,11 @@ class InputComponent extends React.Component{
 InputComponent.propTypes={
     placeholder: PropTypes.string,
     name: PropTypes.string,
+
     onChange: PropTypes.func,
+
     value: PropTypes.string,
+    
     disabled: PropTypes.bool,
 }
 

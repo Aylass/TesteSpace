@@ -4,7 +4,6 @@ import Table from './components/TableComponent/Table';
 import Menu from './components/MenuComponent/MenuComponent';
 import NotificationComponent from "./components/NotificationComponent/NotificationComponent";
 import Header from './components/HeaderComponent/HeaderComponent'
-import PageContent from './components/PageContentComponent/PageContentComponent';
 import { useState } from 'react';
 
 /**
@@ -315,7 +314,7 @@ function App() {
         }, {
           label: "status", onChange: (data, id, dataId) => {
             let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
+            console.log(data)
             for (let index = 0; index < copyAuxUsersList.length; index++) {
               const item = copyAuxUsersList[index];
 
@@ -490,6 +489,13 @@ function App() {
       ]
       }
     ]);
+
+    const formButtonsData = {
+      "buttonLabel": "Salvar",
+      "buttonFunc": ()=>{console.log("clico botao")},
+      "buttonCancelLabel": "Cancelar",
+    }
+
     return (
       <div className="App">
         <Menu menuItems={menuItems} btnFunction={mainListChange} handleConfig={toggleIsConfigOpen} />
@@ -502,8 +508,12 @@ function App() {
           />
           : isConfigOpen ?
             <>
-              <Header buttonsList={headerData} toggleSelectedHeaderOption={toggleSelectedHeaderOption}></Header>
-              <PageContent lists={configList}></PageContent>
+              <Header 
+                buttonsList={headerData} 
+                changeSelectedHeaderOption={toggleSelectedHeaderOption}
+                configList={configList}
+                formButtonsData={formButtonsData}
+              ></Header>
             </>
             :
             <>

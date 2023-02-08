@@ -12,3 +12,25 @@
     border-radius: 5px;
     border: 2px solid #70e0e0;
 }
+.btnSave{
+    margin: 10px;
+    background-color: #56afaf;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    color: white;
+}
+.btnSave:hover{
+    background-color: #3f8282;
+}
+.btnCancel{
+    margin: 10px;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    color: white;
+    background-color: rgb(255, 80, 80);
+}
+.btnCancel:hover{
+    background-color: rgb(198, 64, 64);
+}

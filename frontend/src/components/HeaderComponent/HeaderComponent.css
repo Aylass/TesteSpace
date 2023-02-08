@@ -18,3 +18,11 @@
     background-color: #beeded;
     color: rgb(73, 73, 73);
 }
+.headerbtnSelected{
+    background-color: #beeded;
+    color: rgb(73, 73, 73);
+    border-radius: 0px 0px 20px 20px;
+    border: none;
+    padding: 5px;
+    width: 30%;
+}

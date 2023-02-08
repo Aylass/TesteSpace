@@ -84,7 +84,7 @@ class PageContent extends React.Component{
     }
 
     render(){
-        console.log("aniviaa",this.state.selectedObject)
+        
         return (
             <div className="">
                 <span>Lista Escolhida: </span>
@@ -99,8 +99,13 @@ class PageContent extends React.Component{
                     <FormContent
                         mainList={this.props.lists[this.state.selectedList].list}  
                         fields={this.props.lists[this.state.selectedList].fields}
+                        
                         data={this.state.selectedObject}
                         dataId={this.objectStringId}
+
+                        buttonLabel={this.props.formButtonsData.buttonLabel}
+                        buttonFunc={this.props.formButtonsData.buttonFunc}
+                        buttonCancelLabel={this.props.formButtonsData.buttonCancelLabel}
                     ></FormContent>
                     :
                     <></>
@@ -111,6 +116,9 @@ class PageContent extends React.Component{
 }
 
 PageContent.propTypes={
-    lists: PropTypes.array
+    lists: PropTypes.array,
+    crudType: PropTypes.number,
+
+    formButtonsData: PropTypes.object
 }
 export default PageContent;
