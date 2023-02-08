@@ -84,7 +84,7 @@ class PageContent extends React.Component{
     }
 
     render(){
-        
+        console.log("aniviaa",this.state.selectedObject)
         return (
             <div className="">
                 <span>Lista Escolhida: </span>
@@ -92,7 +92,7 @@ class PageContent extends React.Component{
                     {this.selectOptions()}
                 </select>
                 <span className={style.label} >Id do Item Escolhido: </span>
-                <select className={style.selector} id="selectObject" onChange={this.handleObjectOptionChange} value={this.state.selectedObject} >
+                <select className={style.selector} id="selectObject" onChange={this.handleObjectOptionChange} value={this.state.selectedObject[this.objectStringId]} >
                     {this.selectObject()}
                 </select>
                 {this.state.callForm?

@@ -21,9 +21,16 @@ class FormContent extends React.Component{
     buildForm(){
         let list = [];
         for (let index = 0; index < this.props.fields.length; index++) {
-            list.push(
-                this.buildFields(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
-            );
+            if(typeof this.props.data[this.props.fields[index].label] == "boolean"){
+                list.push(
+                    this.buildFieldsBoolean(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
+                );
+                console.log("é boolean", this.props.data[this.props.fields[index].label])
+            }else{
+                list.push(
+                    this.buildFields(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
+                );
+            }
         }
         return list;
     }
@@ -32,16 +39,8 @@ class FormContent extends React.Component{
      * @summary - Creates header buttons
      */
     buildFields(index, label, value, func){
-        if(typeof(value) == "boolean"){
-            if(value === false){
-                value = "false";
-            }else{
-                value = "true";
-            }
-        }
         const handleOnChange = (event) => {
             value = event.target.value;
-            
             if(typeof func === "function"){
                 func(value, this.props.data[this.props.dataId], this.props.dataId);
             }
@@ -60,6 +59,28 @@ class FormContent extends React.Component{
     }
 
     /**
+     * @function frontend\src\components\FormComponent\FormComponent.buildFieldsBoolean
+     * @summary - Creates header buttons
+     */
+    buildFieldsBoolean(index, label, value, func){
+        const handleOnChange = (event) => {
+            value = event.target.value;
+            if(typeof func === "function"){
+                func(value, this.props.data[this.props.dataId], this.props.dataId);
+            }
+        }
+        return(
+            <>
+                <span key={`label_${label}`}>{label}: </span>
+                <select className={style.selector} name="" id="select_boolean">
+                    <option value={value}>True</option>
+                    <option value={!value}>False</option>
+                </select>
+            </>
+        )
+    }
+
+    /**
      * @function frontend\src\components\TableComponent\Table\EditModal.onModelChanged
      * @summary - Save car model variable
      */
@@ -70,6 +91,7 @@ class FormContent extends React.Component{
     }
 
     render(){
+        console.log(typeof this.props.data.status)
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}
