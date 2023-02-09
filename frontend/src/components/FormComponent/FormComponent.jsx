@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import InputComponent from '../InputComponent/Input';
 import style from './FormComponent.module.css';
+import Translation from "../../users/Translation";
 
 class FormContent extends React.Component{
 
@@ -45,7 +46,7 @@ class FormContent extends React.Component{
         }
         return(
             <>
-                <span key={`label_${label}`}>{label}: </span>
+                <span key={`label_${label}`}>{Translation[label]? Translation[label] : label}: </span>
                 <InputComponent 
                     key={`input_label_${label}`}
                     disabled={false} 
@@ -74,7 +75,7 @@ class FormContent extends React.Component{
         }
         return(
             <>
-                <span key={`label_${label}`}>{label}: </span>
+                <span key={`label_${label}`}>{Translation[label]? Translation[label] : label}: </span>
                 <select className={style.selector} id="select_boolean" onChange={handleOnChange} value={value}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
