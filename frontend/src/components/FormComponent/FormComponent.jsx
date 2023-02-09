@@ -62,9 +62,13 @@ class FormContent extends React.Component{
      * @summary - Creates field for boolean variables
      */
     buildFieldsBoolean(index, label, value, func){
+        let isTrueSet = value;
+        if(value === null)
+        {
+            isTrueSet = "null";
+        }
         const handleOnChange = (event) => {
             value = event.target.value;
-            let isTrueSet = "null";
             if(value !== "null"){
                 console.log("né null", value)
                 isTrueSet = (value === "true");
@@ -76,7 +80,7 @@ class FormContent extends React.Component{
         return(
             <>
                 <span key={`label_${label}`}>{Translation[label]? Translation[label] : label}: </span>
-                <select className={style.selector} id="select_boolean" onChange={handleOnChange} value={value}>
+                <select className={style.selector} id="select_boolean" onChange={handleOnChange} value={isTrueSet}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                     <option value={"null"}>Null</option>
