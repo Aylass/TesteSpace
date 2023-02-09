@@ -70,7 +70,6 @@ class FormContent extends React.Component{
         const handleOnChange = (event) => {
             value = event.target.value;
             if(value !== "null"){
-                console.log("né null", value)
                 isTrueSet = (value === "true");
             }
             if(typeof func === "function"){
@@ -90,13 +89,12 @@ class FormContent extends React.Component{
     }
 
     render(){
-        
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}
                 <div className={style.btnWrap}>
-                    <button className={style.btnSave} onChange={this.props.buttonFunc}>{this.props.buttonLabel}</button>
-                    <button className={style.btnCancel} onChange={this.props.buttonFunc}>{this.props.buttonCancelLabel}</button>
+                    <button className={style.btnSave} onClick={this.props.crudFunction}>Save</button>
+                    <button className={style.btnCancel} onClick={this.props.crudFunction}>Cancel</button>
                 </div>
             </div>
         );
@@ -110,8 +108,6 @@ FormContent.propTypes={
     data: PropTypes.object,
     dataId: PropTypes.string,
 
-    buttonLabel: PropTypes.string,
-    buttonFunc: PropTypes.func,
-    buttonCancelLabel: PropTypes.string,
+    crudFunction: PropTypes.func
 }
 export default FormContent;

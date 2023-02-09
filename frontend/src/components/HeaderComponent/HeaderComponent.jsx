@@ -24,7 +24,7 @@ class Header extends React.Component{
 
         for (let index = 0; index < btnList.length; index++) {
             list.push(
-                this.buildButtons(btnList[index].label, btnList[index].btnFunction)
+                this.buildButtons(index, btnList[index].label, btnList[index].btnFunction)
             );
         }
         return list;
@@ -33,14 +33,14 @@ class Header extends React.Component{
      * @function frontend\src\Header.buildButtons
      * @summary - Creates header buttons
      */
-    buildButtons(label, buttonFunction){
+    buildButtons(index, label, buttonFunction){
         return(
             <button 
                 className={this.state.isSelected === buttonFunction?  "headerbtnSelected": "headerbtn"}
                 key={`headerButton-${buttonFunction}`} 
                 onClick={()=> {
                     this.setState({
-                        selectedBtn: buttonFunction,
+                        selectedBtn: index,
                         isSelected: buttonFunction
                     });
                     this.props.changeSelectedHeaderOption(buttonFunction)}
@@ -51,12 +51,14 @@ class Header extends React.Component{
     }
 
     render(){
-        
         return (
             <div className="headerButtons">
                 {this.buildHeader(this.props.buttonsList)}
-                {this.state.selectedBtn > 1?
-                    <PageContent crudType={this.state.selectedBtn} lists={this.props.configList} formButtonsData={this.props.formButtonsData}></PageContent>
+                {this.state.selectedBtn >= 1?
+                    <PageContent 
+                        crudFunction={this.props.buttonsList[this.state.selectedBtn]?.function} 
+                        lists={this.props.configList} 
+                    ></PageContent>
                 :
                     <></>
                 }
@@ -70,6 +72,5 @@ Header.propTypes={
     changeSelectedHeaderOption: PropTypes.func,
 
     configList: PropTypes.array,
-    formButtonsData: PropTypes.object
 }
 export default Header;

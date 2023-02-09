@@ -103,9 +103,7 @@ class PageContent extends React.Component{
                         data={this.state.selectedObject}
                         dataId={this.objectStringId}
 
-                        buttonLabel={this.props.formButtonsData.buttonLabel}
-                        buttonFunc={this.props.formButtonsData.buttonFunc}
-                        buttonCancelLabel={this.props.formButtonsData.buttonCancelLabel}
+                        crudFunction={this.props.crudFunction}
                     ></FormContent>
                     :
                     <></>
@@ -117,8 +115,6 @@ class PageContent extends React.Component{
 
 PageContent.propTypes={
     lists: PropTypes.array,
-    crudType: PropTypes.number,
-
-    formButtonsData: PropTypes.object
+    crudFunction: PropTypes.func,
 }
 export default PageContent;

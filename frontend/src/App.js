@@ -118,15 +118,18 @@ function App() {
       setHeaderData([
         {
           "label": "Criar",
-          "btnFunction": 1
+          "btnFunction": 1,
+          "function": ()=>{console.log("Funcao Criar")}
         },
         {
           "label": "Editar",
-          "btnFunction": 2
+          "btnFunction": 2,
+          "function": ()=>{console.log("Funcao Editar")}
         },
         {
           "label": "Deletar",
-          "btnFunction": 3
+          "btnFunction": 3,
+          "function": ()=>{console.log("Funcao Deletar")}
         },
       ]);
 
@@ -512,7 +515,6 @@ function App() {
                 buttonsList={headerData} 
                 changeSelectedHeaderOption={toggleSelectedHeaderOption}
                 configList={configList}
-                formButtonsData={formButtonsData}
               ></Header>
             </>
             :
