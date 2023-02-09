@@ -94,7 +94,7 @@ class FormContent extends React.Component{
                 {this.buildForm()}
                 <div className={style.btnWrap}>
                     <button className={style.btnSave} onClick={this.props.crudFunction}>Save</button>
-                    <button className={style.btnCancel} onClick={this.props.crudFunction}>Cancel</button>
+                    <button className={style.btnCancel} onClick={this.props.resetSelectedButton}>Cancel</button>
                 </div>
             </div>
         );
@@ -108,6 +108,7 @@ FormContent.propTypes={
     data: PropTypes.object,
     dataId: PropTypes.string,
 
-    crudFunction: PropTypes.func
+    crudFunction: PropTypes.func,
+    resetSelectedButton: PropTypes.func
 }
 export default FormContent;

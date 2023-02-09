@@ -103,6 +103,7 @@ class PageContent extends React.Component{
                         data={this.state.selectedObject}
                         dataId={this.objectStringId}
 
+                        resetSelectedButton={this.props.resetSelectedButton}
                         crudFunction={this.props.crudFunction}
                     ></FormContent>
                     :
@@ -116,5 +117,6 @@ class PageContent extends React.Component{
 PageContent.propTypes={
     lists: PropTypes.array,
     crudFunction: PropTypes.func,
+    resetSelectedButton: PropTypes.func
 }
 export default PageContent;

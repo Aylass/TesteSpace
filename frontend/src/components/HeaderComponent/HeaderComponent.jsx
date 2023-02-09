@@ -13,6 +13,8 @@ class Header extends React.Component{
         }
         this.buildHeader = this.buildHeader.bind(this);
         this.buildButtons = this.buildButtons.bind(this);
+
+        this.resetSelectedButton = this.resetSelectedButton.bind(this);
     }
     
     /**
@@ -50,6 +52,12 @@ class Header extends React.Component{
         )
     }
 
+    resetSelectedButton(){
+        this.setState({
+            selectedBtn: -1,
+        });
+    }
+
     render(){
         return (
             <div className="headerButtons">
@@ -58,6 +66,7 @@ class Header extends React.Component{
                     <PageContent 
                         crudFunction={this.props.buttonsList[this.state.selectedBtn]?.function} 
                         lists={this.props.configList} 
+                        resetSelectedButton={this.resetSelectedButton}
                     ></PageContent>
                 :
                     <></>
