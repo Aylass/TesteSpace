@@ -37,7 +37,6 @@ function App() {
   const [menuItems, setMenuItems] = useState();
   const [isConfigOpen, setIsConfigOpen] = useState(true);
 
-  const [headerData, setHeaderData] = useState();
   const [selectHeaderOption, setSelectHeaderOption] = useState();
 
   useEffect(() => {
@@ -115,24 +114,6 @@ function App() {
         }
       ]);
 
-      setHeaderData([
-        {
-          "label": "Criar",
-          "btnFunction": 1,
-          "function": ()=>{console.log("Funcao Criar")}
-        },
-        {
-          "label": "Editar",
-          "btnFunction": 2,
-          "function": ()=>{console.log("Funcao Editar")}
-        },
-        {
-          "label": "Deletar",
-          "btnFunction": 3,
-          "function": ()=>{console.log("Funcao Deletar")}
-        },
-      ]);
-
       setTimeout(() => { setIsLoading(false) }, 800)
     }
   }
@@ -143,6 +124,7 @@ function App() {
      */
   function mainListChange(numb) {
     //menu seleciona usuário
+    console.log("troco list")
     setChosenList(numb);
     if ((numb === 2) && (numb !== chosenList)) { //menu seleciona carro
       setMainList(auxCarList);
@@ -200,7 +182,39 @@ function App() {
       </div>
     )
   } else {
-    
+    const headerData = ([
+      {
+        "label": "Criar",
+        "btnFunction": 1,
+        "function": (newObject)=>{
+          //setAuxUsersList(newObject);
+          console.log("Funcao Criar")
+        }
+      },
+      {
+        "label": "Editar",
+        "btnFunction": 2,
+        "function": (objectToEdit)=>{
+          let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
+          
+          for (let index = 0; index < copyAuxUsersList.length; index++) {
+            const item = auxUsersListCopy[index];
+            if (item.user_id === objectToEdit.user_id) {
+              auxUsersListCopy[index] = objectToEdit;
+              console.log(auxUsersListCopy[index])
+            }
+          }
+          setAuxUsersList(auxUsersListCopy);
+        }
+      },
+      {
+        "label": "Deletar",
+        "btnFunction": 3,
+        "function": ()=>{
+          console.log("Funcao Deletar")
+        }
+      },
+    ]);
     const configList = ([
       {
         "id": 0,
@@ -210,15 +224,14 @@ function App() {
           label: "user_id"
         }, {
           label: "user_first_name",
-          onChange: (data, id, dataId) => {
+          onChange: (objectEdited, id, dataId) => {
             let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
 
             for (let index = 0; index < copyAuxUsersList.length; index++) {
               const item = copyAuxUsersList[index];
 
               if (item[dataId] === id) {
-                item.user_first_name = data;
-                auxUsersListCopy[index] = item;
+                auxUsersListCopy[index] = objectEdited;
               }
             }
 
@@ -492,12 +505,6 @@ function App() {
       ]
       }
     ]);
-
-    const formButtonsData = {
-      "buttonLabel": "Salvar",
-      "buttonFunc": ()=>{console.log("clico botao")},
-      "buttonCancelLabel": "Cancelar",
-    }
 
     return (
       <div className="App">

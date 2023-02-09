@@ -8,8 +8,23 @@ class FormContent extends React.Component{
 
     constructor(props){
         super(props);
+        this.state = {
+            objectEdited: this.props.data
+        }
         this.buildForm = this.buildForm.bind(this);
         this.buildFields = this.buildFields.bind(this);
+        this.saveDataModifications = this.saveDataModifications.bind(this);
+        this.handleOnChange = this.handleOnChange.bind(this);
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if(props.data !== state.objectEdited){
+            //Change in props
+            return{
+                objectEdited: props.data
+            };
+        }
+        return null; // No change to state
     }
 
     /**
@@ -19,39 +34,44 @@ class FormContent extends React.Component{
     buildForm(){
         let list = [];
         for (let index = 0; index < this.props.fields.length; index++) {
-            
             if((typeof this.props.data[this.props.fields[index].label] == "boolean") || (this.props.data[this.props.fields[index].label] === null)){
                 list.push(
-                    this.buildFieldsBoolean(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
+                    this.buildFieldsBoolean(this.props.fields[index].label)
                 );
                 
             }else{
                 list.push(
-                    this.buildFields(index, this.props.fields[index].label, this.props.data[this.props.fields[index].label], this.props.fields[index].onChange)
+                    this.buildFields(this.props.fields[index].label)
                 );
             }
         }
         return list;
     }
+
+    handleOnChange(event, label) {
+        const value = event.target.value;
+
+        let editedData = {...this.state.objectEdited};
+        editedData[label] = value;
+
+        this.setState({
+            objectEdited: editedData
+        });
+    }
+
     /**
      * @function frontend\src\components\FormComponent\FormComponent.buildFields
      * @summary - Creates form fields
      */
-    buildFields(index, label, value, func){
-        const handleOnChange = (event) => {
-            value = event.target.value;
-            if(typeof func === "function"){
-                func(value, this.props.data[this.props.dataId], this.props.dataId);
-            }
-        }
+    buildFields(label){
         return(
             <>
                 <span key={`label_${label}`}>{Translation[label]? Translation[label] : label}: </span>
                 <InputComponent 
                     key={`input_label_${label}`}
                     disabled={false} 
-                    data={value} 
-                    onChange={handleOnChange} 
+                    data={this.state.objectEdited[label]} 
+                    onChange={event => this.handleOnChange(event, label)} 
                 /> 
             </>
         )
@@ -61,25 +81,11 @@ class FormContent extends React.Component{
      * @function frontend\src\components\FormComponent\FormComponent.buildFieldsBoolean
      * @summary - Creates field for boolean variables
      */
-    buildFieldsBoolean(index, label, value, func){
-        let isTrueSet = value;
-        if(value === null)
-        {
-            isTrueSet = "null";
-        }
-        const handleOnChange = (event) => {
-            value = event.target.value;
-            if(value !== "null"){
-                isTrueSet = (value === "true");
-            }
-            if(typeof func === "function"){
-                func(isTrueSet, this.props.data[this.props.dataId], this.props.dataId);
-            }
-        }
+    buildFieldsBoolean(label){
         return(
             <>
                 <span key={`label_${label}`}>{Translation[label]? Translation[label] : label}: </span>
-                <select className={style.selector} id="select_boolean" onChange={handleOnChange} value={isTrueSet}>
+                <select className={style.selector} id="select_boolean" onChange={event => this.handleOnChange(event, label)} value={this.state.objectEdited[label]}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                     <option value={"null"}>Null</option>
@@ -88,12 +94,19 @@ class FormContent extends React.Component{
         )
     }
 
+    saveDataModifications()
+    {
+        this.props.crudFunction(this.state.objectEdited);
+    }
+    
     render(){
+        console.log("props",this.props.data)
+        console.log("state",this.state.objectEdited)
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}
                 <div className={style.btnWrap}>
-                    <button className={style.btnSave} onClick={this.props.crudFunction}>Save</button>
+                    <button className={style.btnSave} onClick={this.saveDataModifications}>Save</button>
                     <button className={style.btnCancel} onClick={this.props.resetSelectedButton}>Cancel</button>
                 </div>
             </div>
