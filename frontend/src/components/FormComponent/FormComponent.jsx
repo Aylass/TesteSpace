@@ -98,11 +98,10 @@ class FormContent extends React.Component{
 
     saveDataModifications()
     {
-        this.props.crudFunction(this.state.objectEdited, this.props.mainList, this.props.setMainList);
+        this.props.crudFunction(this.state.objectEdited, this.props.mainList, this.props.setMainList, this.props.dataId);
     }
     
     render(){
-        console.log("setMainList",this.props.setMainList)
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}

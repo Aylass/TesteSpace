@@ -24,11 +24,6 @@ function App() {
   const [auxAccessList, setAuxAccessList] = useState();
   const [auxAddressesList, setAuxAddressesList] = useState();
 
-  //List copys for CRUD actions
-  const [copyAuxUsersList, setCopyAuxUsersList] = useState();
-  const [copyAuxCarList, setCopyAuxCarList] = useState();
-  const [copyAuxJobList, setCopyAuxJobList] = useState();
-
   const [chosenList, setChosenList] = useState(0);
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -82,10 +77,6 @@ function App() {
       setAuxAddressesList(data.address);
       setAuxProductList(data.products);
 
-      setCopyAuxUsersList(deepCloneArray(data.user));
-      setCopyAuxCarList(deepCloneArray(data.car));
-      setCopyAuxJobList(deepCloneArray(data.job));
-
       setMenuItems([
         {
           "label": "Usuários",
@@ -131,14 +122,14 @@ function App() {
    * @function frontend\src\App.onChangeConfigInput
    * @summary - Handle config inputs
    */
-  function onChangeConfigInput(objectToEdit, list, setList){
+  function onChangeConfigInput(objectToEdit, list, setList, idField){
+
       let auxListCopy = deepCloneArray(list);
       
       for (let index = 0; index < list.length; index++) {
         const item = auxListCopy[index];
-        if (item.user_id === objectToEdit.user_id) {
+        if (item[idField] === objectToEdit[idField]) {
           auxListCopy[index] = objectToEdit;
-          console.log(auxListCopy[index])
         }
       }
       setList(auxListCopy);
@@ -201,8 +192,8 @@ function App() {
       {
         "label": "Editar",
         "btnFunction": 2,
-        "function": (objectToEdit, list, setList)=>{
-          onChangeConfigInput(objectToEdit, list, setList);
+        "function": (objectToEdit, list, setList, dataId)=>{
+          onChangeConfigInput(objectToEdit, list, setList, dataId);
         }
       },
       {
@@ -223,38 +214,20 @@ function App() {
           label: "user_id"
         }, {
           label: "user_first_name",
-          onChange: (data, id, dataId) => {
-            console.log("entrio aq")
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
         }, {
-          label: "user_birth_date", onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
+          label: "user_birth_date", 
         }, {
-          label: "user_access_id", onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
+          label: "user_access_id", 
         }, {
-          label: "user_address_id", onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
+          label: "user_address_id", 
         }, {
-          label: "user_job_id", onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
+          label: "user_job_id", 
         }, {
-          label: "user_product_buyed_id", onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
+          label: "user_product_buyed_id", 
         }, {
-          label: "user_car_id", onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
+          label: "user_car_id", 
         }, {
-          label: "status", onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
-          }
+          label: "status", 
         }]
       },
       {
@@ -266,29 +239,14 @@ function App() {
           label: "car_id"
         }, {
           label: "car_fuel",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
-          }
         },{
           label: "car_manufacturer",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
-          }
         },{
           label: "car_model",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
-          }
         },{
           label: "car_name",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
-          }
         },{
           label: "car_type",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
-          }
         }]
       },
       {
@@ -300,24 +258,12 @@ function App() {
           label: "user_job_id"
         },{
           label: "user_job_title",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
-          }
         },{
           label: "user_job_address",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
-          }
         },{
           label: "user_job_salary",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
-          }
         },{
           label: "user_job_salary_currency_symbol",
-          onChange: (data, id, dataId) => {
-            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
-          }
         },
       ]
       }
