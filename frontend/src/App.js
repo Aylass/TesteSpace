@@ -29,13 +29,12 @@ function App() {
   const [copyAuxCarList, setCopyAuxCarList] = useState();
   const [copyAuxJobList, setCopyAuxJobList] = useState();
 
-  const [chosenList, setChosenList] = useState(1);
+  const [chosenList, setChosenList] = useState(0);
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const [menuItems, setMenuItems] = useState();
-  const [isConfigOpen, setIsConfigOpen] = useState(true);
 
   const [selectHeaderOption, setSelectHeaderOption] = useState();
 
@@ -57,18 +56,6 @@ function App() {
    */
   function toggleSelectedHeaderOption(option) {
     setSelectHeaderOption(option);
-  }
-
-  /**
-     * @function frontend\src\App.toggleIsConfigOpen
-     * @summary - Toggle variable that controlles config page
-     */
-  function toggleIsConfigOpen(btnConfig) {
-    if (btnConfig) {
-      setIsConfigOpen(!isConfigOpen);
-    } else if (isConfigOpen === true) {
-      setIsConfigOpen(false);
-    }
   }
 
   /**
@@ -124,7 +111,6 @@ function App() {
      */
   function mainListChange(numb) {
     //menu seleciona usuário
-    console.log("troco list")
     setChosenList(numb);
     if ((numb === 2) && (numb !== chosenList)) { //menu seleciona carro
       setMainList(auxCarList);
@@ -135,8 +121,28 @@ function App() {
     } else if ((numb === 1) && (numb !== chosenList)) {
       setMainList(auxUsersList);
       setChosenList(1);
+    } else if ((numb === 0) && (numb !== chosenList)) {
+      setMainList(auxUsersList);
+      setChosenList(0);
     }
   }
+
+  /**
+   * @function frontend\src\App.onChangeConfigInput
+   * @summary - Handle config inputs
+   */
+  function onChangeConfigInput(objectToEdit, list, setList){
+      let auxListCopy = deepCloneArray(list);
+      
+      for (let index = 0; index < list.length; index++) {
+        const item = auxListCopy[index];
+        if (item.user_id === objectToEdit.user_id) {
+          auxListCopy[index] = objectToEdit;
+          console.log(auxListCopy[index])
+        }
+      }
+      setList(auxListCopy);
+    }
 
   /**
    * @function frontend\src\App.saveEditedData
@@ -182,6 +188,7 @@ function App() {
       </div>
     )
   } else {
+
     const headerData = ([
       {
         "label": "Criar",
@@ -194,17 +201,8 @@ function App() {
       {
         "label": "Editar",
         "btnFunction": 2,
-        "function": (objectToEdit)=>{
-          let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-          
-          for (let index = 0; index < copyAuxUsersList.length; index++) {
-            const item = auxUsersListCopy[index];
-            if (item.user_id === objectToEdit.user_id) {
-              auxUsersListCopy[index] = objectToEdit;
-              console.log(auxUsersListCopy[index])
-            }
-          }
-          setAuxUsersList(auxUsersListCopy);
+        "function": (objectToEdit, list, setList)=>{
+          onChangeConfigInput(objectToEdit, list, setList);
         }
       },
       {
@@ -219,296 +217,116 @@ function App() {
       {
         "id": 0,
         "name": "Usuários",
-        "list": copyAuxUsersList,
+        "list": auxUsersList,
+        "setList": setAuxUsersList,
         "fields": [{
           label: "user_id"
         }, {
           label: "user_first_name",
-          onChange: (objectEdited, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                auxUsersListCopy[index] = objectEdited;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+          onChange: (data, id, dataId) => {
+            console.log("entrio aq")
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }, {
           label: "user_birth_date", onChange: (data, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                item.user_birth_date = data;
-                auxUsersListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }, {
           label: "user_access_id", onChange: (data, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                item.user_access_id = data;
-                auxUsersListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }, {
           label: "user_address_id", onChange: (data, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                item.user_address_id = data;
-                auxUsersListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }, {
           label: "user_job_id", onChange: (data, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                item.user_job_id = data;
-                auxUsersListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }, {
           label: "user_product_buyed_id", onChange: (data, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                item.user_product_buyed_id = data;
-                auxUsersListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }, {
           label: "user_car_id", onChange: (data, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                item.user_car_id = data;
-                auxUsersListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }, {
           label: "status", onChange: (data, id, dataId) => {
-            let auxUsersListCopy = deepCloneArray(copyAuxUsersList);
-            console.log(data)
-            for (let index = 0; index < copyAuxUsersList.length; index++) {
-              const item = copyAuxUsersList[index];
-
-              if (item[dataId] === id) {
-                item.status = data;
-                auxUsersListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxUsersList(auxUsersListCopy);
+            onChangeConfigInput(data, id, dataId, auxUsersList, setAuxUsersList);
           }
         }]
       },
       {
         "id": 1,
         "name": "Carros",
-        "list": copyAuxCarList,
+        "list": auxCarList,
+        "setList": setAuxCarList,
         "fields": [{
           label: "car_id"
         }, {
           label: "car_fuel",
           onChange: (data, id, dataId) => {
-            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
-
-            for (let index = 0; index < copyAuxCarList.length; index++) {
-              const item = copyAuxCarList[index];
-
-              if (item[dataId] === id) {
-                item.car_fuel = data;
-                auxCarsListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxCarList(auxCarsListCopy);
+            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
           }
         },{
           label: "car_manufacturer",
           onChange: (data, id, dataId) => {
-            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
-
-            for (let index = 0; index < copyAuxCarList.length; index++) {
-              const item = copyAuxCarList[index];
-
-              if (item[dataId] === id) {
-                item.car_manufacturer = data;
-                auxCarsListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxCarList(auxCarsListCopy);
+            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
           }
         },{
           label: "car_model",
           onChange: (data, id, dataId) => {
-            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
-
-            for (let index = 0; index < copyAuxCarList.length; index++) {
-              const item = copyAuxCarList[index];
-
-              if (item[dataId] === id) {
-                item.car_model = data;
-                auxCarsListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxCarList(auxCarsListCopy);
+            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
           }
         },{
           label: "car_name",
           onChange: (data, id, dataId) => {
-            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
-
-            for (let index = 0; index < copyAuxCarList.length; index++) {
-              const item = copyAuxCarList[index];
-
-              if (item[dataId] === id) {
-                item.car_name = data;
-                auxCarsListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxCarList(auxCarsListCopy);
+            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
           }
         },{
           label: "car_type",
           onChange: (data, id, dataId) => {
-            let auxCarsListCopy = deepCloneArray(copyAuxCarList);
-
-            for (let index = 0; index < copyAuxCarList.length; index++) {
-              const item = copyAuxCarList[index];
-
-              if (item[dataId] === id) {
-                item.car_type = data;
-                auxCarsListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxCarList(auxCarsListCopy);
+            onChangeConfigInput(data, id, dataId, auxCarList, setAuxCarList);
           }
         }]
       },
       {
         "id": 2,
         "name": "Trabalhos",
-        "list": copyAuxJobList,
+        "list": auxJobList,
+        "setList": setAuxJobList,
         "fields": [{
           label: "user_job_id"
         },{
           label: "user_job_title",
           onChange: (data, id, dataId) => {
-            let auxJobListCopy = deepCloneArray(copyAuxJobList);
-              
-            for (let index = 0; index < copyAuxJobList.length; index++) {
-              const item = copyAuxJobList[index];
-
-              if (item[dataId] === id) {
-                item.user_job_title = data;
-                auxJobListCopy[index] = item;
-              }
-            }
-            setCopyAuxJobList(auxJobListCopy);
+            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
           }
         },{
           label: "user_job_address",
           onChange: (data, id, dataId) => {
-            let auxJobListCopy = deepCloneArray(copyAuxJobList);
-
-            for (let index = 0; index < copyAuxJobList.length; index++) {
-              const item = copyAuxJobList[index];
-
-              if (item[dataId] === id) {
-                item.user_job_address = data;
-                auxJobListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxJobList(auxJobListCopy);
+            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
           }
         },{
           label: "user_job_salary",
           onChange: (data, id, dataId) => {
-            let auxJobListCopy = deepCloneArray(copyAuxJobList);
-
-            for (let index = 0; index < copyAuxJobList.length; index++) {
-              const item = copyAuxJobList[index];
-
-              if (item[dataId] === id) {
-                item.user_job_salary = data;
-                auxJobListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxJobList(auxJobListCopy);
+            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
           }
         },{
           label: "user_job_salary_currency_symbol",
           onChange: (data, id, dataId) => {
-            let auxJobListCopy = deepCloneArray(copyAuxJobList);
-
-            for (let index = 0; index < copyAuxJobList.length; index++) {
-              const item = copyAuxJobList[index];
-
-              if (item[dataId] === id) {
-                item.user_job_salary_currency_symbol = data;
-                auxJobListCopy[index] = item;
-              }
-            }
-
-            setCopyAuxJobList(auxJobListCopy);
+            onChangeConfigInput(data, id, dataId, auxJobList, setAuxJobList);
           }
         },
       ]
       }
     ]);
 
+
     return (
       <div className="App">
-        <Menu menuItems={menuItems} btnFunction={mainListChange} handleConfig={toggleIsConfigOpen} />
+        <Menu menuItems={menuItems} btnFunction={mainListChange}/>
         {isNotificationOpen ?
           <NotificationComponent
             type="Error"
@@ -516,7 +334,7 @@ function App() {
             notificationDescription="Acesso ao banco de dados com"
             closeNotification={() => { }}
           />
-          : isConfigOpen ?
+          : chosenList === 0 ?
             <>
               <Header 
                 buttonsList={headerData} 

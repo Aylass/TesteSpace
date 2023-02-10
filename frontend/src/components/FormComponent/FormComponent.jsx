@@ -17,14 +17,12 @@ class FormContent extends React.Component{
         this.handleOnChange = this.handleOnChange.bind(this);
     }
 
-    static getDerivedStateFromProps(props, state) {
-        if(props.data !== state.objectEdited){
-            //Change in props
-            return{
-                objectEdited: props.data
-            };
-        }
-        return null; // No change to state
+    componentDidUpdate(prevProps){
+        if(prevProps.data !== this.props.data){
+            this.setState({
+                objectEdited: this.props.data
+            });
+        } 
     }
 
     /**
@@ -48,6 +46,10 @@ class FormContent extends React.Component{
         return list;
     }
 
+    /**
+     * @function frontend\src\components\FormComponent\FormComponent.handleOnChange
+     * @summary - Handle changes on inputs
+     */
     handleOnChange(event, label) {
         const value = event.target.value;
 
@@ -96,12 +98,11 @@ class FormContent extends React.Component{
 
     saveDataModifications()
     {
-        this.props.crudFunction(this.state.objectEdited);
+        this.props.crudFunction(this.state.objectEdited, this.props.mainList, this.props.setMainList);
     }
     
     render(){
-        console.log("props",this.props.data)
-        console.log("state",this.state.objectEdited)
+        console.log("setMainList",this.props.setMainList)
         return (
             <div className={style.formComponent}>
                 {this.buildForm()}
@@ -116,6 +117,7 @@ class FormContent extends React.Component{
 
 FormContent.propTypes={
     mainList: PropTypes.array,
+    setMainList: PropTypes.func,
     fields: PropTypes.array,
 
     data: PropTypes.object,

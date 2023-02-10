@@ -97,7 +97,8 @@ class PageContent extends React.Component{
                 </select>
                 {this.state.callForm?
                     <FormContent
-                        mainList={this.props.lists[this.state.selectedList].list}  
+                        mainList={this.props.lists[this.state.selectedList].list}
+                        setMainList={this.props.lists[this.state.selectedList].setList}    
                         fields={this.props.lists[this.state.selectedList].fields}
                         
                         data={this.state.selectedObject}

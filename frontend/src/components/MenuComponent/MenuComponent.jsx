@@ -58,9 +58,7 @@ class Menu extends React.Component{
             <button 
                 className="menuButton"
                 key={`menuButton_${buttonFunction}`} 
-                onClick={()=> {this.props.btnFunction(buttonFunction)
-                    this.props.handleConfig(false)
-                }}>
+                onClick={()=> this.props.btnFunction(buttonFunction)}>
                 {label}
             </button>
         )
@@ -82,7 +80,7 @@ class Menu extends React.Component{
                         <button 
                             className="menuButton"
                             key={`menuButton_config`} 
-                            onClick={()=>this.props.handleConfig(true)}>
+                            onClick={()=> this.props.btnFunction(0)}>
                             Configurações
                         </button>
                     </div>
@@ -97,6 +95,5 @@ class Menu extends React.Component{
 Menu.propTypes={
     menuItems: PropTypes.array,
     btnFunction: PropTypes.func,
-    handleConfig: PropTypes.func
 }
 export default Menu;
