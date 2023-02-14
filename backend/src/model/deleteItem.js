@@ -2,7 +2,7 @@ const { Client } = require('pg');
 var fs = require('fs');
 
 exports.deleteItem = function deleteItem(data) {
- 
+    console.log(data)
     let result = "null";
 
     const client = new Client({

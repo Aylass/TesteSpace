@@ -7,5 +7,6 @@ exports.deleteItem = async (req, res) => {
         item
     }
 
-    item.json(response);
+    console.log("item", item)
+    res.json(response);
 };

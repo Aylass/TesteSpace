@@ -122,8 +122,9 @@ function App() {
    * @function frontend\src\App.onChangeConfigInput
    * @summary - Handle config inputs
    */
-  function onChangeConfigInput(objectToEdit, list, setList, idField){
-
+  function onChangeConfigInput(objectToEdit, list, setList, idField, action){
+    console.log("oi",idField)
+    if(action === 2){// edit
       let auxListCopy = deepCloneArray(list);
       
       for (let index = 0; index < list.length; index++) {
@@ -133,6 +134,20 @@ function App() {
         }
       }
       setList(auxListCopy);
+    }
+    if(action === 3){//delete
+      const listLength = list.length;
+      let itemToDelete;
+
+      let newList=[];
+      do{
+        itemToDelete = list.pop()
+        if(itemToDelete[idField] !== objectToEdit[idField]){
+          newList.push(itemToDelete);
+        }
+      }while(newList.length < listLength-1);
+      setList(newList);
+    } 
   }
 
   /**
@@ -195,7 +210,7 @@ function App() {
         "btnFunction": 2,
         "isEditDisable": false,
         "function": (objectToEdit, list, setList, dataId)=>{
-          onChangeConfigInput(objectToEdit, list, setList, dataId);
+          onChangeConfigInput(objectToEdit, list, setList, dataId, 2);
           
           const aux2 = new Date(objectToEdit.user_birth_date);
           const aux = jsDateToDbTimestampStr(aux2, false);
@@ -214,14 +229,41 @@ function App() {
                 setIsLoading(false);
                 setIsNotificationOpen(true);
               });
-              }
+          }
       },
       {
         "label": "Deletar",
         "btnFunction": 3,
         "isEditDisable": true,
-        "function": ()=>{
+        "function": (objectToEdit, list, setList, dataId)=>{
+          onChangeConfigInput(objectToEdit, list, setList, dataId, 3);
           console.log("Funcao Deletar")
+          let listName = "";
+          if(chosenList <= 1){
+            listName = "users"
+          }else if(chosenList === 2){
+            listName = "users_cars";
+          }else if(chosenList === 3){
+            listName = "users_job";
+          }
+
+          const body = {
+            "list": listName,
+            "condition": `${dataId} = ${objectToEdit[dataId]}`
+          }
+
+          fetch('http://localhost:8080/deleteItem', {
+            method: "DELETE",
+            body: JSON.stringify(body),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+          })
+            .then(async function (response) {
+              const res = await response.json();
+            }).catch(
+              err => {
+                setIsLoading(false);
+                setIsNotificationOpen(true);
+          });
         }
       },
     ]);
