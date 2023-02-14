@@ -140,7 +140,7 @@ class Table extends React.Component{
     }
 
     /*Builds*/
-     /**
+    /**
      * @function frontend\src\components\TableComponent\Table.buildHeader
      * @summary - Shows list as table header
      * @returns {Element} - Return a react element
@@ -181,6 +181,7 @@ class Table extends React.Component{
      * @returns {Element} - Return a react element
      */
     buildItem(data, columnsList,tagId,auxCarDataList,auxJobDataList){
+        
         return(
             <Item 
                 key={Math.random()}
@@ -401,7 +402,7 @@ class EditModal extends React.Component{
         event.stopPropagation();
 
         if(this.state.isEditing === false){ //not editing
-             this.setState({
+            this.setState({
                 isEditing: true});
         }else{ //editing
             this.setState({
@@ -613,10 +614,10 @@ class Item extends React.Component{
     
     render(){
         let currentCar;
-
         if((this.props.auxCarDataList !== "notNeeded") && (this.props.auxJobDataList !== "notNeeded")){
             const currentUserCarId = this.props.data.user_car_id;
-            currentCar = this.props.auxCarDataList.filter((car, index, array) => {;return car.car_id === currentUserCarId});
+            
+            currentCar = this.props.auxCarDataList.filter((car) => {return car.car_id === currentUserCarId});
         }
 
         return(
@@ -721,10 +722,11 @@ class ItemBody extends React.Component{
      * @summary - Toggle item modal
      */
     toggleModal(tab){
-       this.setState({tabOpenModal : tab});
+        this.setState({tabOpenModal : tab});
     }
 
     render(){
+        console.log("current car item",this.props.currentCar)
         return(
             <tr key={`itemBody_${this.props.user}`} className="modal">
                 <td>
@@ -780,6 +782,7 @@ class Modal extends React.Component{
     }
 
     render(){
+        console.log("current car",this.props.currentCar)
         return(
             <>
                 {

@@ -133,7 +133,7 @@ function App() {
         }
       }
       setList(auxListCopy);
-    }
+  }
 
   /**
    * @function frontend\src\App.saveEditedData
@@ -194,7 +194,25 @@ function App() {
         "btnFunction": 2,
         "function": (objectToEdit, list, setList, dataId)=>{
           onChangeConfigInput(objectToEdit, list, setList, dataId);
-        }
+          
+          const aux2 = new Date(objectToEdit.user_birth_date);
+          const aux = jsDateToDbTimestampStr(aux2, false);
+
+          objectToEdit.user_birth_date = aux.trim();
+
+          fetch('http://localhost:8080/updateUser', {
+            method: "POST",
+            body: JSON.stringify(objectToEdit),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+          })
+            .then(async function (response) {
+              const res = await response.json();
+            }).catch(
+              err => {
+                setIsLoading(false);
+                setIsNotificationOpen(true);
+              });
+              }
       },
       {
         "label": "Deletar",
@@ -372,6 +390,69 @@ export function deepCloneArray(array) {
   }
 
   return cloneArray;
+}
+
+/**
+* @function module:web/javascripts/genericFunctions.jsDateToDbTimestampStr
+* @summary Converts a valid js date to a db timestamp string
+* @param {object} jsDate - The js date object
+* @param {boolean} shouldUseMilliseconds - Boolean than indicate if should concat milliseconds ".MS"
+* @returns {string} - The db timestamp string (YYYY-MM-DD HH:MM:SS)
+*/
+export function jsDateToDbTimestampStr(jsDate, shouldUseMilliseconds) {
+
+  let timestamp = '';
+
+  //YYYY-
+  let year = jsDate.getUTCFullYear();
+  if (year < 1000) {
+      year = '0' + year;
+  }
+
+  timestamp += (year) + '-';
+
+  //MM-
+  timestamp += ('0' + (jsDate.getUTCMonth() + 1)).slice(-2) + '-';
+
+  //DD
+  timestamp += ('0' + jsDate.getUTCDate()).slice(-2) + ' ';
+
+  return timestamp;
+}
+
+/**
+* @function module:web/javascripts/genericFunctions.dbTimestampStrToJsDate
+* @summary Converts a dbTimestamp date string to a Js date using UTC timezone
+* @param {string} d - The dbTimestamp date string
+* @returns {object} - The new js date
+*/
+export function dbTimestampStrToJsDate(d) {
+  if ((typeof d != 'string') || (d.length < 10)) {
+      return null;
+  }
+
+  var year = parseInt(d.substring(0, 4));
+  var month = parseInt(d.substring(5, 7)) - 1;
+  var day = parseInt(d.substring(8, 10));
+
+  var hour = 0;
+  var minute = 0;
+  var second = 0;
+
+  if (d.length != 10) {
+      hour = d.substring(11, 13);
+      minute = d.substring(14, 16);
+      second = d.substring(17, 19);
+  }
+
+  var jsDate = new Date(Date.UTC(year, month, day, hour, minute, second));
+
+  if (jsDate.getTime && !isNaN(jsDate.getTime())) {
+      return jsDate;
+  }
+  else {
+      return null;
+  }
 }
 
 export default App;
