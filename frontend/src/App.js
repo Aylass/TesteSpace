@@ -24,9 +24,14 @@ function App() {
   const [auxAccessList, setAuxAccessList] = useState();
   const [auxAddressesList, setAuxAddressesList] = useState();
 
+  const [notificationType, setNotificationType] = useState("Error");
+  const [notificationTitle, setNotificationTitle] = useState("Acesso ao banco");
+  const [notificationDesc, setNotificationDesc] = useState("Acesso ao banco de dados com");
+
   const [chosenList, setChosenList] = useState(0);
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [accessError, setAccessError] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   const [menuItems, setMenuItems] = useState();
@@ -42,7 +47,7 @@ function App() {
       }).catch(
         err => {
           setIsLoading(false);
-          setIsNotificationOpen(true);
+          setAccessError(true);
         });
   }, []);
   /**
@@ -224,10 +229,17 @@ function App() {
           })
             .then(async function (response) {
               const res = await response.json();
+              setIsNotificationOpen(true);
+              setNotificationType("Success");
+              setNotificationTitle("Editado com sucesso");
+              setNotificationDesc("Item editado com sucesso!");
             }).catch(
               err => {
                 setIsLoading(false);
                 setIsNotificationOpen(true);
+                setNotificationType("Error");
+                setNotificationTitle("Erro ao editar");
+                setNotificationDesc("Item editado com erro!");
               });
           }
       },
@@ -259,10 +271,18 @@ function App() {
           })
             .then(async function (response) {
               const res = await response.json();
+              setIsNotificationOpen(true);
+              setNotificationType("Success");
+              setNotificationTitle("Sucesso ao Excluir");
+              setNotificationDesc("Item escolhido foi excluido!");
             }).catch(
               err => {
                 setIsLoading(false);
                 setIsNotificationOpen(true);
+                setIsNotificationOpen(true);
+                setNotificationType("Error");
+                setNotificationTitle("Erro ao Excluir");
+                setNotificationDesc("Item excluido com erro!");
           });
         }
       },
@@ -336,15 +356,24 @@ function App() {
     return (
       <div className="App">
         <Menu menuItems={menuItems} btnFunction={mainListChange}/>
-        {isNotificationOpen ?
+        {accessError ?
           <NotificationComponent
-            type="Error"
-            title="Acesso ao banco"
-            notificationDescription="Acesso ao banco de dados com"
+            type={notificationType}
+            title={notificationTitle}
+            notificationDescription={notificationDesc}
             closeNotification={() => { }}
           />
           : chosenList === 0 ?
             <>
+              {isNotificationOpen ? 
+                <NotificationComponent
+                  type={notificationType}
+                  title={notificationTitle}
+                  notificationDescription={notificationDesc}
+                  closeNotification={() => {setIsNotificationOpen(false);}}
+                />
+                :<></>
+              }
               <Header 
                 buttonsList={headerData} 
                 changeSelectedHeaderOption={toggleSelectedHeaderOption}
