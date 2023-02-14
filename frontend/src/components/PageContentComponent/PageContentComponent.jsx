@@ -100,6 +100,7 @@ class PageContent extends React.Component{
                         mainList={this.props.lists[this.state.selectedList].list}
                         setMainList={this.props.lists[this.state.selectedList].setList}    
                         fields={this.props.lists[this.state.selectedList].fields}
+                        isEditDisable={this.props.isEditDisable}
                         
                         data={this.state.selectedObject}
                         dataId={this.objectStringId}
@@ -118,6 +119,7 @@ class PageContent extends React.Component{
 PageContent.propTypes={
     lists: PropTypes.array,
     crudFunction: PropTypes.func,
-    resetSelectedButton: PropTypes.func
+    resetSelectedButton: PropTypes.func,
+    isEditDisable: PropTypes.bool
 }
 export default PageContent;

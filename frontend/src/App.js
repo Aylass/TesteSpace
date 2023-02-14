@@ -183,6 +183,7 @@ function App() {
     const headerData = ([
       {
         "label": "Criar",
+        "isEditDisable": false,
         "btnFunction": 1,
         "function": (newObject)=>{
           //setAuxUsersList(newObject);
@@ -192,6 +193,7 @@ function App() {
       {
         "label": "Editar",
         "btnFunction": 2,
+        "isEditDisable": false,
         "function": (objectToEdit, list, setList, dataId)=>{
           onChangeConfigInput(objectToEdit, list, setList, dataId);
           
@@ -217,6 +219,7 @@ function App() {
       {
         "label": "Deletar",
         "btnFunction": 3,
+        "isEditDisable": true,
         "function": ()=>{
           console.log("Funcao Deletar")
         }

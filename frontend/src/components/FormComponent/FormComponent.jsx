@@ -71,7 +71,7 @@ class FormContent extends React.Component{
                 <span key={`label_${label}`}>{Translation[label]? Translation[label] : label}: </span>
                 <InputComponent 
                     key={`input_label_${label}`}
-                    disabled={false} 
+                    disabled={this.props.isEditDisable} 
                     data={this.state.objectEdited[label]} 
                     onChange={event => this.handleOnChange(event, label)} 
                 /> 
@@ -87,7 +87,12 @@ class FormContent extends React.Component{
         return(
             <>
                 <span key={`label_${label}`}>{Translation[label]? Translation[label] : label}: </span>
-                <select className={style.selector} id="select_boolean" onChange={event => this.handleOnChange(event, label)} value={this.state.objectEdited[label]}>
+                <select 
+                        className={style.selector} 
+                        id="select_boolean" 
+                        onChange={event => this.handleOnChange(event, label)} 
+                        value={this.state.objectEdited[label]}
+                        disabled={this.props.isEditDisable}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                     <option value={"null"}>Null</option>
@@ -106,7 +111,7 @@ class FormContent extends React.Component{
             <div className={style.formComponent}>
                 {this.buildForm()}
                 <div className={style.btnWrap}>
-                    <button className={style.btnSave} onClick={this.saveDataModifications}>Save</button>
+                    <button className={style.btnSave} onClick={this.saveDataModifications}>{this.props.isEditDisable? "Deletar": "Salvar"}</button>
                     <button className={style.btnCancel} onClick={this.props.resetSelectedButton}>Cancel</button>
                 </div>
             </div>
@@ -118,6 +123,7 @@ FormContent.propTypes={
     mainList: PropTypes.array,
     setMainList: PropTypes.func,
     fields: PropTypes.array,
+    isEditDisable: PropTypes.bool,
 
     data: PropTypes.object,
     dataId: PropTypes.string,

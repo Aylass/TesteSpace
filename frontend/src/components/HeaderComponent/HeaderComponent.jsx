@@ -9,7 +9,7 @@ class Header extends React.Component{
         super(props);
         this.state = {
             selectedBtn: 0,
-            isSelected: 0
+            isSelected: 0,
         }
         this.buildHeader = this.buildHeader.bind(this);
         this.buildButtons = this.buildButtons.bind(this);
@@ -67,6 +67,7 @@ class Header extends React.Component{
                         crudFunction={this.props.buttonsList[this.state.selectedBtn]?.function} 
                         lists={this.props.configList} 
                         resetSelectedButton={this.resetSelectedButton}
+                        isEditDisable={this.props.buttonsList[this.state.selectedBtn].isEditDisable}
                     ></PageContent>
                 :
                     <></>
